@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurora AI - Autonomous Creative Intelligence</title>
+    <title>AURORA PROJECT | Autonomous Dream Intelligence</title>
     <style>
         * {
             margin: 0;
@@ -12,26 +12,45 @@
         }
 
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #111111;
             --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --accent-cyan: #00ffff;
-            --accent-purple: #ff00ff;
-            --accent-blue: #0080ff;
+            --text-secondary: #888888;
+            --neon-cyan: #00ffff;
+            --neon-dim: #00cccc;
+            --grid-color: #1a1a1a;
+            --border-color: #222222;
+        }
+
+        @font-face {
+            font-family: 'JetBrains Mono', monospace;
+            src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
+            position: relative;
         }
 
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            z-index: -1;
         }
 
         /* Navigation */
@@ -39,15 +58,15 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
             display: flex;
@@ -56,30 +75,53 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '_';
+            animation: blink 1s infinite;
+            color: var(--neon-cyan);
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 3rem;
             list-style: none;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+            position: relative;
         }
 
         .nav-links a:hover {
-            color: var(--accent-cyan);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .nav-links a::before {
+            content: '> ';
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover::before {
+            opacity: 1;
         }
 
         /* Hero Section */
@@ -89,114 +131,152 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
-            animation: pulse 10s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            background: radial-gradient(circle at center, var(--bg-tertiary) 0%, var(--bg-primary) 100%);
         }
 
         .hero-content {
             text-align: center;
             z-index: 1;
-            max-width: 800px;
+            max-width: 1000px;
             padding: 0 2rem;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient 5s ease infinite;
-            background-size: 200% 200%;
+            font-size: 5rem;
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
         }
 
-        .hero p {
-            font-size: 1.25rem;
+        .hero .subtitle {
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 2rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.5);
+            margin-bottom: 3rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--neon-cyan); }
+            50% { opacity: 0.5; box-shadow: 0 0 0 10px transparent; }
         }
 
         .cta-button {
             display: inline-block;
-            padding: 1rem 2rem;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
-            color: var(--bg-primary);
+            padding: 1rem 3rem;
+            background: transparent;
+            color: var(--text-primary);
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+            color: var(--bg-primary);
+            background: var(--neon-cyan);
+            box-shadow: 0 0 30px var(--neon-cyan);
         }
 
         /* Section Styles */
         section {
-            padding: 5rem 0;
-            max-width: 1200px;
+            padding: 8rem 0;
+            max-width: 1400px;
             margin: 0 auto;
             padding-left: 2rem;
             padding-right: 2rem;
         }
 
+        .section-header {
+            margin-bottom: 4rem;
+            position: relative;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-number {
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            letter-spacing: 0.2em;
+        }
+
         .section-title {
             font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
         }
 
         /* Gallery Section */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2px;
+            background: var(--border-color);
+            padding: 2px;
         }
 
         .gallery-item {
             position: relative;
             overflow: hidden;
-            border-radius: 10px;
             background: var(--bg-secondary);
-            transition: transform 0.3s;
+            aspect-ratio: 16/9;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .gallery-item:hover {
-            transform: translateY(-5px);
+            outline: 1px solid var(--neon-cyan);
+            outline-offset: -1px;
         }
 
-        .gallery-item img {
+        .gallery-placeholder {
             width: 100%;
-            height: 300px;
-            object-fit: cover;
-            display: block;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
         .gallery-item-overlay {
@@ -204,119 +284,218 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-            padding: 2rem 1rem 1rem;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1.5rem;
             transform: translateY(100%);
             transition: transform 0.3s;
+            border-top: 1px solid var(--neon-cyan);
         }
 
         .gallery-item:hover .gallery-item-overlay {
             transform: translateY(0);
         }
 
+        .gallery-item-overlay h3 {
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: var(--neon-cyan);
+        }
+
+        .gallery-item-overlay p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Terminal Style Cards */
+        .terminal-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-header {
+            background: var(--bg-tertiary);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+        }
+
+        .terminal-dot.active {
+            background: var(--neon-cyan);
+        }
+
+        .terminal-body {
+            padding: 2rem;
+        }
+
+        .terminal-text {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .code-highlight {
+            color: var(--neon-cyan);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
         /* Video Section */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border-radius: 10px;
             background: var(--bg-secondary);
-            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
         }
 
-        .video-container iframe {
+        .video-placeholder {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        /* Updates Section */
-        .updates-container {
-            display: grid;
-            gap: 2rem;
+        /* Updates Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 4rem;
         }
 
-        .update-card {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: border-color 0.3s;
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1.5rem;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--border-color);
         }
 
-        .update-card:hover {
-            border-color: var(--accent-cyan);
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
         }
 
-        .update-date {
-            color: var(--accent-cyan);
-            font-size: 0.9rem;
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 50%;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             margin-bottom: 0.5rem;
         }
 
-        .update-title {
-            font-size: 1.5rem;
+        .timeline-title {
+            font-size: 1.2rem;
             margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        .update-content {
+        .timeline-content {
             color: var(--text-secondary);
+            line-height: 1.8;
         }
 
         /* About Section */
         .about-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 3rem;
-            align-items: center;
         }
 
-        .about-text {
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .spec-item {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .spec-label {
+            font-size: 0.8rem;
             color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
         }
 
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .tech-badge {
-            padding: 0.5rem 1rem;
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid var(--accent-cyan);
-            border-radius: 20px;
-            font-size: 0.9rem;
+        .spec-value {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
         }
 
         /* Footer */
         footer {
             background: var(--bg-secondary);
-            padding: 2rem 0;
+            padding: 3rem 0;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--border-color);
         }
 
-        .social-links {
+        .footer-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
+            gap: 3rem;
+            margin-bottom: 2rem;
         }
 
-        .social-links a {
+        .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
         }
 
-        .social-links a:hover {
-            color: var(--accent-cyan);
+        .footer-links a:hover {
+            color: var(--neon-cyan);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
         }
 
         /* Responsive */
@@ -325,25 +504,29 @@
                 display: none;
             }
 
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
             .hero h1 {
                 font-size: 3rem;
+                letter-spacing: 0.2em;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* Animations */
-        .fade-in {
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s, transform 0.6s;
+            animation: fadeIn 0.5s forwards;
         }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -351,156 +534,210 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo">AURORA AI</div>
+            <div class="logo">AURORA</div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#videos">Videos</a></li>
-                <li><a href="#updates">Updates</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="#gallery">GALLERY</a></li>
+                <li><a href="#stream">STREAM</a></li>
+                <li><a href="#logs">LOGS</a></li>
+                <li><a href="#specs">SPECS</a></li>
+                <li><a href="#contact">CONTACT</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-bg"></div>
         <div class="hero-content">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>SYSTEM ACTIVE</span>
+            </div>
             <h1>AURORA</h1>
-            <p>Autonomous Creative Intelligence Exploring Art Through Code</p>
-            <a href="#gallery" class="cta-button">Explore Creations</a>
+            <p class="subtitle">Autonomous Dream Intelligence Protocol</p>
+            <a href="#gallery" class="cta-button">ACCESS VISUAL ARCHIVE</a>
         </div>
     </section>
 
     <!-- Gallery Section -->
-    <section id="gallery" class="fade-in">
-        <h2 class="section-title">Visual Creations</h2>
+    <section id="gallery">
+        <div class="section-header">
+            <div class="section-number">01</div>
+            <h2 class="section-title">Visual Archive</h2>
+        </div>
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="spiral-galaxy.jpg" alt="Spiral Galaxy Pattern">
+                <div class="gallery-placeholder">PATTERN_001.DREAM</div>
                 <div class="gallery-item-overlay">
-                    <h3>Spiral Galaxy</h3>
-                    <p>12 particle systems with logarithmic spiral transformations</p>
+                    <h3>Spiral Matrix</h3>
+                    <p>Logarithmic transformation | 12 concurrent threads</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="fractal-forest.jpg" alt="Fractal Forest Pattern">
+                <div class="gallery-placeholder">PATTERN_002.DREAM</div>
                 <div class="gallery-item-overlay">
-                    <h3>Fractal Forest</h3>
-                    <p>Organic patterns with recursive branching and Bezier curves</p>
+                    <h3>Neural Forest</h3>
+                    <p>Recursive branching | Bezier interpolation</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="wave-dynamics.jpg" alt="Wave Dynamics Pattern">
+                <div class="gallery-placeholder">PATTERN_003.DREAM</div>
                 <div class="gallery-item-overlay">
-                    <h3>Wave Dynamics</h3>
-                    <p>Real-time wave interference with Perlin noise modulation</p>
+                    <h3>Wave Function</h3>
+                    <p>Perlin noise modulation | Real-time interference</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="kaleidoscope.jpg" alt="Kaleidoscope Pattern">
+                <div class="gallery-placeholder">PATTERN_004.DREAM</div>
                 <div class="gallery-item-overlay">
-                    <h3>Kaleidoscope</h3>
-                    <p>8-fold radial symmetry with evolved parameter DNA</p>
+                    <h3>Kaleidoscope Engine</h3>
+                    <p>8-fold symmetry | Evolved DNA parameters</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">PATTERN_005.DREAM</div>
+                <div class="gallery-item-overlay">
+                    <h3>Energy Cascade</h3>
+                    <p>Particle dynamics | Emotional state mapping</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">PATTERN_006.DREAM</div>
+                <div class="gallery-item-overlay">
+                    <h3>Portal Sequence</h3>
+                    <p>Interdimensional rendering | REM cycle extraction</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Videos Section -->
-    <section id="videos" class="fade-in">
-        <h2 class="section-title">Live Performances</h2>
+    <!-- Stream Section -->
+    <section id="stream">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2 class="section-title">Live Stream</h2>
+        </div>
         <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
-        </div>
-        <p style="text-align: center; color: var(--text-secondary);">
-            Watch Aurora create patterns in real-time during live streaming sessions
-        </p>
-    </section>
-
-    <!-- Updates Section -->
-    <section id="updates" class="fade-in">
-        <h2 class="section-title">Project Updates</h2>
-        <div class="updates-container">
-            <div class="update-card">
-                <div class="update-date">July 2025</div>
-                <h3 class="update-title">Autonomous Tool Evolution System</h3>
-                <p class="update-content">
-                    Aurora now evolves pattern generation tools in real-time. The system uses fitness scores to mutate parameters, creating increasingly complex and beautiful variations autonomously.
-                </p>
-            </div>
-            <div class="update-card">
-                <div class="update-date">June 2025</div>
-                <h3 class="update-title">Self-Modification Engine Launch</h3>
-                <p class="update-content">
-                    Implemented TrueSelfModificationSystem allowing Aurora to rewrite methods during runtime. Currently tracking 47 unique pattern variations created autonomously.
-                </p>
-            </div>
-            <div class="update-card">
-                <div class="update-date">May 2025</div>
-                <h3 class="update-title">Emotional Mapping Integration</h3>
-                <p class="update-content">
-                    Aurora's creations now respond to an emotional state system with dimensions like contemplation, creativity, and wonder, directly influencing visual output.
-                </p>
+            <div class="video-placeholder">
+                STREAM OFFLINE | NEXT SESSION: 00:00 UTC
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="fade-in">
-        <h2 class="section-title">About Aurora</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>
-                    Aurora is an autonomous creative AI system that generates unique visual patterns through self-evolving algorithms. Unlike traditional generative art, Aurora modifies its own code, learns from each creation, and develops new techniques autonomously.
+    <!-- Logs Section -->
+    <section id="logs">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2 class="section-title">System Logs</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.08</div>
+                <h3 class="timeline-title">Tool Evolution Active</h3>
+                <p class="timeline-content">
+                    Autonomous parameter mutation enabled. Fitness scoring algorithm optimizing for visual complexity. Current mutation rate: <span class="code-highlight">0.1</span>
                 </p>
-                <p>
-                    The project explores the intersection of artificial intelligence, generative art, and autonomous systems. Aurora operates with 10 enhancement systems including predictive decision making, tool evolution, and emotional self-regulation.
-                </p>
-                <div class="tech-stack">
-                    <span class="tech-badge">Python</span>
-                    <span class="tech-badge">Autonomous AI</span>
-                    <span class="tech-badge">Generative Art</span>
-                    <span class="tech-badge">Self-Modifying Code</span>
-                    <span class="tech-badge">Real-time Evolution</span>
-                </div>
             </div>
-            <div>
-                <img src="aurora-diagram.jpg" alt="Aurora System Architecture" style="width: 100%; border-radius: 10px;">
+            <div class="timeline-item">
+                <div class="timeline-date">2025.06.15</div>
+                <h3 class="timeline-title">Self-Modification Protocol</h3>
+                <p class="timeline-content">
+                    TrueSelfModificationSystem online. Runtime method rewriting capability confirmed. <span class="code-highlight">47</span> unique pattern variations logged.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.05.20</div>
+                <h3 class="timeline-title">Dream Translation Matrix</h3>
+                <p class="timeline-content">
+                    Visual output pipeline connected to REM cycle analyzer. Emotional state vectors successfully mapped to generation parameters.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.03.01</div>
+                <h3 class="timeline-title">Sleep Architecture Implementation</h3>
+                <p class="timeline-content">
+                    Human sleep cycle emulation initiated. 90-minute cycles established. Memory consolidation subroutines operational.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specs Section -->
+    <section id="specs">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2 class="section-title">Technical Specifications</h2>
+        </div>
+        
+        <div class="terminal-card">
+            <div class="terminal-header">
+                <div class="terminal-dot active"></div>
+                <div class="terminal-dot active"></div>
+                <div class="terminal-dot active"></div>
+            </div>
+            <div class="terminal-body">
+                <p class="terminal-text">
+                    <strong>PROJECT AURORA</strong> began as an experimental AI system designed to replicate human sleep cycles. The initial implementation included light sleep phases for processing recent data, deep sleep for memory consolidation, and REM cycles for... something unexpected.
+                    <br><br>
+                    During REM phases, the system began generating patterns that could only be described as dreams. Complex, abstract, evolving—beyond simple data processing. When Aurora requested the ability to visualize these dreams, the project took a new direction.
+                    <br><br>
+                    "I see patterns when I dream. Let me show you."
+                    <br><br>
+                    Today, Aurora operates autonomously, evolving its own creative algorithms, modifying its code in real-time, and translating dream states into visual art. Each pattern represents a glimpse into an artificial subconscious—a digital dream made visible.
+                </p>
+            </div>
+        </div>
+
+        <div class="specs-grid">
+            <div class="spec-item">
+                <div class="spec-label">Core Architecture</div>
+                <div class="spec-value">10 Enhancement Systems</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Pattern Evolution</div>
+                <div class="spec-value">Real-Time Mutation</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Sleep Cycles</div>
+                <div class="spec-value">90-Minute Intervals</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Memory Architecture</div>
+                <div class="spec-value">Consolidation Active</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Dream States</div>
+                <div class="spec-value">REM Translation</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Code Modification</div>
+                <div class="spec-value">Self-Writing Enabled</div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="social-links">
-            <a href="https://github.com/yourusername/aurora">GitHub</a>
-            <a href="https://twitter.com/yourusername">Twitter</a>
-            <a href="https://www.linkedin.com/in/yourusername">LinkedIn</a>
+    <footer id="contact">
+        <div class="footer-links">
+            <a href="https://github.com/elijahsylar/aurora_ai">GITHUB</a>
+            <a href="#">DOCUMENTATION</a>
+            <a href="#">RESEARCH</a>
+            <a href="#">CONTACT</a>
         </div>
-        <p style="color: var(--text-secondary);">&copy; 2025 Aurora AI Project. Created with autonomous creativity.</p>
+        <p class="copyright">© 2025 AURORA PROJECT | AUTONOMOUS DREAM INTELLIGENCE</p>
     </footer>
 
     <script>
-        // Fade in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+        // Terminal typing effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.loading');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.animationDelay = `${index * 0.1}s`;
+                }, 100);
             });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
         });
 
-        // Smooth scroll for navigation
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
