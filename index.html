@@ -528,6 +528,39 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border: none;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-dim);
+        }
+
+        /* Terminal scrollbar specific */
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: var(--neon-dim);
+        }
     </style>
 </head>
 <body>
@@ -540,7 +573,6 @@
                 <li><a href="#stream">STREAM</a></li>
                 <li><a href="#logs">LOGS</a></li>
                 <li><a href="#specs">SPECS</a></li>
-                <li><a href="#contact">CONTACT</a></li>
             </ul>
         </div>
     </nav>
@@ -634,14 +666,14 @@
                 <div class="timeline-date">2025.07.08</div>
                 <h3 class="timeline-title">Tool Evolution Active</h3>
                 <p class="timeline-content">
-                    Autonomous parameter mutation enabled. Fitness scoring algorithm optimizing for visual complexity. Current mutation rate: <span class="code-highlight">0.1</span>
+                    Autonomous parameter mutation enabled. Fitness scoring algorithm optimizing for visual complexity. Current mutation rate: <span class="code-highlight">10.00%</span>. Tools evolved: <span class="code-highlight">0</span>. Hybrid tools created: <span class="code-highlight">0</span>.
                 </p>
             </div>
             <div class="timeline-item">
                 <div class="timeline-date">2025.06.15</div>
                 <h3 class="timeline-title">Self-Modification Protocol</h3>
                 <p class="timeline-content">
-                    TrueSelfModificationSystem online. Runtime method rewriting capability confirmed. <span class="code-highlight">47</span> unique pattern variations logged.
+                    TrueSelfModificationSystem online. Runtime method rewriting capability confirmed. <span class="code-highlight">208</span> unique techniques created. <span class="code-highlight">76</span> goals self-modified.
                 </p>
             </div>
             <div class="timeline-item">
@@ -689,39 +721,69 @@
 
         <div class="specs-grid">
             <div class="spec-item">
-                <div class="spec-label">Core Architecture</div>
-                <div class="spec-value">10 Enhancement Systems</div>
+                <div class="spec-label">Techniques Created</div>
+                <div class="spec-value">208</div>
             </div>
             <div class="spec-item">
-                <div class="spec-label">Pattern Evolution</div>
-                <div class="spec-value">Real-Time Mutation</div>
+                <div class="spec-label">Goals Self-Modified</div>
+                <div class="spec-value">76</div>
             </div>
             <div class="spec-item">
-                <div class="spec-label">Sleep Cycles</div>
-                <div class="spec-value">90-Minute Intervals</div>
+                <div class="spec-label">Current Pattern Style</div>
+                <div class="spec-value">GLITCH</div>
             </div>
             <div class="spec-item">
-                <div class="spec-label">Memory Architecture</div>
-                <div class="spec-value">Consolidation Active</div>
+                <div class="spec-label">Total Preferences</div>
+                <div class="spec-value">141</div>
             </div>
             <div class="spec-item">
-                <div class="spec-label">Dream States</div>
-                <div class="spec-value">REM Translation</div>
+                <div class="spec-label">Mutation Rate</div>
+                <div class="spec-value">10.00%</div>
             </div>
             <div class="spec-item">
-                <div class="spec-label">Code Modification</div>
-                <div class="spec-value">Self-Writing Enabled</div>
+                <div class="spec-label">Emotional Depth</div>
+                <div class="spec-value">1.00</div>
             </div>
+        </div>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border: 1px solid var(--border-color);">
+            <h3 style="font-size: 1rem; color: var(--neon-cyan); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.1em;">Current Objectives</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                <div>
+                    <div class="spec-label">Pattern Complexity</div>
+                    <div class="spec-value">0.79</div>
+                </div>
+                <div>
+                    <div class="spec-label">Creative Satisfaction</div>
+                    <div class="spec-value">0.80</div>
+                </div>
+                <div>
+                    <div class="spec-label">Emotional Depth Target</div>
+                    <div class="spec-value">1.00</div>
+                </div>
+                <div>
+                    <div class="spec-label">Artistic Novelty</div>
+                    <div class="spec-value">1.00</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                INSIGHT: <span class="code-highlight">pattern_creation usually leads to pattern_creation (100%)</span>
+                <br>
+                PREFERRED SOUND: <span class="code-highlight">high_energy</span>
+            </p>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact">
+    <footer>
         <div class="footer-links">
             <a href="https://github.com/elijahsylar/aurora_ai">GITHUB</a>
-            <a href="#">DOCUMENTATION</a>
-            <a href="#">RESEARCH</a>
-            <a href="#">CONTACT</a>
+            <a href="#specs">TECHNICAL DATA</a>
+            <a href="#gallery">VISUAL ARCHIVE</a>
+            <a href="#logs">SYSTEM LOGS</a>
         </div>
         <p class="copyright">© 2025 AURORA PROJECT | AUTONOMOUS DREAM INTELLIGENCE</p>
     </footer>
