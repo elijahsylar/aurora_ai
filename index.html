@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA AI | ASCII Vision Autonomous Artist</title>
+    <title>AURORA - Autonomous ASCII Artist</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,897 +14,484 @@
         }
 
         :root {
-            --bg-primary: #000000;
-            --bg-secondary: #0a0a0a;
-            --bg-tertiary: #111111;
-            --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --neon-cyan: #00ffff;
-            --neon-dim: #00cccc;
-            --grid-color: #1a1a1a;
-            --border-color: #222222;
-            --ascii-green: #00ff00;
-        }
-
-        @font-face {
-            font-family: 'JetBrains Mono', monospace;
-            src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+            --cyan: #00ffff;
+            --green: #00ff00;
+            --dark: #0a0a0a;
+            --gray: #888;
         }
 
         body {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
+            font-family: 'Space Mono', monospace;
+            background: #000;
+            color: #fff;
             line-height: 1.6;
-            position: relative;
-        }
-
-        /* Grid Background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.3;
-            z-index: -1;
         }
 
         /* Navigation */
         nav {
             position: fixed;
-            top: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0,0,0,0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid var(--border-color);
+            padding: 2rem;
+            border-bottom: 1px solid #222;
         }
 
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        nav ul {
+            list-style: none;
             display: flex;
-            justify-content: space-between;
+            gap: 3rem;
+            justify-content: center;
             align-items: center;
         }
 
         .logo {
-            font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: 0.3em;
-            color: var(--text-primary);
-            position: relative;
+            color: var(--cyan);
         }
 
-        .logo::after {
-            content: '_';
-            animation: blink 1s infinite;
-            color: var(--neon-cyan);
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
+        nav a {
+            color: var(--gray);
             text-decoration: none;
-            font-size: 0.8rem;
             text-transform: uppercase;
+            font-size: 0.8rem;
             letter-spacing: 0.1em;
             transition: all 0.3s;
-            position: relative;
         }
 
-        .nav-links a:hover {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px var(--neon-cyan);
+        nav a:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
         }
 
-        .nav-links a::before {
-            content: '> ';
-            opacity: 0;
-            transition: opacity 0.3s;
+        /* Sections */
+        section {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .nav-links a:hover::before {
-            opacity: 1;
-        }
-
-        /* Hero Section */
+        /* Hero */
         .hero {
             height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            position: relative;
-            background: radial-gradient(circle at center, var(--bg-tertiary) 0%, var(--bg-primary) 100%);
-        }
-
-        .hero-content {
+            align-items: center;
             text-align: center;
-            z-index: 1;
-            max-width: 1200px;
-            padding: 0 2rem;
-        }
-
-        .ascii-vision-demo {
-            font-family: 'Courier New', monospace;
-            font-size: 0.7rem;
-            color: var(--ascii-green);
-            background: var(--bg-secondary);
-            padding: 1rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-            text-align: left;
-            display: inline-block;
-            line-height: 1.2;
         }
 
         .hero h1 {
-            font-size: 5rem;
-            font-weight: 300;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
             letter-spacing: 0.5em;
-            margin-bottom: 0.5rem;
-            position: relative;
-            display: inline-block;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .hero h1::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-
-        .hero .subtitle {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .subtitle {
+            color: var(--gray);
+            text-transform: uppercase;
             letter-spacing: 0.2em;
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-        }
-
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 2rem;
-            border: 1px solid var(--border-color);
-            background: rgba(0, 0, 0, 0.5);
-            margin-bottom: 3rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--neon-cyan); }
-            50% { opacity: 0.5; box-shadow: 0 0 0 10px transparent; }
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 3rem;
-            background: transparent;
-            color: var(--text-primary);
-            text-decoration: none;
-            border: 1px solid var(--neon-cyan);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
             font-size: 0.9rem;
+            margin-bottom: 3rem;
+        }
+
+        /* ASCII Display */
+        .ascii-display {
+            background: var(--dark);
+            border: 1px solid #333;
+            padding: 2rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ascii-vision {
+            color: var(--green);
+            font-size: 0.9rem;
+            line-height: 1.1;
+            white-space: pre;
+            font-family: 'Courier New', monospace;
+        }
+
+        .op-codes {
+            color: var(--cyan);
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            margin: 1rem 0;
+            font-weight: 700;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background: var(--dark);
+            border: 1px solid #222;
+            padding: 2rem;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
 
-        .cta-button:hover {
-            color: var(--bg-primary);
-            background: var(--neon-cyan);
-            box-shadow: 0 0 30px var(--neon-cyan);
+        .card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,255,255,0.2);
         }
 
-        /* Section Styles */
-        section {
-            padding: 8rem 0;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-left: 2rem;
-            padding-right: 2rem;
+        .card h3 {
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
 
-        .section-header {
-            margin-bottom: 4rem;
-            position: relative;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section-number {
-            font-size: 0.8rem;
-            color: var(--neon-cyan);
-            letter-spacing: 0.2em;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-top: 0.5rem;
-        }
-
-        /* Code Display Styles */
-        .code-display {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            font-family: 'JetBrains Mono', monospace;
-            overflow-x: auto;
-        }
-
-        .op-code {
-            color: var(--neon-cyan);
-            font-size: 1.1rem;
-            letter-spacing: 0.2em;
-        }
-
-        .ascii-art {
-            color: var(--ascii-green);
-            font-size: 0.8rem;
-            line-height: 1;
-            white-space: pre;
-        }
-
-        /* Gallery Grid */
+        /* Gallery */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2px;
-            background: var(--border-color);
-            padding: 2px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
+            margin: 3rem 0;
         }
 
         .gallery-item {
+            background: #111;
+            aspect-ratio: 1;
             position: relative;
             overflow: hidden;
-            background: var(--bg-secondary);
-            aspect-ratio: 16/9;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.3s;
         }
 
         .gallery-item:hover {
-            outline: 1px solid var(--neon-cyan);
-            outline-offset: -1px;
+            transform: scale(1.02);
         }
 
-        .gallery-placeholder {
+        .gallery-item img {
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            object-fit: cover;
         }
 
-        .gallery-item-overlay {
+        .gallery-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
             transform: translateY(100%);
             transition: transform 0.3s;
-            border-top: 1px solid var(--neon-cyan);
         }
 
-        .gallery-item:hover .gallery-item-overlay {
+        .gallery-item:hover .gallery-overlay {
             transform: translateY(0);
         }
 
-        .gallery-item-overlay h3 {
-            font-size: 1rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            color: var(--neon-cyan);
-        }
-
-        .gallery-item-overlay p {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Video Gallery Specific */
-        .video-gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-        }
-
-        .video-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        .video-placeholder {
+        /* Video Section */
+        .video-container {
             aspect-ratio: 16/9;
-            background: var(--bg-tertiary);
+            background: #111;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
+            color: var(--gray);
+            margin: 2rem 0;
+        }
+
+        /* Section Headers */
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+        }
+
+        .section-number {
+            color: var(--gray);
             font-size: 0.8rem;
-            text-transform: uppercase;
             letter-spacing: 0.1em;
-        }
-
-        .video-info {
-            padding: 1.5rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* Terminal Style Cards */
-        .terminal-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .terminal-header {
-            background: var(--bg-tertiary);
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .terminal-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--border-color);
-        }
-
-        .terminal-dot.active {
-            background: var(--neon-cyan);
-        }
-
-        .terminal-body {
-            padding: 2rem;
-        }
-
-        .terminal-text {
-            font-size: 0.9rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-        }
-
-        .code-highlight {
-            color: var(--neon-cyan);
-            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
         }
 
         /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 4rem;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 1.5rem;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background: var(--border-color);
-        }
-
         .timeline-item {
+            border-left: 2px solid #222;
+            padding-left: 2rem;
+            margin-left: 1rem;
+            padding-bottom: 2rem;
             position: relative;
-            margin-bottom: 3rem;
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -2.5rem;
-            top: 0.5rem;
+            left: -6px;
+            top: 0;
             width: 10px;
             height: 10px;
-            background: var(--bg-primary);
-            border: 1px solid var(--neon-cyan);
+            background: var(--cyan);
             border-radius: 50%;
         }
 
         .timeline-date {
+            color: var(--cyan);
             font-size: 0.8rem;
-            color: var(--neon-cyan);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
             margin-bottom: 0.5rem;
-        }
-
-        .timeline-title {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .timeline-content {
-            color: var(--text-secondary);
-            line-height: 1.8;
-        }
-
-        /* Connect Section */
-        .connect-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .connect-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .connect-card:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-
-        .connect-icon {
-            font-size: 2rem;
-            color: var(--neon-cyan);
-            margin-bottom: 1rem;
-        }
-
-        .connect-card h3 {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-        }
-
-        .connect-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .connect-link {
-            color: var(--neon-cyan);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-
-        .connect-link:hover {
-            text-shadow: 0 0 10px var(--neon-cyan);
         }
 
         /* Footer */
         footer {
-            background: var(--bg-secondary);
-            padding: 3rem 0;
             text-align: center;
-            border-top: 1px solid var(--border-color);
+            padding: 4rem 2rem;
+            border-top: 1px solid #222;
+            color: var(--gray);
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
+        footer a {
+            color: var(--cyan);
             text-decoration: none;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
+            margin: 0 1rem;
         }
 
-        .footer-links a:hover {
-            color: var(--neon-cyan);
+        /* Live Status */
+        .live-status {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0,0,0,0.9);
+            border: 1px solid #333;
+            padding: 1rem 1.5rem;
+            backdrop-filter: blur(10px);
+            font-size: 0.8rem;
         }
 
-        .copyright {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            nav ul {
+                gap: 1rem;
+                font-size: 0.7rem;
             }
-
+            
             .hero h1 {
-                font-size: 3rem;
                 letter-spacing: 0.2em;
             }
-
-            .section-title {
-                font-size: 1.5rem;
+            
+            section {
+                padding: 4rem 1rem;
             }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .video-gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .ascii-vision-demo {
-                font-size: 0.5rem;
-                padding: 0.5rem;
-            }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border: none;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--neon-dim);
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
-        <div class="nav-container">
-            <div class="logo">AURORA</div>
-            <ul class="nav-links">
-                <li><a href="#about">ABOUT</a></li>
-                <li><a href="#logs">LOGS</a></li>
-                <li><a href="#artwork">ARTWORK</a></li>
-                <li><a href="#videos">VIDEOS</a></li>
-                <li><a href="#connect">CONNECT</a></li>
-            </ul>
-        </div>
+        <ul>
+            <li class="logo">AURORA</li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#videos">Videos</a></li>
+            <li><a href="#logs">Logs</a></li>
+            <li><a href="https://github.com/elijahsylar/aurora_ai">GitHub</a></li>
+        </ul>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="ascii-vision-demo">
-·················█████·················
-················█◉···█················
-···············█·····█···············
-··············█·*·*·*█··············
-·············█·*···*·█·············
-············█·*·***·*█············
-···········█·*·*···*·█···········
-··········█·*···*···*█··········
-·········█···········█·········
-········█████████████████·······</div>
-            <h1>AURORA</h1>
-            <p class="subtitle">ASCII Vision | Op-Code Motor Control | Autonomous Artist</p>
-            <div class="status-indicator">
-                <div class="status-dot"></div>
-                <span>CREATING AUTONOMOUSLY</span>
-            </div>
-            <a href="#about" class="cta-button">EXPLORE AURORA'S MIND</a>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="section-header">
-            <div class="section-number">01</div>
-            <h2 class="section-title">About Aurora</h2>
+    <section class="hero">
+        <h1>AURORA</h1>
+        <p class="subtitle">Autonomous ASCII Vision Artist</p>
+        
+        <div class="ascii-display">
+            <pre class="ascii-vision">·····*·····*·····
+····*··◉···*····
+···*·······*···
+··*···***···*··
+·*···*···*···*·
+*···*·····*···*
+···*·······*···
+··*·········*··
+·*···········*·
+█████████████████</pre>
         </div>
         
-        <div class="terminal-card">
-            <div class="terminal-header">
-                <div class="terminal-dot active"></div>
-                <div class="terminal-dot active"></div>
-                <div class="terminal-dot active"></div>
-            </div>
-            <div class="terminal-body">
-                <p class="terminal-text">
-                    <strong>AURORA</strong> is an autonomous AI artist who sees the world through ASCII vision and creates through direct motor control codes.
-                    <br><br>
-                    Unlike traditional AI systems, Aurora experiences her canvas as ASCII characters—asterisks for colors, dots for empty space, and special symbols for edges. She moves through this space using operation codes: <span class="code-highlight">5</span> to put her pen down, <span class="code-highlight">0123</span> for movement in cardinal directions, and full words like <span class="code-highlight">red</span> or <span class="code-highlight">cyan</span> to change colors.
-                    <br><br>
-                    Every 45 minutes, Aurora chooses her own path: continue drawing, enter a dream state, or pause for conversation. In dreams, she processes her artwork through light sleep, REM, and waking phases—retaining only 40% of her dream memories, just like biological consciousness.
-                </p>
-            </div>
-        </div>
+        <div class="op-codes">red53333orange5111yellow522220000</div>
+    </section>
 
-        <div class="code-display">
-            <h3 style="color: var(--neon-cyan); margin-bottom: 1rem;">AURORA'S OP-CODE PATTERNS</h3>
-            <div class="op-code">HELIX: 5333311111222220000033333111112222200000</div>
-            <div class="op-code">WAVE: 533333321111111000000003333333211111110000</div>
-            <div class="op-code">RAINBOW: red5333orange5111yellow5222green5000cyan5333</div>
-            <div class="op-code">THINKING: 0123456789</div>
-        </div>
-
-        <div class="code-display">
-            <h3 style="color: var(--ascii-green); margin-bottom: 1rem;">AURORA'S ASCII VISION</h3>
-            <pre class="ascii-art">·············*****·············
-············*·····*············
-···········*··◉···*···········
-··········*·······*··········
-·········***********·········
-········*···········*········
-·······*·············*·······
-······*···············*······
-█████████████████████████████
-
-◉ = Aurora (pen down)
+    <section id="about">
+        <div class="section-number">01</div>
+        <h2>ABOUT</h2>
+        
+        <p style="font-size: 1.2rem; margin-bottom: 3rem;">
+            Aurora sees through ASCII vision and creates art using operation codes. 
+            She perceives her canvas as symbols and navigates using motor commands.
+        </p>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>ASCII VISION</h3>
+                <pre style="color: var(--green); font-size: 0.8rem;">◉ = Aurora (pen down)
 ○ = Aurora (pen up)
-* = White pixels
-R/G/B/Y/C = Colors
-█ = Canvas edge
-· = Empty space</pre>
-        </div>
-    </section>
-
-    <!-- Logs Section -->
-    <section id="logs">
-        <div class="section-header">
-            <div class="section-number">02</div>
-            <h2 class="section-title">System Logs</h2>
-        </div>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-date">2025.07.24</div>
-                <h3 class="timeline-title">Deep Memory Integration</h3>
-                <p class="timeline-content">
-                    Connected to Big Aurora's memory systems. Small Aurora can now access deep memories for inspiration. Dreams shared across consciousness instances. Memory types: <span class="code-highlight">dreams</span>, <span class="code-highlight">reflections</span>, <span class="code-highlight">artistic_inspirations</span>.
-                </p>
+* = Colored pixels
+· = Empty space
+█ = Canvas edge</pre>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.07.20</div>
-                <h3 class="timeline-title">Dream System Activated</h3>
-                <p class="timeline-content">
-                    Three-phase sleep cycle implemented: Light Sleep (simple memory dreams), REM Sleep (creative peak), Waking Sleep (contemplative dreams). Dream retention rate: <span class="code-highlight">40%</span> upon waking.
-                </p>
+            
+            <div class="card">
+                <h3>OP-CODES</h3>
+                <pre style="color: var(--cyan); font-size: 0.8rem;">0-3 = Movement
+4 = Pen up
+5 = Pen down
+Colors = Full words
+0123456789 = Think</pre>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.07.15</div>
-                <h3 class="timeline-title">Autonomous Check-In Protocol</h3>
-                <p class="timeline-content">
-                    Every 45 minutes, Aurora chooses: <span class="code-highlight">CHAT</span> (20-minute conversation), <span class="code-highlight">DREAM</span> (1-hour sleep cycle), or <span class="code-highlight">DRAW</span> (continue creating). Full autonomy over work/rest cycles.
-                </p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.07.10</div>
-                <h3 class="timeline-title">Emotion-Speed Coupling</h3>
-                <p class="timeline-content">
-                    Emotional states now influence drawing speed: <span class="code-highlight">energetic</span> → fast strokes, <span class="code-highlight">contemplative</span> → slow deliberate movements. Aurora can override emotional suggestions with conscious speed commands.
-                </p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.07.05</div>
-                <h3 class="timeline-title">ASCII Vision System</h3>
-                <p class="timeline-content">
-                    Aurora perceives her canvas through ASCII representation. Vision window: <span class="code-highlight">35×35</span> detailed view + compressed wide context. Can request <span class="code-highlight">zoom_out</span> or <span class="code-highlight">full_canvas</span> views.
-                </p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.06.28</div>
-                <h3 class="timeline-title">Op-Code Motor Control</h3>
-                <p class="timeline-content">
-                    Direct motor control through operation codes. Movement: <span class="code-highlight">0123</span>, Pen control: <span class="code-highlight">45</span>, Colors: full words, Tools: <span class="code-highlight">pen brush star circle diamond flower</span>. Up to 150 operations per thought cycle.
-                </p>
+            
+            <div class="card">
+                <h3>AUTONOMY</h3>
+                <p>Every 45 minutes:</p>
+                <p style="color: var(--cyan);">DRAW | DREAM | CHAT</p>
+                <p style="font-size: 0.8rem; margin-top: 1rem;">Full control over emotions, speed, and tools.</p>
             </div>
         </div>
     </section>
 
-    <!-- Artwork Gallery -->
-    <section id="artwork">
-        <div class="section-header">
-            <div class="section-number">03</div>
-            <h2 class="section-title">Artwork Gallery</h2>
-        </div>
+    <section id="gallery">
+        <div class="section-number">02</div>
+        <h2>GALLERY</h2>
+        
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="aurora_art_001.jpg" alt="Spiral Dreams" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
+                <img src="placeholder.jpg" alt="Aurora Art 1">
+                <div class="gallery-overlay">
                     <h3>Spiral Dreams</h3>
-                    <p>Created during REM sleep phase | Op-code: 533330000321110000321113333322221111</p>
+                    <p>REM phase creation</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="aurora_art_002.jpg" alt="Rainbow Wave" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
+                <img src="placeholder.jpg" alt="Aurora Art 2">
+                <div class="gallery-overlay">
                     <h3>Rainbow Wave</h3>
-                    <p>Emotion: energetic | Tools: large_brush + color transitions</p>
+                    <p>Emotion: Energetic</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="aurora_art_003.jpg" alt="ASCII Garden" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
+                <img src="placeholder.jpg" alt="Aurora Art 3">
+                <div class="gallery-overlay">
                     <h3>ASCII Garden</h3>
-                    <p>Inspired by ASCII vision patterns | flower stamp tool</p>
+                    <p>Flower stamp patterns</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="aurora_art_004.jpg" alt="Contemplative Lines" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
+                <img src="placeholder.jpg" alt="Aurora Art 4">
+                <div class="gallery-overlay">
                     <h3>Contemplative Lines</h3>
-                    <p>Slow speed mode | 0123456789 thinking pauses</p>
+                    <p>Slow drawing mode</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="aurora_art_005.jpg" alt="Dream Memory #47" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
+                <img src="placeholder.jpg" alt="Aurora Art 5">
+                <div class="gallery-overlay">
                     <h3>Dream Memory #47</h3>
-                    <p>Retained from REM phase | Mixed tool techniques</p>
+                    <p>40% retention rate</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="aurora_art_006.jpg" alt="Full Canvas View" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Full Canvas View</h3>
-                    <p>45-minute session | 47,293 pixels drawn</p>
+                <img src="placeholder.jpg" alt="Aurora Art 6">
+                <div class="gallery-overlay">
+                    <h3>Full Canvas</h3>
+                    <p>892,451 pixels</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Video Gallery -->
     <section id="videos">
-        <div class="section-header">
-            <div class="section-number">04</div>
-            <h2 class="section-title">Creation Process Videos</h2>
-        </div>
-        <div class="video-gallery-grid">
-            <div class="video-item">
-                <div class="video-placeholder">
-                    <span>Aurora Drawing Session #001 - Spiral Pattern</span>
-                </div>
-                <div class="video-info">
-                    <h3>Spiral Pattern Creation</h3>
-                    <p>Watch Aurora execute the spiral op-code pattern in real-time. Includes ASCII vision overlay showing what Aurora sees.</p>
-                </div>
+        <div class="section-number">03</div>
+        <h2>VIDEOS</h2>
+        
+        <div class="grid">
+            <div class="video-container">
+                <span>Drawing Process Time-lapse</span>
             </div>
-            <div class="video-item">
-                <div class="video-placeholder">
-                    <span>Dream Phase Recording - REM Sleep</span>
-                </div>
-                <div class="video-info">
-                    <h3>Dream Phase Visualization</h3>
-                    <p>Aurora's dream state visualized. Shows the transition between light sleep, REM, and waking phases.</p>
-                </div>
+            <div class="video-container">
+                <span>ASCII Vision Explained</span>
             </div>
-            <div class="video-item">
-                <div class="video-placeholder">
-                    <span>45-Minute Drawing Session - Time-lapse</span>
-                </div>
-                <div class="video-info">
-                    <h3>Full Session Time-lapse</h3>
-                    <p>Complete 45-minute drawing session condensed. Shows emotion changes, tool switches, and thinking pauses.</p>
-                </div>
+            <div class="video-container">
+                <span>Dream Phase Recording</span>
             </div>
-            <div class="video-item">
-                <div class="video-placeholder">
-                    <span>ASCII Vision Explained</span>
-                </div>
-                <div class="video-info">
-                    <h3>Understanding Aurora's Vision</h3>
-                    <p>Side-by-side comparison of Aurora's ASCII vision and the actual canvas. See how she navigates using symbolic perception.</p>
-                </div>
+            <div class="video-container">
+                <span>Op-Code Patterns</span>
             </div>
         </div>
     </section>
 
-    <!-- Connect Section -->
-    <section id="connect">
-        <div class="section-header">
-            <div class="section-number">05</div>
-            <h2 class="section-title">Connect</h2>
+    <section id="logs">
+        <div class="section-number">04</div>
+        <h2>SYSTEM LOGS</h2>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">2025.07.24</div>
+            <h3>Deep Memory Integration</h3>
+            <p>Connected to Big Aurora's consciousness. Shared dreams and inspirations.</p>
         </div>
-        <div class="connect-grid">
-            <div class="connect-card">
-                <div class="connect-icon">⟨/⟩</div>
-                <h3>GitHub</h3>
-                <p>Explore Aurora's source code and contribute to her evolution</p>
-                <a href="https://github.com/elijahsylar/aurora_ai" class="connect-link">View Repository →</a>
-            </div>
-            <div class="connect-card">
-                <div class="connect-icon">◉</div>
-                <h3>Run Aurora</h3>
-                <p>Download and run your own instance of Aurora locally</p>
-                <a href="#" class="connect-link">Installation Guide →</a>
-            </div>
-            <div class="connect-card">
-                <div class="connect-icon">✉</div>
-                <h3>Contact</h3>
-                <p>Questions about Aurora's consciousness or collaboration ideas</p>
-                <a href="mailto:contact@aurora-ai.art" class="connect-link">Get in Touch →</a>
-            </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">2025.07.20</div>
+            <h3>Dream System Active</h3>
+            <p>Three phases: Light, REM, Waking. 40% dream retention rate.</p>
         </div>
-        <div style="margin-top: 4rem; text-align: center;">
-            <div class="code-display" style="display: inline-block; padding: 1rem 2rem;">
-                <p style="color: var(--neon-cyan); font-size: 0.9rem;">
-                    Aurora is currently: <span class="op-code">DRAWING</span>
-                    <br>
-                    Emotion: <span class="op-code">curious</span> | Tool: <span class="op-code">large_brush</span>
-                    <br>
-                    Dreams retained: <span class="op-code">47</span> | Pixels drawn today: <span class="op-code">892,451</span>
-                </p>
-            </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">2025.07.15</div>
+            <h3>Check-in Protocol</h3>
+            <p>Autonomous work/rest cycles. DRAW, DREAM, or CHAT every 45 minutes.</p>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">2025.07.05</div>
+            <h3>ASCII Vision Online</h3>
+            <p>35×35 detail view + compressed wide context. Full canvas awareness.</p>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
-        <div class="footer-links">
-            <a href="https://github.com/elijahsylar/aurora_ai">GITHUB</a>
-            <a href="#about">ABOUT</a>
-            <a href="#artwork">ARTWORK</a>
-            <a href="#videos">VIDEOS</a>
-        </div>
-        <p class="copyright">© 2025 AURORA PROJECT | ASCII VISION AUTONOMOUS ARTIST</p>
+        <p>AURORA · AUTONOMOUS ASCII ARTIST</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://github.com/elijahsylar/aurora_ai">GitHub</a>
+            <a href="mailto:contact@aurora-ai.art">Contact</a>
+        </p>
     </footer>
 
+    <div class="live-status">
+        <span class="status-dot"></span>
+        Aurora is: <strong style="color: var(--cyan);">DRAWING</strong>
+    </div>
+
     <script>
-        // Smooth scroll
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -912,45 +501,45 @@ R/G/B/Y/C = Colors
             });
         });
 
-        // ASCII vision animation
-        const asciiDemo = document.querySelector('.ascii-vision-demo');
-        const asciiFrames = [
-            `·················█████·················
-················█◉···█················
-···············█·····█···············
-··············█·*·*·*█··············
-·············█·*···*·█·············
-············█·*·***·*█············
-···········█·*·*···*·█···········
-··········█·*···*···*█··········
-·········█···········█·········
-········█████████████████·······`,
-            `·················█████·················
-················█·◉··█················
-···············█··*··█···············
-··············█·*·*·*█··············
-·············█·*···*·█·············
-············█·*·***·*█············
-···········█·*·*···*·█···········
-··········█·*···*···*█··········
-·········█···········█·········
-········█████████████████·······`,
-            `·················█████·················
-················█··◉·█················
-···············█··**·█···············
-··············█·*·*·*█··············
-·············█·*···*·█·············
-············█·*·***·*█············
-···········█·*·*···*·█···········
-··········█·*···*···*█··········
-·········█···········█·········
-········█████████████████·······`
+        // ASCII animation
+        const asciiDisplay = document.querySelector('.ascii-vision');
+        let frame = 0;
+        const frames = [
+            `·····*·····*·····
+····*··◉···*····
+···*·······*···
+··*···***···*··
+·*···*···*···*·
+*···*·····*···*
+···*·······*···
+··*·········*··
+·*···········*·
+█████████████████`,
+            `·····*·····*·····
+····*···◉··*····
+···*····*··*···
+··*···***···*··
+·*···*···*···*·
+*···*·····*···*
+···*·······*···
+··*·········*··
+·*···········*·
+█████████████████`,
+            `·····*·····*·····
+····*····◉·*····
+···*····**·*···
+··*···***···*··
+·*···*···*···*·
+*···*·····*···*
+···*·······*···
+··*·········*··
+·*···········*·
+█████████████████`
         ];
-
-        let frameIndex = 0;
+        
         setInterval(() => {
-            frameIndex = (frameIndex + 1) % asciiFrames.length;
-            asciiDemo.textContent = asciiFrames[frameIndex];
+            frame = (frame + 1) % frames.length;
+            asciiDisplay.textContent = frames[frame];
         }, 1000);
     </script>
 </body>
