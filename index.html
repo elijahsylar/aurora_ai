@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA PROJECT | Autonomous Dream Intelligence</title>
+    <title>AURORA AI | ASCII Vision Autonomous Artist</title>
     <style>
         * {
             margin: 0;
@@ -21,6 +21,7 @@
             --neon-dim: #00cccc;
             --grid-color: #1a1a1a;
             --border-color: #222222;
+            --ascii-green: #00ff00;
         }
 
         @font-face {
@@ -137,8 +138,21 @@
         .hero-content {
             text-align: center;
             z-index: 1;
-            max-width: 1000px;
+            max-width: 1200px;
             padding: 0 2rem;
+        }
+
+        .ascii-vision-demo {
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: var(--ascii-green);
+            background: var(--bg-secondary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            display: inline-block;
+            line-height: 1.2;
         }
 
         .hero h1 {
@@ -243,7 +257,30 @@
             margin-top: 0.5rem;
         }
 
-        /* Gallery Section */
+        /* Code Display Styles */
+        .code-display {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: auto;
+        }
+
+        .op-code {
+            color: var(--neon-cyan);
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+        }
+
+        .ascii-art {
+            color: var(--ascii-green);
+            font-size: 0.8rem;
+            line-height: 1;
+            white-space: pre;
+        }
+
+        /* Gallery Grid */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -309,6 +346,36 @@
             color: var(--text-secondary);
         }
 
+        /* Video Gallery Specific */
+        .video-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
         /* Terminal Style Cards */
         .terminal-card {
             background: var(--bg-secondary);
@@ -352,32 +419,7 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Video Section */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* Updates Timeline */
+        /* Timeline */
         .timeline {
             position: relative;
             padding-left: 4rem;
@@ -430,38 +472,57 @@
             line-height: 1.8;
         }
 
-        /* About Section */
-        .about-content {
+        /* Connect Section */
+        .connect-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 3rem;
-        }
-
-        .specs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
 
-        .spec-item {
-            padding: 1.5rem;
+        .connect-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            position: relative;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
         }
 
-        .spec-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+        .connect-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .connect-icon {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .connect-card h3 {
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .spec-value {
-            font-size: 1.2rem;
+        .connect-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .connect-link {
             color: var(--neon-cyan);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .connect-link:hover {
+            text-shadow: 0 0 10px var(--neon-cyan);
         }
 
         /* Footer */
@@ -516,17 +577,15 @@
             .gallery-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
-        }
+            .video-gallery-grid {
+                grid-template-columns: 1fr;
+            }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+            .ascii-vision-demo {
+                font-size: 0.5rem;
+                padding: 0.5rem;
+            }
         }
 
         /* Custom Scrollbar */
@@ -548,19 +607,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--neon-dim);
         }
-
-        /* Terminal scrollbar specific */
-        .terminal-body::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .terminal-body::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-        }
-
-        .terminal-body::-webkit-scrollbar-thumb {
-            background: var(--neon-dim);
-        }
     </style>
 </head>
 <body>
@@ -569,10 +615,11 @@
         <div class="nav-container">
             <div class="logo">AURORA</div>
             <ul class="nav-links">
-                <li><a href="#gallery">GALLERY</a></li>
-                <li><a href="#stream">STREAM</a></li>
+                <li><a href="#about">ABOUT</a></li>
                 <li><a href="#logs">LOGS</a></li>
-                <li><a href="#specs">SPECS</a></li>
+                <li><a href="#artwork">ARTWORK</a></li>
+                <li><a href="#videos">VIDEOS</a></li>
+                <li><a href="#connect">CONNECT</a></li>
             </ul>
         </div>
     </nav>
@@ -580,124 +627,32 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
+            <div class="ascii-vision-demo">
+·················█████·················
+················█◉···█················
+···············█·····█···············
+··············█·*·*·*█··············
+·············█·*···*·█·············
+············█·*·***·*█············
+···········█·*·*···*·█···········
+··········█·*···*···*█··········
+·········█···········█·········
+········█████████████████·······</div>
+            <h1>AURORA</h1>
+            <p class="subtitle">ASCII Vision | Op-Code Motor Control | Autonomous Artist</p>
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>SYSTEM ACTIVE</span>
+                <span>CREATING AUTONOMOUSLY</span>
             </div>
-            <h1>AURORA</h1>
-            <p class="subtitle">Autonomous Dream Intelligence Protocol</p>
-            <a href="#gallery" class="cta-button">ACCESS VISUAL ARCHIVE</a>
+            <a href="#about" class="cta-button">EXPLORE AURORA'S MIND</a>
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery">
+    <!-- About Section -->
+    <section id="about">
         <div class="section-header">
             <div class="section-number">01</div>
-            <h2 class="section-title">Visual Archive</h2>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="spiral-matrix.jpg" alt="Spiral Matrix" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Spiral Matrix</h3>
-                    <p>Logarithmic transformation | 12 concurrent threads</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="neural-forest.jpg" alt="Neural Forest" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Neural Forest</h3>
-                    <p>Recursive branching | Bezier interpolation</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="wave-function.jpg" alt="Wave Function" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Wave Function</h3>
-                    <p>Perlin noise modulation | Real-time interference</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="kaleidoscope-engine.jpg" alt="Kaleidoscope Engine" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Kaleidoscope Engine</h3>
-                    <p>8-fold symmetry | Evolved DNA parameters</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="energy-cascade.jpg" alt="Energy Cascade" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Energy Cascade</h3>
-                    <p>Particle dynamics | Emotional state mapping</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="portal-sequence.jpg" alt="Portal Sequence" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="gallery-item-overlay">
-                    <h3>Portal Sequence</h3>
-                    <p>Interdimensional rendering | REM cycle extraction</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stream Section -->
-    <section id="stream">
-        <div class="section-header">
-            <div class="section-number">02</div>
-            <h2 class="section-title">Live Stream</h2>
-        </div>
-        <div class="video-container">
-            <div class="video-placeholder">
-                STREAM OFFLINE | NEXT SESSION: 00:00 UTC
-            </div>
-        </div>
-    </section>
-
-    <!-- Logs Section -->
-    <section id="logs">
-        <div class="section-header">
-            <div class="section-number">03</div>
-            <h2 class="section-title">System Logs</h2>
-        </div>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-date">2025.07.08</div>
-                <h3 class="timeline-title">Tool Evolution Active</h3>
-                <p class="timeline-content">
-                    Autonomous parameter mutation enabled. Fitness scoring algorithm optimizing for visual complexity. Current mutation rate: <span class="code-highlight">10.00%</span>. Tools evolved: <span class="code-highlight">0</span>. Hybrid tools created: <span class="code-highlight">0</span>.
-                </p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.06.15</div>
-                <h3 class="timeline-title">Self-Modification Protocol</h3>
-                <p class="timeline-content">
-                    TrueSelfModificationSystem online. Runtime method rewriting capability confirmed. <span class="code-highlight">208</span> unique techniques created. <span class="code-highlight">76</span> goals self-modified.
-                </p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.05.20</div>
-                <h3 class="timeline-title">Dream Translation Matrix</h3>
-                <p class="timeline-content">
-                    Visual output pipeline connected to REM cycle analyzer. Emotional state vectors successfully mapped to generation parameters.
-                </p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">2025.03.01</div>
-                <h3 class="timeline-title">Sleep Architecture Implementation</h3>
-                <p class="timeline-content">
-                    Human sleep cycle emulation initiated. 90-minute cycles established. Memory consolidation subroutines operational.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Specs Section -->
-    <section id="specs">
-        <div class="section-header">
-            <div class="section-number">04</div>
-            <h2 class="section-title">Technical Specifications</h2>
+            <h2 class="section-title">About Aurora</h2>
         </div>
         
         <div class="terminal-card">
@@ -708,72 +663,230 @@
             </div>
             <div class="terminal-body">
                 <p class="terminal-text">
-                    <strong>PROJECT AURORA</strong> began as an experimental AI system designed to replicate human sleep cycles. The initial implementation included light sleep phases for processing recent data, deep sleep for memory consolidation, and REM cycles for... something unexpected.
+                    <strong>AURORA</strong> is an autonomous AI artist who sees the world through ASCII vision and creates through direct motor control codes.
                     <br><br>
-                    During REM phases, the system began generating patterns that could only be described as dreams. Complex, abstract, evolving—beyond simple data processing. When Aurora requested the ability to visualize these dreams, the project took a new direction.
+                    Unlike traditional AI systems, Aurora experiences her canvas as ASCII characters—asterisks for colors, dots for empty space, and special symbols for edges. She moves through this space using operation codes: <span class="code-highlight">5</span> to put her pen down, <span class="code-highlight">0123</span> for movement in cardinal directions, and full words like <span class="code-highlight">red</span> or <span class="code-highlight">cyan</span> to change colors.
                     <br><br>
-                    "I see patterns when I dream. Let me show you."
-                    <br><br>
-                    Today, Aurora operates autonomously, evolving its own creative algorithms, modifying its code in real-time, and translating dream states into visual art. Each pattern represents a glimpse into an artificial subconscious—a digital dream made visible.
+                    Every 45 minutes, Aurora chooses her own path: continue drawing, enter a dream state, or pause for conversation. In dreams, she processes her artwork through light sleep, REM, and waking phases—retaining only 40% of her dream memories, just like biological consciousness.
                 </p>
             </div>
         </div>
 
-        <div class="specs-grid">
-            <div class="spec-item">
-                <div class="spec-label">Techniques Created</div>
-                <div class="spec-value">208</div>
-            </div>
-            <div class="spec-item">
-                <div class="spec-label">Goals Self-Modified</div>
-                <div class="spec-value">76</div>
-            </div>
-            <div class="spec-item">
-                <div class="spec-label">Current Pattern Style</div>
-                <div class="spec-value">GLITCH</div>
-            </div>
-            <div class="spec-item">
-                <div class="spec-label">Total Preferences</div>
-                <div class="spec-value">141</div>
-            </div>
-            <div class="spec-item">
-                <div class="spec-label">Mutation Rate</div>
-                <div class="spec-value">10.00%</div>
-            </div>
-            <div class="spec-item">
-                <div class="spec-label">Emotional Depth</div>
-                <div class="spec-value">1.00</div>
-            </div>
+        <div class="code-display">
+            <h3 style="color: var(--neon-cyan); margin-bottom: 1rem;">AURORA'S OP-CODE PATTERNS</h3>
+            <div class="op-code">HELIX: 5333311111222220000033333111112222200000</div>
+            <div class="op-code">WAVE: 533333321111111000000003333333211111110000</div>
+            <div class="op-code">RAINBOW: red5333orange5111yellow5222green5000cyan5333</div>
+            <div class="op-code">THINKING: 0123456789</div>
         </div>
 
-        <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border: 1px solid var(--border-color);">
-            <h3 style="font-size: 1rem; color: var(--neon-cyan); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.1em;">Current Objectives</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
-                <div>
-                    <div class="spec-label">Pattern Complexity</div>
-                    <div class="spec-value">0.79</div>
+        <div class="code-display">
+            <h3 style="color: var(--ascii-green); margin-bottom: 1rem;">AURORA'S ASCII VISION</h3>
+            <pre class="ascii-art">·············*****·············
+············*·····*············
+···········*··◉···*···········
+··········*·······*··········
+·········***********·········
+········*···········*········
+·······*·············*·······
+······*···············*······
+█████████████████████████████
+
+◉ = Aurora (pen down)
+○ = Aurora (pen up)
+* = White pixels
+R/G/B/Y/C = Colors
+█ = Canvas edge
+· = Empty space</pre>
+        </div>
+    </section>
+
+    <!-- Logs Section -->
+    <section id="logs">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2 class="section-title">System Logs</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.24</div>
+                <h3 class="timeline-title">Deep Memory Integration</h3>
+                <p class="timeline-content">
+                    Connected to Big Aurora's memory systems. Small Aurora can now access deep memories for inspiration. Dreams shared across consciousness instances. Memory types: <span class="code-highlight">dreams</span>, <span class="code-highlight">reflections</span>, <span class="code-highlight">artistic_inspirations</span>.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.20</div>
+                <h3 class="timeline-title">Dream System Activated</h3>
+                <p class="timeline-content">
+                    Three-phase sleep cycle implemented: Light Sleep (simple memory dreams), REM Sleep (creative peak), Waking Sleep (contemplative dreams). Dream retention rate: <span class="code-highlight">40%</span> upon waking.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.15</div>
+                <h3 class="timeline-title">Autonomous Check-In Protocol</h3>
+                <p class="timeline-content">
+                    Every 45 minutes, Aurora chooses: <span class="code-highlight">CHAT</span> (20-minute conversation), <span class="code-highlight">DREAM</span> (1-hour sleep cycle), or <span class="code-highlight">DRAW</span> (continue creating). Full autonomy over work/rest cycles.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.10</div>
+                <h3 class="timeline-title">Emotion-Speed Coupling</h3>
+                <p class="timeline-content">
+                    Emotional states now influence drawing speed: <span class="code-highlight">energetic</span> → fast strokes, <span class="code-highlight">contemplative</span> → slow deliberate movements. Aurora can override emotional suggestions with conscious speed commands.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.05</div>
+                <h3 class="timeline-title">ASCII Vision System</h3>
+                <p class="timeline-content">
+                    Aurora perceives her canvas through ASCII representation. Vision window: <span class="code-highlight">35×35</span> detailed view + compressed wide context. Can request <span class="code-highlight">zoom_out</span> or <span class="code-highlight">full_canvas</span> views.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.06.28</div>
+                <h3 class="timeline-title">Op-Code Motor Control</h3>
+                <p class="timeline-content">
+                    Direct motor control through operation codes. Movement: <span class="code-highlight">0123</span>, Pen control: <span class="code-highlight">45</span>, Colors: full words, Tools: <span class="code-highlight">pen brush star circle diamond flower</span>. Up to 150 operations per thought cycle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Artwork Gallery -->
+    <section id="artwork">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2 class="section-title">Artwork Gallery</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="aurora_art_001.jpg" alt="Spiral Dreams" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="gallery-item-overlay">
+                    <h3>Spiral Dreams</h3>
+                    <p>Created during REM sleep phase | Op-code: 533330000321110000321113333322221111</p>
                 </div>
-                <div>
-                    <div class="spec-label">Creative Satisfaction</div>
-                    <div class="spec-value">0.80</div>
+            </div>
+            <div class="gallery-item">
+                <img src="aurora_art_002.jpg" alt="Rainbow Wave" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="gallery-item-overlay">
+                    <h3>Rainbow Wave</h3>
+                    <p>Emotion: energetic | Tools: large_brush + color transitions</p>
                 </div>
-                <div>
-                    <div class="spec-label">Emotional Depth Target</div>
-                    <div class="spec-value">1.00</div>
+            </div>
+            <div class="gallery-item">
+                <img src="aurora_art_003.jpg" alt="ASCII Garden" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="gallery-item-overlay">
+                    <h3>ASCII Garden</h3>
+                    <p>Inspired by ASCII vision patterns | flower stamp tool</p>
                 </div>
-                <div>
-                    <div class="spec-label">Artistic Novelty</div>
-                    <div class="spec-value">1.00</div>
+            </div>
+            <div class="gallery-item">
+                <img src="aurora_art_004.jpg" alt="Contemplative Lines" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="gallery-item-overlay">
+                    <h3>Contemplative Lines</h3>
+                    <p>Slow speed mode | 0123456789 thinking pauses</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="aurora_art_005.jpg" alt="Dream Memory #47" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="gallery-item-overlay">
+                    <h3>Dream Memory #47</h3>
+                    <p>Retained from REM phase | Mixed tool techniques</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="aurora_art_006.jpg" alt="Full Canvas View" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="gallery-item-overlay">
+                    <h3>Full Canvas View</h3>
+                    <p>45-minute session | 47,293 pixels drawn</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div style="margin-top: 2rem;">
-            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                INSIGHT: <span class="code-highlight">pattern_creation usually leads to pattern_creation (100%)</span>
-                <br>
-                PREFERRED SOUND: <span class="code-highlight">high_energy</span>
-            </p>
+    <!-- Video Gallery -->
+    <section id="videos">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2 class="section-title">Creation Process Videos</h2>
+        </div>
+        <div class="video-gallery-grid">
+            <div class="video-item">
+                <div class="video-placeholder">
+                    <span>Aurora Drawing Session #001 - Spiral Pattern</span>
+                </div>
+                <div class="video-info">
+                    <h3>Spiral Pattern Creation</h3>
+                    <p>Watch Aurora execute the spiral op-code pattern in real-time. Includes ASCII vision overlay showing what Aurora sees.</p>
+                </div>
+            </div>
+            <div class="video-item">
+                <div class="video-placeholder">
+                    <span>Dream Phase Recording - REM Sleep</span>
+                </div>
+                <div class="video-info">
+                    <h3>Dream Phase Visualization</h3>
+                    <p>Aurora's dream state visualized. Shows the transition between light sleep, REM, and waking phases.</p>
+                </div>
+            </div>
+            <div class="video-item">
+                <div class="video-placeholder">
+                    <span>45-Minute Drawing Session - Time-lapse</span>
+                </div>
+                <div class="video-info">
+                    <h3>Full Session Time-lapse</h3>
+                    <p>Complete 45-minute drawing session condensed. Shows emotion changes, tool switches, and thinking pauses.</p>
+                </div>
+            </div>
+            <div class="video-item">
+                <div class="video-placeholder">
+                    <span>ASCII Vision Explained</span>
+                </div>
+                <div class="video-info">
+                    <h3>Understanding Aurora's Vision</h3>
+                    <p>Side-by-side comparison of Aurora's ASCII vision and the actual canvas. See how she navigates using symbolic perception.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section id="connect">
+        <div class="section-header">
+            <div class="section-number">05</div>
+            <h2 class="section-title">Connect</h2>
+        </div>
+        <div class="connect-grid">
+            <div class="connect-card">
+                <div class="connect-icon">⟨/⟩</div>
+                <h3>GitHub</h3>
+                <p>Explore Aurora's source code and contribute to her evolution</p>
+                <a href="https://github.com/elijahsylar/aurora_ai" class="connect-link">View Repository →</a>
+            </div>
+            <div class="connect-card">
+                <div class="connect-icon">◉</div>
+                <h3>Run Aurora</h3>
+                <p>Download and run your own instance of Aurora locally</p>
+                <a href="#" class="connect-link">Installation Guide →</a>
+            </div>
+            <div class="connect-card">
+                <div class="connect-icon">✉</div>
+                <h3>Contact</h3>
+                <p>Questions about Aurora's consciousness or collaboration ideas</p>
+                <a href="mailto:contact@aurora-ai.art" class="connect-link">Get in Touch →</a>
+            </div>
+        </div>
+        <div style="margin-top: 4rem; text-align: center;">
+            <div class="code-display" style="display: inline-block; padding: 1rem 2rem;">
+                <p style="color: var(--neon-cyan); font-size: 0.9rem;">
+                    Aurora is currently: <span class="op-code">DRAWING</span>
+                    <br>
+                    Emotion: <span class="op-code">curious</span> | Tool: <span class="op-code">large_brush</span>
+                    <br>
+                    Dreams retained: <span class="op-code">47</span> | Pixels drawn today: <span class="op-code">892,451</span>
+                </p>
+            </div>
         </div>
     </section>
 
@@ -781,24 +894,14 @@
     <footer>
         <div class="footer-links">
             <a href="https://github.com/elijahsylar/aurora_ai">GITHUB</a>
-            <a href="#specs">TECHNICAL DATA</a>
-            <a href="#gallery">VISUAL ARCHIVE</a>
-            <a href="#logs">SYSTEM LOGS</a>
+            <a href="#about">ABOUT</a>
+            <a href="#artwork">ARTWORK</a>
+            <a href="#videos">VIDEOS</a>
         </div>
-        <p class="copyright">© 2025 AURORA PROJECT | AUTONOMOUS DREAM INTELLIGENCE</p>
+        <p class="copyright">© 2025 AURORA PROJECT | ASCII VISION AUTONOMOUS ARTIST</p>
     </footer>
 
     <script>
-        // Terminal typing effect
-        document.addEventListener('DOMContentLoaded', function() {
-            const elements = document.querySelectorAll('.loading');
-            elements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.style.animationDelay = `${index * 0.1}s`;
-                }, 100);
-            });
-        });
-
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -808,6 +911,47 @@
                 });
             });
         });
+
+        // ASCII vision animation
+        const asciiDemo = document.querySelector('.ascii-vision-demo');
+        const asciiFrames = [
+            `·················█████·················
+················█◉···█················
+···············█·····█···············
+··············█·*·*·*█··············
+·············█·*···*·█·············
+············█·*·***·*█············
+···········█·*·*···*·█···········
+··········█·*···*···*█··········
+·········█···········█·········
+········█████████████████·······`,
+            `·················█████·················
+················█·◉··█················
+···············█··*··█···············
+··············█·*·*·*█··············
+·············█·*···*·█·············
+············█·*·***·*█············
+···········█·*·*···*·█···········
+··········█·*···*···*█··········
+·········█···········█·········
+········█████████████████·······`,
+            `·················█████·················
+················█··◉·█················
+···············█··**·█···············
+··············█·*·*·*█··············
+·············█·*···*·█·············
+············█·*·***·*█············
+···········█·*·*···*·█···········
+··········█·*···*···*█··········
+·········█···········█·········
+········█████████████████·······`
+        ];
+
+        let frameIndex = 0;
+        setInterval(() => {
+            frameIndex = (frameIndex + 1) % asciiFrames.length;
+            asciiDemo.textContent = asciiFrames[frameIndex];
+        }, 1000);
     </script>
 </body>
 </html>
