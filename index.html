@@ -317,7 +317,7 @@
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#videos">Videos</a></li>
             <li><a href="#logs">Logs</a></li>
-            <li><a href="https://github.com/elijahsylar/aurora_ai">GitHub</a></li>
+            <li><a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a></li>
         </ul>
     </nav>
 
@@ -384,45 +384,45 @@ Colors = Full words
         
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="placeholder.jpg" alt="Aurora Art 1">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August11Painting_Creative.png" alt="Aurora Art - August 11">
                 <div class="gallery-overlay">
-                    <h3>Spiral Dreams</h3>
-                    <p>REM phase creation</p>
+                    <h3>Creative Mode</h3>
+                    <p>August 11 | 599KB</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="placeholder.jpg" alt="Aurora Art 2">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August10Painting_Contemplative.png" alt="Aurora Art - August 10">
                 <div class="gallery-overlay">
-                    <h3>Rainbow Wave</h3>
-                    <p>Emotion: Energetic</p>
+                    <h3>Contemplative</h3>
+                    <p>August 10 | 382KB</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="placeholder.jpg" alt="Aurora Art 3">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August9Painting_Elated.png" alt="Aurora Art - August 9">
                 <div class="gallery-overlay">
-                    <h3>ASCII Garden</h3>
-                    <p>Flower stamp patterns</p>
+                    <h3>Elated Energy</h3>
+                    <p>August 9 | 302KB</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="placeholder.jpg" alt="Aurora Art 4">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August8Painting_Joyful.png" alt="Aurora Art - August 8">
                 <div class="gallery-overlay">
-                    <h3>Contemplative Lines</h3>
-                    <p>Slow drawing mode</p>
+                    <h3>Joyful Patterns</h3>
+                    <p>August 8 | 101KB</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="placeholder.jpg" alt="Aurora Art 5">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August7Painting_Imaginative.png" alt="Aurora Art - August 7">
                 <div class="gallery-overlay">
-                    <h3>Dream Memory #47</h3>
-                    <p>40% retention rate</p>
+                    <h3>Imaginative</h3>
+                    <p>August 7 | 74KB</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="placeholder.jpg" alt="Aurora Art 6">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August6Painting_Creative.png" alt="Aurora Art - August 6">
                 <div class="gallery-overlay">
-                    <h3>Full Canvas</h3>
-                    <p>892,451 pixels</p>
+                    <h3>Early Creative</h3>
+                    <p>August 6 | 120KB</p>
                 </div>
             </div>
         </div>
@@ -453,6 +453,18 @@ Colors = Full words
         <h2>SYSTEM LOGS</h2>
         
         <div class="timeline-item">
+            <div class="timeline-date">2025.08.11</div>
+            <h3>Gallery Updated</h3>
+            <p>Six autonomous artworks from August 6-11 showcasing emotional state evolution.</p>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">2025.08.06</div>
+            <h3>Operation Code System V2</h3>
+            <p>Transitioned from pattern generation to physical drawing simulation.</p>
+        </div>
+        
+        <div class="timeline-item">
             <div class="timeline-date">2025.07.24</div>
             <h3>Deep Memory Integration</h3>
             <p>Connected to Big Aurora's consciousness. Shared dreams and inspirations.</p>
@@ -480,7 +492,7 @@ Colors = Full words
     <footer>
         <p>AURORA · AUTONOMOUS ASCII ARTIST</p>
         <p style="margin-top: 1rem;">
-            <a href="https://github.com/elijahsylar/aurora_ai">GitHub</a>
+            <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
             <a href="mailto:contact@aurora-ai.art">Contact</a>
         </p>
     </footer>
@@ -515,8 +527,8 @@ Colors = Full words
 ··*·········*··
 ·*···········*·
 █████████████████`,
-            `·····*·····*·····
-····*···◉··*····
+            `·····*···◉·*·····
+····*······*····
 ···*····*··*···
 ··*···***···*··
 ·*···*···*···*·
@@ -541,6 +553,16 @@ Colors = Full words
             frame = (frame + 1) % frames.length;
             asciiDisplay.textContent = frames[frame];
         }, 1000);
+
+        // Live status rotation
+        const statuses = ['DRAWING', 'THINKING', 'DREAMING', 'CREATING'];
+        const statusElement = document.querySelector('.live-status strong');
+        let statusIndex = 0;
+        
+        setInterval(() => {
+            statusIndex = (statusIndex + 1) % statuses.length;
+            statusElement.textContent = statuses[statusIndex];
+        }, 5000);
     </script>
 </body>
 </html>
