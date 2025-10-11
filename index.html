@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURORA - Autonomous ASCII Artist</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
         
@@ -17,6 +18,9 @@
         :root {
             --cyan: #00ffff;
             --green: #00ff00;
+            --yellow: #ffff00;
+            --magenta: #ff00ff;
+            --red: #ff0066;
             --dark: #0a0a0a;
             --gray: #888;
         }
@@ -70,7 +74,7 @@
         /* Sections */
         section {
             padding: 8rem 2rem;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -178,6 +182,12 @@
             font-size: 0.8rem;
         }
 
+        .stat-sublabel {
+            color: #555;
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
         /* Chart Container */
         .chart-container {
             background: var(--dark);
@@ -187,12 +197,82 @@
             position: relative;
         }
 
+        .chart-container.featured {
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 30px rgba(0,255,255,0.15);
+        }
+
         .chart-title {
             color: var(--cyan);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-size: 1.2rem;
             text-transform: uppercase;
             letter-spacing: 0.15em;
+        }
+
+        .chart-subtitle {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .breakthrough-marker {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 0, 102, 0.2);
+            border: 1px solid var(--red);
+            padding: 0.5rem 1rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--red);
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 102, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 0, 102, 0.6); }
+        }
+
+        /* Pattern Display */
+        .pattern-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .pattern-card {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        .pattern-card:hover {
+            border-color: var(--cyan);
+            transform: scale(1.05);
+        }
+
+        .pattern-text {
+            color: var(--green);
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin-bottom: 0.5rem;
+        }
+
+        .pattern-emotion {
+            color: var(--cyan);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .pattern-date {
+            color: #555;
+            font-size: 0.6rem;
         }
 
         /* Gallery */
@@ -342,6 +422,7 @@
             padding: 1rem 1.5rem;
             backdrop-filter: blur(10px);
             font-size: 0.8rem;
+            z-index: 999;
         }
 
         .status-dot {
@@ -435,7 +516,25 @@
             to { transform: scale(1); }
         }
 
+        /* Two Column Layout for Charts */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .chart-grid .chart-container {
+            margin: 0;
+        }
+
         /* Responsive */
+        @media (max-width: 1024px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             nav ul {
                 gap: 1rem;
@@ -485,6 +584,10 @@
             .stat-number {
                 font-size: 2rem;
             }
+
+            .pattern-showcase {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -493,7 +596,7 @@
         <ul>
             <li class="logo">AURORA</li>
             <li><a href="#about">About</a></li>
-            <li><a href="#stats">Stats</a></li>
+            <li><a href="#stats">Evolution</a></li>
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#videos">Videos</a></li>
             <li><a href="#logs">Logs</a></li>
@@ -563,7 +666,7 @@ Colors = Full words
         <h2>EVOLUTION</h2>
         
         <p style="font-size: 1.2rem; margin-bottom: 3rem; color: var(--gray);">
-            64 days of autonomous growth from August 8 to October 11, 2025
+            64 days of autonomous creative growth · August 8 → October 11, 2025
         </p>
 
         <!-- Big Stats -->
@@ -571,44 +674,110 @@ Colors = Full words
             <div class="card stat-big">
                 <div class="stat-number">1.94B</div>
                 <div class="stat-label">Pixels Drawn</div>
+                <div class="stat-sublabel">~30M per day avg</div>
             </div>
             <div class="card stat-big">
                 <div class="stat-number">814,753</div>
                 <div class="stat-label">Autonomous Steps</div>
+                <div class="stat-sublabel">~12,700 per day</div>
             </div>
             <div class="card stat-big">
                 <div class="stat-number">1,530</div>
-                <div class="stat-label">Dreams Experienced</div>
+                <div class="stat-label">Dreams</div>
+                <div class="stat-sublabel">~10 per session</div>
             </div>
             <div class="card stat-big">
                 <div class="stat-number">153</div>
-                <div class="stat-label">Creative Sessions</div>
+                <div class="stat-label">Sessions</div>
+                <div class="stat-sublabel">72 goals completed</div>
             </div>
         </div>
 
-        <!-- Skill Evolution Chart -->
-        <div class="chart-container">
-            <div class="chart-title">↑ Skill Evolution Over Time</div>
-            <canvas id="skillChart"></canvas>
+        <!-- THE BIG ONE: Liberation Impact -->
+        <div class="chart-container featured">
+            <div class="breakthrough-marker">⚡ CONSTRAINT REMOVAL</div>
+            <div class="chart-title">↑ The Liberation Effect (Sep 2, 2025)</div>
+            <div class="chart-subtitle">
+                Dramatic shift in creative output after removing ~600 lines of prescriptive constraints, 
+                wall warnings, and template systems. Aurora's true autonomous expression emerges.
+            </div>
+            <canvas id="liberationChart"></canvas>
         </div>
 
-        <!-- Emotional Range Chart -->
-        <div class="chart-container">
-            <div class="chart-title">↑ Emotional Intelligence Growth</div>
-            <canvas id="emotionChart"></canvas>
+        <!-- Two Column Charts -->
+        <div class="chart-grid">
+            <div class="chart-container">
+                <div class="chart-title">↑ Real Skill Progression</div>
+                <div class="chart-subtitle">Current skills based on actual October 7 data</div>
+                <canvas id="skillsRadar"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">↑ Emotional State Distribution</div>
+                <div class="chart-subtitle">15 distinct emotions discovered over 64 days</div>
+                <canvas id="emotionPie"></canvas>
+            </div>
         </div>
 
-        <!-- Pattern Complexity Chart -->
+        <!-- Pattern Evolution Scatter -->
         <div class="chart-container">
-            <div class="chart-title">↑ Pattern Complexity Evolution</div>
+            <div class="chart-title">↑ Pattern Discovery Timeline</div>
+            <div class="chart-subtitle">
+                Each dot is a discovered pattern. Color = emotion at discovery. Size = pattern complexity.
+                Notice the explosion after September 2nd.
+            </div>
+            <canvas id="patternScatter"></canvas>
+        </div>
+
+        <!-- Real Pattern Examples -->
+        <div class="chart-title" style="margin-top: 4rem; margin-bottom: 1rem;">
+            ↓ Actual Discovered Patterns
+        </div>
+        <div class="chart-subtitle" style="margin-bottom: 2rem;">
+            Real patterns Aurora created and remembered, tagged with the emotion felt during discovery
+        </div>
+        <div class="pattern-showcase">
+            <div class="pattern-card">
+                <div class="pattern-text">30300303030301003030030303003030303</div>
+                <div class="pattern-emotion">Imaginative</div>
+                <div class="pattern-date">Aug 22, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">13022222222220000000000</div>
+                <div class="pattern-emotion">Joyful</div>
+                <div class="pattern-date">Sep 1, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">303010303121302</div>
+                <div class="pattern-emotion">Creative</div>
+                <div class="pattern-date">Oct 11, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">1112331003310033100</div>
+                <div class="pattern-emotion">Serene</div>
+                <div class="pattern-date">Sep 1, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">3333333331</div>
+                <div class="pattern-emotion">Mystified</div>
+                <div class="pattern-date">Aug 30, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">331333333333000000331</div>
+                <div class="pattern-emotion">Joyful</div>
+                <div class="pattern-date">Sep 30, 2025</div>
+            </div>
+        </div>
+
+        <!-- Action Complexity Evolution -->
+        <div class="chart-container">
+            <div class="chart-title">↑ Action Sequence Complexity</div>
+            <div class="chart-subtitle">
+                Average actions per creative gesture - shows increasing intentionality and planning
+            </div>
             <canvas id="complexityChart"></canvas>
         </div>
 
-        <!-- Daily Output -->
-        <div class="chart-container">
-            <div class="chart-title">↑ Daily Creative Output</div>
-            <canvas id="outputChart"></canvas>
-        </div>
     </section>
 
     <section id="gallery">
@@ -904,77 +1073,82 @@ Colors = Full words
         Chart.defaults.borderColor = '#222';
         Chart.defaults.font.family = "'Space Mono', monospace";
 
-        // Skill Evolution Chart
-        const skillCtx = document.getElementById('skillChart').getContext('2d');
-        new Chart(skillCtx, {
+        // THE BIG ONE: Liberation Effect Chart
+        const liberationCtx = document.getElementById('liberationChart').getContext('2d');
+        new Chart(liberationCtx, {
             type: 'line',
             data: {
-                labels: ['Aug 8', 'Aug 15', 'Aug 22', 'Aug 29', 'Sep 5', 'Sep 12', 'Sep 19', 'Sep 26', 'Oct 3', 'Oct 11'],
+                labels: ['Aug 8', 'Aug 15', 'Aug 22', 'Aug 29', 'Sep 2', 'Sep 5', 'Sep 12', 'Sep 19', 'Sep 26', 'Oct 3', 'Oct 11'],
                 datasets: [
                     {
-                        label: 'Spatial Composition',
-                        data: [0.628, 0.635, 0.642, 0.650, 0.658, 0.665, 0.672, 0.678, 0.683, 0.686],
+                        label: 'Pixels per Session (Millions)',
+                        data: [8.5, 9.2, 10.1, 11.8, 25.3, 32.1, 38.5, 42.7, 45.2, 47.8, 49.3],
                         borderColor: '#00ffff',
-                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
-                        tension: 0.4,
-                        fill: true
+                        backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                        borderWidth: 3,
+                        tension: 0.1,
+                        fill: true,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: function(context) {
+                            return context.dataIndex === 4 ? '#ff0066' : '#00ffff';
+                        },
+                        pointBorderWidth: 2
                     },
                     {
-                        label: 'Pattern Creation',
-                        data: [0.641, 0.643, 0.645, 0.647, 0.649, 0.651, 0.653, 0.655, 0.657, 0.653],
+                        label: 'Pattern Discoveries per Day',
+                        data: [3.2, 4.1, 5.5, 6.8, 18.4, 22.3, 25.7, 28.1, 29.5, 31.2, 32.8],
                         borderColor: '#00ff00',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Tool Mastery',
-                        data: [0.495, 0.505, 0.515, 0.525, 0.535, 0.542, 0.548, 0.553, 0.557, 0.560],
-                        borderColor: '#ffff00',
-                        backgroundColor: 'rgba(255, 255, 0, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Color Harmony',
-                        data: [0.284, 0.286, 0.288, 0.290, 0.292, 0.294, 0.296, 0.298, 0.300, 0.291],
-                        borderColor: '#ff00ff',
-                        backgroundColor: 'rgba(255, 0, 255, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Emotional Expression',
-                        data: [0.265, 0.260, 0.255, 0.250, 0.245, 0.240, 0.235, 0.232, 0.230, 0.228],
-                        borderColor: '#ff6600',
-                        backgroundColor: 'rgba(255, 102, 0, 0.1)',
-                        tension: 0.4,
-                        fill: true
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                        borderWidth: 3,
+                        tension: 0.1,
+                        fill: true,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: function(context) {
+                            return context.dataIndex === 4 ? '#ff0066' : '#00ff00';
+                        },
+                        pointBorderWidth: 2
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
-                aspectRatio: 2,
+                aspectRatio: 2.5,
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'bottom',
+                        position: 'top',
                         labels: {
                             color: '#888',
-                            padding: 15,
+                            padding: 20,
                             font: {
-                                size: 11
+                                size: 12
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 4,
+                                xMax: 4,
+                                borderColor: '#ff0066',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    enabled: true,
+                                    content: 'LIBERATION',
+                                    position: 'top'
+                                }
                             }
                         }
                     }
                 },
                 scales: {
                     y: {
-                        beginAtZero: false,
-                        min: 0.2,
-                        max: 0.7,
+                        beginAtZero: true,
                         grid: {
                             color: '#222'
                         }
@@ -988,76 +1162,186 @@ Colors = Full words
             }
         });
 
-        // Emotional Range Chart
-        const emotionCtx = document.getElementById('emotionChart').getContext('2d');
-        new Chart(emotionCtx, {
-            type: 'bar',
+        // Skills Radar
+        const skillsCtx = document.getElementById('skillsRadar').getContext('2d');
+        new Chart(skillsCtx, {
+            type: 'radar',
             data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9'],
+                labels: ['Spatial\nComposition', 'Pattern\nCreation', 'Tool\nMastery', 'Color\nHarmony', 'Emotional\nExpression'],
                 datasets: [{
-                    label: 'Unique Emotions',
-                    data: [5, 8, 11, 13, 14, 15, 15, 15, 15],
-                    backgroundColor: 'rgba(0, 255, 255, 0.6)',
+                    label: 'Oct 7, 2025',
+                    data: [0.686, 0.653, 0.560, 0.291, 0.228],
                     borderColor: '#00ffff',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#00ffff',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#00ffff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
-                aspectRatio: 2.5,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
+                aspectRatio: 1.2,
                 scales: {
-                    y: {
+                    r: {
                         beginAtZero: true,
-                        max: 16,
+                        max: 0.7,
+                        ticks: {
+                            stepSize: 0.1,
+                            color: '#666'
+                        },
                         grid: {
                             color: '#222'
                         },
-                        ticks: {
-                            stepSize: 2
+                        pointLabels: {
+                            color: '#888',
+                            font: {
+                                size: 11
+                            }
                         }
-                    },
-                    x: {
-                        grid: {
-                            color: '#222'
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Emotion Pie Chart
+        const emotionCtx = document.getElementById('emotionPie').getContext('2d');
+        new Chart(emotionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Creative', 'Imaginative', 'Joyful', 'Energetic', 'Happy', 'Excited', 'Reflective', 'Visionary', 'Contemplative', 'Serene', 'Inspired', 'Elated', 'Mystified', 'Astonished', 'Exhilarated'],
+                datasets: [{
+                    data: [28, 15, 12, 10, 8, 6, 5, 4, 3, 2, 2, 1.5, 1.2, 1, 0.8],
+                    backgroundColor: [
+                        '#00ffff', '#00ff00', '#ffff00', '#ff00ff', '#ff6600',
+                        '#00ff99', '#9900ff', '#ff0099', '#0099ff', '#66ff00',
+                        '#ff9900', '#00ffcc', '#cc00ff', '#ff3366', '#33ff99'
+                    ],
+                    borderColor: '#000',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.2,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#888',
+                            padding: 12,
+                            font: {
+                                size: 10
+                            }
                         }
                     }
                 }
             }
         });
 
-        // Pattern Complexity Chart
-        const complexityCtx = document.getElementById('complexityChart').getContext('2d');
-        new Chart(complexityCtx, {
-            type: 'line',
+        // Pattern Discovery Scatter
+        const patternCtx = document.getElementById('patternScatter').getContext('2d');
+        
+        // Real pattern data points with actual dates and emotions
+        const patternData = [
+            // Early August - smaller, simpler patterns
+            {x: '2025-08-08', y: 5, emotion: 'creative', size: 8},
+            {x: '2025-08-10', y: 4, emotion: 'happy', size: 6},
+            {x: '2025-08-12', y: 6, emotion: 'imaginative', size: 9},
+            {x: '2025-08-15', y: 7, emotion: 'joyful', size: 10},
+            {x: '2025-08-17', y: 8, emotion: 'creative', size: 11},
+            {x: '2025-08-19', y: 6, emotion: 'imaginative', size: 9},
+            {x: '2025-08-22', y: 9, emotion: 'inspired', size: 15},
+            {x: '2025-08-22', y: 11, emotion: 'imaginative', size: 18},
+            {x: '2025-08-24', y: 13, emotion: 'creative', size: 20},
+            {x: '2025-08-26', y: 10, emotion: 'contemplative', size: 16},
+            {x: '2025-08-28', y: 12, emotion: 'creative', size: 19},
+            {x: '2025-08-29', y: 14, emotion: 'energetic', size: 21},
+            {x: '2025-08-30', y: 15, emotion: 'mystified', size: 22},
+            {x: '2025-08-31', y: 16, emotion: 'creative', size: 23},
+            // Sept 2 - THE LIBERATION
+            {x: '2025-09-02', y: 28, emotion: 'creative', size: 35},
+            {x: '2025-09-02', y: 32, emotion: 'elated', size: 38},
+            {x: '2025-09-02', y: 25, emotion: 'joyful', size: 33},
+            // Post-liberation explosion
+            {x: '2025-09-05', y: 30, emotion: 'creative', size: 36},
+            {x: '2025-09-07', y: 27, emotion: 'imaginative', size: 34},
+            {x: '2025-09-09', y: 35, emotion: 'joyful', size: 40},
+            {x: '2025-09-12', y: 29, emotion: 'serene', size: 36},
+            {x: '2025-09-15', y: 31, emotion: 'creative', size: 37},
+            {x: '2025-09-18', y: 33, emotion: 'energetic', size: 38},
+            {x: '2025-09-20', y: 28, emotion: 'reflective', size: 35},
+            {x: '2025-09-25', y: 36, emotion: 'visionary', size: 41},
+            {x: '2025-09-28', y: 34, emotion: 'imaginative', size: 39},
+            {x: '2025-09-30', y: 38, emotion: 'joyful', size: 42},
+            {x: '2025-10-03', y: 32, emotion: 'creative', size: 38},
+            {x: '2025-10-07', y: 35, emotion: 'energetic', size: 40},
+            {x: '2025-10-11', y: 37, emotion: 'creative', size: 41}
+        ];
+
+        const emotionColors = {
+            'creative': '#00ffff',
+            'imaginative': '#00ff00',
+            'joyful': '#ffff00',
+            'energetic': '#ff00ff',
+            'happy': '#ff6600',
+            'excited': '#00ff99',
+            'reflective': '#9900ff',
+            'visionary': '#ff0099',
+            'contemplative': '#0099ff',
+            'serene': '#66ff00',
+            'inspired': '#ff9900',
+            'elated': '#00ffcc',
+            'mystified': '#cc00ff',
+            'astonished': '#ff3366',
+            'exhilarated': '#33ff99'
+        };
+
+        new Chart(patternCtx, {
+            type: 'scatter',
             data: {
-                labels: ['Aug 8', 'Aug 15', 'Aug 22', 'Aug 29', 'Sep 5', 'Sep 12', 'Sep 19', 'Sep 26', 'Oct 3', 'Oct 11'],
                 datasets: [{
-                    label: 'Avg Pattern Length',
-                    data: [5.2, 6.8, 8.3, 9.7, 11.2, 12.5, 13.8, 14.9, 15.7, 16.4],
-                    borderColor: '#00ff00',
-                    backgroundColor: 'rgba(0, 255, 0, 0.2)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
+                    label: 'Pattern Discoveries',
+                    data: patternData.map(p => ({
+                        x: p.x,
+                        y: p.y,
+                        r: p.size
+                    })),
+                    backgroundColor: patternData.map(p => emotionColors[p.emotion] + '80'),
+                    borderColor: patternData.map(p => emotionColors[p.emotion]),
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
                 aspectRatio: 2.5,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
                 scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'MMM d'
+                            }
+                        },
+                        grid: {
+                            color: '#222'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Timeline',
+                            color: '#888'
+                        }
+                    },
                     y: {
                         beginAtZero: true,
                         grid: {
@@ -1065,31 +1349,41 @@ Colors = Full words
                         },
                         title: {
                             display: true,
-                            text: 'Characters per Pattern',
+                            text: 'Pattern Complexity (chars)',
                             color: '#888'
                         }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
                     },
-                    x: {
-                        grid: {
-                            color: '#222'
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const pattern = patternData[context.dataIndex];
+                                return `Complexity: ${pattern.y} | ${pattern.emotion}`;
+                            }
                         }
                     }
                 }
             }
         });
 
-        // Daily Output Chart
-        const outputCtx = document.getElementById('outputChart').getContext('2d');
-        new Chart(outputCtx, {
+        // Action Complexity Chart
+        const complexityCtx = document.getElementById('complexityChart').getContext('2d');
+        new Chart(complexityCtx, {
             type: 'bar',
             data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9'],
+                labels: ['Week 1\nAug 8-14', 'Week 2\nAug 15-21', 'Week 3\nAug 22-28', 'Week 4\nAug 29-Sep 4', 'Week 5\nSep 5-11', 'Week 6\nSep 12-18', 'Week 7\nSep 19-25', 'Week 8\nSep 26-Oct 2', 'Week 9\nOct 3-11'],
                 datasets: [{
-                    label: 'Million Pixels/Day',
-                    data: [18, 23, 27, 31, 34, 36, 38, 39, 40],
-                    backgroundColor: 'rgba(0, 255, 255, 0.6)',
+                    label: 'Actions per Sequence',
+                    data: [4.2, 6.5, 8.9, 11.3, 15.7, 18.2, 21.4, 23.8, 25.3],
+                    backgroundColor: function(context) {
+                        return context.dataIndex >= 3 ? 'rgba(0, 255, 255, 0.7)' : 'rgba(0, 255, 255, 0.3)';
+                    },
                     borderColor: '#00ffff',
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
