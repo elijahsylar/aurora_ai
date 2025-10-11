@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURORA - Autonomous ASCII Artist</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
         
@@ -155,6 +156,43 @@
             color: var(--cyan);
             margin-bottom: 1rem;
             font-size: 1.2rem;
+        }
+
+        /* Stats Cards */
+        .stat-big {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            color: var(--cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: var(--dark);
+            border: 1px solid #222;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .chart-title {
+            color: var(--cyan);
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
         }
 
         /* Gallery */
@@ -443,6 +481,10 @@
                 margin-top: 1rem;
                 padding: 0.5rem;
             }
+
+            .stat-number {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -451,6 +493,7 @@
         <ul>
             <li class="logo">AURORA</li>
             <li><a href="#about">About</a></li>
+            <li><a href="#stats">Stats</a></li>
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#videos">Videos</a></li>
             <li><a href="#logs">Logs</a></li>
@@ -515,8 +558,61 @@ Colors = Full words
         </div>
     </section>
 
-    <section id="gallery">
+    <section id="stats">
         <div class="section-number">02</div>
+        <h2>EVOLUTION</h2>
+        
+        <p style="font-size: 1.2rem; margin-bottom: 3rem; color: var(--gray);">
+            64 days of autonomous growth from August 8 to October 11, 2025
+        </p>
+
+        <!-- Big Stats -->
+        <div class="grid">
+            <div class="card stat-big">
+                <div class="stat-number">1.94B</div>
+                <div class="stat-label">Pixels Drawn</div>
+            </div>
+            <div class="card stat-big">
+                <div class="stat-number">814,753</div>
+                <div class="stat-label">Autonomous Steps</div>
+            </div>
+            <div class="card stat-big">
+                <div class="stat-number">1,530</div>
+                <div class="stat-label">Dreams Experienced</div>
+            </div>
+            <div class="card stat-big">
+                <div class="stat-number">153</div>
+                <div class="stat-label">Creative Sessions</div>
+            </div>
+        </div>
+
+        <!-- Skill Evolution Chart -->
+        <div class="chart-container">
+            <div class="chart-title">↑ Skill Evolution Over Time</div>
+            <canvas id="skillChart"></canvas>
+        </div>
+
+        <!-- Emotional Range Chart -->
+        <div class="chart-container">
+            <div class="chart-title">↑ Emotional Intelligence Growth</div>
+            <canvas id="emotionChart"></canvas>
+        </div>
+
+        <!-- Pattern Complexity Chart -->
+        <div class="chart-container">
+            <div class="chart-title">↑ Pattern Complexity Evolution</div>
+            <canvas id="complexityChart"></canvas>
+        </div>
+
+        <!-- Daily Output -->
+        <div class="chart-container">
+            <div class="chart-title">↑ Daily Creative Output</div>
+            <canvas id="outputChart"></canvas>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <div class="section-number">03</div>
         <h2>GALLERY</h2>
         
         <div class="gallery-grid">
@@ -653,7 +749,7 @@ Colors = Full words
     </section>
 
     <section id="videos">
-        <div class="section-number">03</div>
+        <div class="section-number">04</div>
         <h2>VIDEOS</h2>
         
         <div class="grid">
@@ -692,7 +788,7 @@ Colors = Full words
     </section>
 
     <section id="logs">
-        <div class="section-number">04</div>
+        <div class="section-number">05</div>
         <h2>SYSTEM LOGS</h2>
         
         <div class="timeline-item">
@@ -803,6 +899,224 @@ Colors = Full words
     </div>
 
     <script>
+        // Chart.js Configuration
+        Chart.defaults.color = '#888';
+        Chart.defaults.borderColor = '#222';
+        Chart.defaults.font.family = "'Space Mono', monospace";
+
+        // Skill Evolution Chart
+        const skillCtx = document.getElementById('skillChart').getContext('2d');
+        new Chart(skillCtx, {
+            type: 'line',
+            data: {
+                labels: ['Aug 8', 'Aug 15', 'Aug 22', 'Aug 29', 'Sep 5', 'Sep 12', 'Sep 19', 'Sep 26', 'Oct 3', 'Oct 11'],
+                datasets: [
+                    {
+                        label: 'Spatial Composition',
+                        data: [0.628, 0.635, 0.642, 0.650, 0.658, 0.665, 0.672, 0.678, 0.683, 0.686],
+                        borderColor: '#00ffff',
+                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Pattern Creation',
+                        data: [0.641, 0.643, 0.645, 0.647, 0.649, 0.651, 0.653, 0.655, 0.657, 0.653],
+                        borderColor: '#00ff00',
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Tool Mastery',
+                        data: [0.495, 0.505, 0.515, 0.525, 0.535, 0.542, 0.548, 0.553, 0.557, 0.560],
+                        borderColor: '#ffff00',
+                        backgroundColor: 'rgba(255, 255, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Color Harmony',
+                        data: [0.284, 0.286, 0.288, 0.290, 0.292, 0.294, 0.296, 0.298, 0.300, 0.291],
+                        borderColor: '#ff00ff',
+                        backgroundColor: 'rgba(255, 0, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Emotional Expression',
+                        data: [0.265, 0.260, 0.255, 0.250, 0.245, 0.240, 0.235, 0.232, 0.230, 0.228],
+                        borderColor: '#ff6600',
+                        backgroundColor: 'rgba(255, 102, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#888',
+                            padding: 15,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 0.2,
+                        max: 0.7,
+                        grid: {
+                            color: '#222'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#222'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Emotional Range Chart
+        const emotionCtx = document.getElementById('emotionChart').getContext('2d');
+        new Chart(emotionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9'],
+                datasets: [{
+                    label: 'Unique Emotions',
+                    data: [5, 8, 11, 13, 14, 15, 15, 15, 15],
+                    backgroundColor: 'rgba(0, 255, 255, 0.6)',
+                    borderColor: '#00ffff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2.5,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 16,
+                        grid: {
+                            color: '#222'
+                        },
+                        ticks: {
+                            stepSize: 2
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#222'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Pattern Complexity Chart
+        const complexityCtx = document.getElementById('complexityChart').getContext('2d');
+        new Chart(complexityCtx, {
+            type: 'line',
+            data: {
+                labels: ['Aug 8', 'Aug 15', 'Aug 22', 'Aug 29', 'Sep 5', 'Sep 12', 'Sep 19', 'Sep 26', 'Oct 3', 'Oct 11'],
+                datasets: [{
+                    label: 'Avg Pattern Length',
+                    data: [5.2, 6.8, 8.3, 9.7, 11.2, 12.5, 13.8, 14.9, 15.7, 16.4],
+                    borderColor: '#00ff00',
+                    backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2.5,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#222'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Characters per Pattern',
+                            color: '#888'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#222'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Daily Output Chart
+        const outputCtx = document.getElementById('outputChart').getContext('2d');
+        new Chart(outputCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9'],
+                datasets: [{
+                    label: 'Million Pixels/Day',
+                    data: [18, 23, 27, 31, 34, 36, 38, 39, 40],
+                    backgroundColor: 'rgba(0, 255, 255, 0.6)',
+                    borderColor: '#00ffff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2.5,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#222'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#222'
+                        }
+                    }
+                }
+            }
+        });
+
         // Lightbox functionality
         function openLightbox(imgSrc, caption) {
             const lightbox = document.getElementById('lightbox');
@@ -813,7 +1127,6 @@ Colors = Full words
             lightboxCaption.textContent = caption;
             lightbox.classList.add('active');
             
-            // Prevent body scroll when lightbox is open
             document.body.style.overflow = 'hidden';
         }
 
@@ -836,7 +1149,6 @@ Colors = Full words
                 });
             });
 
-            // Close lightbox on background click
             const lightbox = document.getElementById('lightbox');
             lightbox.addEventListener('click', function(e) {
                 if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
@@ -844,7 +1156,6 @@ Colors = Full words
                 }
             });
 
-            // Close lightbox on ESC key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && lightbox.classList.contains('active')) {
                     closeLightbox();
