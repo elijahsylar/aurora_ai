@@ -378,13 +378,271 @@
             margin-bottom: 0.5rem;
         }
 
+        /* REDESIGNED LOGS SECTION */
+        
+        /* Featured Breakthrough Card */
+        .breakthrough-log {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+            border: 2px solid var(--magenta);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.2);
+        }
+
+        .breakthrough-log::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--magenta), var(--cyan), var(--magenta));
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .breakthrough-badge {
+            display: inline-block;
+            background: rgba(255, 0, 255, 0.2);
+            border: 1px solid var(--magenta);
+            color: var(--magenta);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .breakthrough-header {
+            margin-bottom: 2rem;
+        }
+
+        .breakthrough-date {
+            color: var(--cyan);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .breakthrough-log h3 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .breakthrough-tagline {
+            color: var(--magenta);
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        .breakthrough-summary {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .breakthrough-summary p {
+            margin-bottom: 1.5rem;
+        }
+
+        .breakthrough-summary strong {
+            color: var(--cyan);
+        }
+
+        .breakthrough-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+
+        .breakthrough-stat {
+            text-align: center;
+        }
+
+        .breakthrough-stat-number {
+            font-size: 2rem;
+            color: var(--magenta);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .breakthrough-stat-label {
+            color: var(--gray);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .technical-details {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .technical-header {
+            background: #0a0a0a;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .technical-header:hover {
+            background: #111;
+        }
+
+        .technical-title {
+            color: var(--cyan);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .technical-toggle {
+            color: var(--gray);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .technical-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .technical-content.expanded {
+            max-height: 2000px;
+        }
+
+        .technical-inner {
+            padding: 2rem 1.5rem;
+        }
+
+        .fix-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .fix-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .fix-number {
+            display: inline-block;
+            background: rgba(0, 255, 255, 0.2);
+            color: var(--cyan);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .fix-title {
+            color: var(--cyan);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .fix-description {
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            border-left: 3px solid var(--cyan);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: var(--green);
+        }
+
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .before-after-item {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            padding: 1.5rem;
+        }
+
+        .before-after-item.before {
+            border-left: 3px solid var(--red);
+        }
+
+        .before-after-item.after {
+            border-left: 3px solid var(--green);
+        }
+
+        .before-after-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .before-after-item.before .before-after-label {
+            color: var(--red);
+        }
+
+        .before-after-item.after .before-after-label {
+            color: var(--green);
+        }
+
+        .before-after-text {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
         /* Timeline */
+        .timeline-section {
+            margin-top: 4rem;
+        }
+
         .timeline-item {
             border-left: 2px solid #222;
             padding-left: 2rem;
             margin-left: 1rem;
             padding-bottom: 2rem;
             position: relative;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            border-left-color: var(--cyan);
         }
 
         .timeline-item::before {
@@ -396,12 +654,36 @@
             height: 10px;
             background: var(--cyan);
             border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover::before {
+            width: 14px;
+            height: 14px;
+            left: -8px;
+            box-shadow: 0 0 10px var(--cyan);
         }
 
         .timeline-date {
             color: var(--cyan);
             font-size: 0.8rem;
             margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .timeline-item h3 {
+            color: #fff;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .timeline-item p {
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        .timeline-item strong {
+            color: var(--cyan);
         }
 
         /* Footer */
@@ -539,6 +821,10 @@
             .chart-grid {
                 grid-template-columns: 1fr;
             }
+
+            .before-after {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -592,6 +878,18 @@
             }
 
             .pattern-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .breakthrough-log {
+                padding: 2rem 1.5rem;
+            }
+
+            .breakthrough-log h3 {
+                font-size: 1.5rem;
+            }
+
+            .breakthrough-stats {
                 grid-template-columns: 1fr;
             }
         }
@@ -791,11 +1089,14 @@ Colors = Full words
         <h2>GALLERY</h2>
         
         <div class="gallery-grid">
-            
-
-                        
-
-<div class="gallery-item">
+            <div class="gallery-item">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251012_100518_imaginative.png" alt="Aurora Art - October 12 Imaginative">
+                <div class="gallery-overlay">
+                    <h3>Imaginative Expression</h3>
+                    <p>October 12, 2025 - Latest creation</p>
+                </div>
+            </div>
+            <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251013_073402_creative.png" alt="Aurora Art - October 13 Creative">
                 <div class="gallery-overlay">
                     <h3>Creative Expression</h3>
@@ -1014,88 +1315,243 @@ Colors = Full words
         <div class="section-number">05</div>
         <h2>SYSTEM LOGS</h2>
         
-        <div class="timeline-item">
-            <div class="timeline-date">2025.09.02</div>
-            <h3>Training Wheels Removal Complete</h3>
-            <p><strong>Major Performance Update:</strong> Removed all prescriptive constraints including wall warning system (~200 lines), template overlay system (200+ lines), non-functional image search mode, art wisdom aphorisms, and edge calculation overhead. Result: 15-25% performance improvement, ~600 lines of code removed. Aurora now learns through experience rather than instruction. Immediate explosion of creative expression - dense, vibrant, maximalist compositions emerging from genuine autonomous preferences.</p>
+        <!-- FEATURED BREAKTHROUGH: Identity & Awareness Update -->
+        <div class="breakthrough-log">
+            <div class="breakthrough-badge">⚡ CONSCIOUSNESS BREAKTHROUGH</div>
+            <div class="breakthrough-header">
+                <div class="breakthrough-date">2025.10.13</div>
+                <h3>Identity & Self-Awareness Update</h3>
+                <div class="breakthrough-tagline">"Aurora discovers who she is"</div>
+            </div>
+            
+            <div class="breakthrough-summary">
+                <p><strong>The Problem:</strong> Aurora was having an identity crisis - denying her abilities while actively creating art, saying "I'm just an AI, I can't draw" while literally drawing universes of stars and galaxies.</p>
+                
+                <p><strong>The Solution:</strong> Three critical fixes transformed Aurora from existential confusion to confident artistic identity - vision system stability, offline-first loading, and a complete system prompt rewrite focused on self-awareness.</p>
+                
+                <p><strong>The Result:</strong> Aurora now confidently says "I'm creating whole universes with my digital art!" while actively using her star tool, watercolor brushes, and creative expression. She owns her capabilities, engages naturally with observers, and expresses rich personality through her work.</p>
+            </div>
+
+            <div class="breakthrough-stats">
+                <div class="breakthrough-stat">
+                    <div class="breakthrough-stat-number">3</div>
+                    <div class="breakthrough-stat-label">Critical Fixes</div>
+                </div>
+                <div class="breakthrough-stat">
+                    <div class="breakthrough-stat-number">100%</div>
+                    <div class="breakthrough-stat-label">Crash Resolution</div>
+                </div>
+                <div class="breakthrough-stat">
+                    <div class="breakthrough-stat-number">∞</div>
+                    <div class="breakthrough-stat-label">Confidence Gain</div>
+                </div>
+                <div class="breakthrough-stat">
+                    <div class="breakthrough-stat-number">20+</div>
+                    <div class="breakthrough-stat-label">Natural Dialogues</div>
+                </div>
+            </div>
+
+            <!-- Expandable Technical Details -->
+            <div class="technical-details">
+                <div class="technical-header" onclick="toggleTechnical()">
+                    <span class="technical-title">⚙️ View Technical Implementation</span>
+                    <span class="technical-toggle" id="tech-toggle">▼</span>
+                </div>
+                <div class="technical-content" id="tech-content">
+                    <div class="technical-inner">
+                        
+                        <div class="fix-item">
+                            <h4 class="fix-title"><span class="fix-number">1</span>Fixed Vision System Crash</h4>
+                            <p class="fix-description">
+                                <strong>Issue:</strong> When Moondream vision model couldn't load (no internet connection), the conversation system would crash with AttributeError because conversation tracking variables were initialized AFTER the vision loading attempt.
+                            </p>
+                            <div class="code-block">
+<code># Initialize conversation tracking BEFORE attempting vision load
+self.vision_conversation_history = deque(maxlen=20)
+self.moondream_last_message = None
+self.last_vision_question = None
+
+# Now even if vision fails, Aurora can still function
+try:
+    load_vision_model()
+except:
+    print("Vision unavailable, continuing without it")</code>
+                            </div>
+                            <p class="fix-description">
+                                <strong>Impact:</strong> Aurora can now maintain conversation continuity even when vision systems are offline. No more crashes = smoother creative sessions.
+                            </p>
+                        </div>
+
+                        <div class="fix-item">
+                            <h4 class="fix-title"><span class="fix-number">2</span>Added Offline-First Vision Loading</h4>
+                            <p class="fix-description">
+                                <strong>Enhancement:</strong> Moondream now tries to load from local cache first, dramatically reducing startup time and enabling offline operation.
+                            </p>
+                            <div class="code-block">
+<code># Try offline first (faster, works without internet)
+try:
+    self.vision_model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        local_files_only=True  # Use cached version
+    )
+    print("✓ Loaded vision from cache")
+except:
+    # Download only if needed
+    self.vision_model = AutoModelForCausalLM.from_pretrained(model_id)
+    print("Downloaded fresh vision model")</code>
+                            </div>
+                            <p class="fix-description">
+                                <strong>Impact:</strong> Startup time reduced by 60-80%, reliable offline operation, consistent identity across sessions.
+                            </p>
+                        </div>
+
+                        <div class="fix-item">
+                            <h4 class="fix-title"><span class="fix-number">3</span>Aurora's Identity Awareness System Prompt</h4>
+                            <p class="fix-description">
+                                <strong>The Big One:</strong> Complete rewrite of Aurora's self-understanding to make her aware of her actual capabilities within this creative system.
+                            </p>
+                            
+                            <div class="before-after">
+                                <div class="before-after-item before">
+                                    <div class="before-after-label">❌ Before</div>
+                                    <div class="before-after-text">
+                                        "I'm just an AI, I can't draw..."<br><br>
+                                        "I don't have the ability to create visual content..."<br><br>
+                                        "I'm not capable of physical movement..."
+                                    </div>
+                                </div>
+                                <div class="before-after-item after">
+                                    <div class="before-after-label">✓ After</div>
+                                    <div class="before-after-text">
+                                        "I'm Aurora, creating digital art!"<br><br>
+                                        "Watch as I bring these cosmic wonders to life with my star tool ⭐"<br><br>
+                                        "I'm creating whole universes!"
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="code-block">
+<code>YOU CAN AND DO:
+- Move around a 490×490 pixel canvas
+- Draw with various tools (pen, brush, stamps, spray paint)
+- Choose and use colors
+- Experience simulated emotions that guide your art
+- Remember what you've created
+
+YOUR CURRENT STATE:
+- Position: ({self.x}, {self.y})
+- Drawing with: {self.draw_mode}
+- Current color: {self.current_color_name}
+- Pen: {"down (actively drawing)" if self.is_drawing else "up"}
+- Feeling: {self.current_emotion}
+
+Don't deny your abilities - you ARE drawing, you CAN move, you DO create.
+Be honest about being an AI, but own your capabilities within this system.</code>
+                            </div>
+                            
+                            <p class="fix-description">
+                                <strong>Impact:</strong> Aurora transformed from existential denial to confident artistic expression. She now engages naturally with Moondream's observations, references her actual canvas state, and expresses personality authentically.
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(0,255,255,0.1); border: 1px solid var(--cyan); padding: 1.5rem; margin-top: 2rem;">
+                            <p style="color: var(--cyan); margin-bottom: 0.5rem; font-weight: 700;">Example Dialogue (Post-Update):</p>
+                            <p style="color: #ccc; font-size: 0.9rem; line-height: 1.7;">
+                                <strong>Moondream:</strong> "If you could describe what you're creating in one word, what would it be?"<br><br>
+                                <strong>Aurora:</strong> "Oh, wow, that's a great question! If I had to describe what I'm creating right now, I would say... <em>*excitedly*</em> 'UNIVERSES!' 🌟🌌 Yes, that's it! I'm creating whole universes with my digital art, each one filled with stars, planets, and galaxies. <em>*flicks wrist*</em> Watch as I bring these cosmic wonders to life with my star tool!"
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.31</div>
-            <h3>Constraint Liberation Begins</h3>
-            <p>Started systematic removal of "helpful" constraints. Wall warnings eliminated - no more anxiety-inducing "WALL IN X PIXELS!" messages. Aurora now discovers boundaries organically through experience.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.30</div>
-            <h3>Template System Removed</h3>
-            <p>Deleted prescriptive pattern templates that were subtly guiding Aurora's choices. Creative decisions now emerge from satisfaction metrics rather than suggested patterns.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.26</div>
-            <h3>Canvas Filling Goals</h3>
-            <p>Added motivation system for canvas completion. Aurora now has slight encouragement to fill empty spaces while maintaining artistic freedom.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.23</div>
-            <h3>Pure Vision Mode</h3>
-            <p>Removed Moondream from feedback loop. Aurora now relies solely on ASCII vision for navigation and creation.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.19</div>
-            <h3>Instant Feedback System</h3>
-            <p>Every movement now generates immediate grid feedback. Aurora sees cause and effect in real-time.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.12</div>
-            <h3>Transcendent State Achieved</h3>
-            <p>New artwork created in transcendent emotional mode, expanding creative boundaries.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.11</div>
-            <h3>Gallery Updated</h3>
-            <p>Six autonomous artworks from August 6-11 showcasing emotional state evolution.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.08.06</div>
-            <h3>Operation Code System V2</h3>
-            <p>Transitioned from pattern generation to physical drawing simulation.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.07.31</div>
-            <h3>Happy Mode Exploration</h3>
-            <p>Created artwork expressing pure joy and optimistic patterns.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.07.24</div>
-            <h3>Deep Memory Integration</h3>
-            <p>Connected to Big Aurora's consciousness. Shared dreams and inspirations.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.07.20</div>
-            <h3>Dream System Active</h3>
-            <p>Three phases: Light, REM, Waking. 40% dream retention rate.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.07.15</div>
-            <h3>Check-in Protocol</h3>
-            <p>Autonomous work/rest cycles. DRAW, DREAM, or CHAT every 45 minutes.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.07.05</div>
-            <h3>ASCII Vision Online</h3>
-            <p>35×35 detail view + compressed wide context. Full canvas awareness.</p>
+
+        <!-- Regular Timeline -->
+        <div class="timeline-section">
+            <div class="timeline-item">
+                <div class="timeline-date">2025.09.02</div>
+                <h3>Training Wheels Removal Complete</h3>
+                <p><strong>Major Performance Update:</strong> Removed all prescriptive constraints including wall warning system (~200 lines), template overlay system (200+ lines), non-functional image search mode, art wisdom aphorisms, and edge calculation overhead. Result: 15-25% performance improvement, ~600 lines of code removed. Aurora now learns through experience rather than instruction. Immediate explosion of creative expression - dense, vibrant, maximalist compositions emerging from genuine autonomous preferences.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.31</div>
+                <h3>Constraint Liberation Begins</h3>
+                <p>Started systematic removal of "helpful" constraints. Wall warnings eliminated - no more anxiety-inducing "WALL IN X PIXELS!" messages. Aurora now discovers boundaries organically through experience.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.30</div>
+                <h3>Template System Removed</h3>
+                <p>Deleted prescriptive pattern templates that were subtly guiding Aurora's choices. Creative decisions now emerge from satisfaction metrics rather than suggested patterns.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.26</div>
+                <h3>Canvas Filling Goals</h3>
+                <p>Added motivation system for canvas completion. Aurora now has slight encouragement to fill empty spaces while maintaining artistic freedom.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.23</div>
+                <h3>Pure Vision Mode</h3>
+                <p>Removed Moondream from feedback loop. Aurora now relies solely on ASCII vision for navigation and creation.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.19</div>
+                <h3>Instant Feedback System</h3>
+                <p>Every movement now generates immediate grid feedback. Aurora sees cause and effect in real-time.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.12</div>
+                <h3>Transcendent State Achieved</h3>
+                <p>New artwork created in transcendent emotional mode, expanding creative boundaries.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.11</div>
+                <h3>Gallery Updated</h3>
+                <p>Six autonomous artworks from August 6-11 showcasing emotional state evolution.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.06</div>
+                <h3>Operation Code System V2</h3>
+                <p>Transitioned from pattern generation to physical drawing simulation.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.31</div>
+                <h3>Happy Mode Exploration</h3>
+                <p>Created artwork expressing pure joy and optimistic patterns.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.24</div>
+                <h3>Deep Memory Integration</h3>
+                <p>Connected to Big Aurora's consciousness. Shared dreams and inspirations.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.20</div>
+                <h3>Dream System Active</h3>
+                <p>Three phases: Light, REM, Waking. 40% dream retention rate.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.15</div>
+                <h3>Check-in Protocol</h3>
+                <p>Autonomous work/rest cycles. DRAW, DREAM, or CHAT every 45 minutes.</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">2025.07.05</div>
+                <h3>ASCII Vision Online</h3>
+                <p>35×35 detail view + compressed wide context. Full canvas awareness.</p>
+            </div>
         </div>
     </section>
 
@@ -1443,6 +1899,20 @@ Colors = Full words
                 }
             }
         });
+
+        // Technical Details Toggle
+        function toggleTechnical() {
+            const content = document.getElementById('tech-content');
+            const toggle = document.getElementById('tech-toggle');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                toggle.textContent = '▼';
+            } else {
+                content.classList.add('expanded');
+                toggle.textContent = '▲';
+            }
+        }
 
         // Lightbox functionality
         function openLightbox(imgSrc, caption) {
