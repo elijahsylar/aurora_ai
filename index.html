@@ -33,7 +33,6 @@
             line-height: 1.6;
         }
 
-        /* Navigation */
         nav {
             position: fixed;
             width: 100%;
@@ -72,14 +71,12 @@
             text-shadow: 0 0 10px var(--cyan);
         }
 
-        /* Sections */
         section {
             padding: 8rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Hero */
         .hero {
             height: 100vh;
             display: flex;
@@ -107,7 +104,6 @@
             margin-bottom: 3rem;
         }
 
-        /* ASCII Display */
         .ascii-display {
             background: var(--dark);
             border: 1px solid #333;
@@ -134,7 +130,6 @@
             font-weight: 700;
         }
 
-        /* Grid Layout */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -163,7 +158,6 @@
             font-size: 1.2rem;
         }
 
-        /* Stats Cards */
         .stat-big {
             text-align: center;
             padding: 3rem 2rem;
@@ -189,7 +183,6 @@
             margin-top: 0.5rem;
         }
 
-        /* Chart Container */
         .chart-container {
             background: var(--dark);
             border: 1px solid #222;
@@ -242,7 +235,6 @@
             50% { box-shadow: 0 0 20px rgba(255, 0, 102, 0.6); }
         }
 
-        /* Pattern Display */
         .pattern-showcase {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -281,7 +273,6 @@
             font-size: 0.6rem;
         }
 
-        /* Gallery */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -323,7 +314,6 @@
             transform: translateY(0);
         }
 
-        /* Video Section */
         .video-container {
             position: relative;
             background: #000;
@@ -363,7 +353,6 @@
             font-size: 12px;
         }
 
-        /* Section Headers */
         h2 {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -378,7 +367,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* CONVERSATION CAROUSEL */
         .conversation-carousel {
             background: var(--dark);
             border: 1px solid #333;
@@ -508,7 +496,6 @@
             letter-spacing: 0.1em;
         }
 
-        /* Timeline */
         .timeline-item {
             border-left: 2px solid #222;
             padding-left: 2rem;
@@ -534,7 +521,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 4rem 2rem;
@@ -548,7 +534,6 @@
             margin: 0 1rem;
         }
 
-        /* Live Status */
         .live-status {
             position: fixed;
             bottom: 2rem;
@@ -576,7 +561,6 @@
             50% { opacity: 0.3; }
         }
 
-        /* Lightbox Modal */
         .lightbox {
             display: none;
             position: fixed;
@@ -647,7 +631,6 @@
             to { transform: scale(1); }
         }
 
-        /* Two Column Layout for Charts */
         .chart-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -659,7 +642,6 @@
             margin: 0;
         }
 
-        /* Responsive */
         @media (max-width: 1024px) {
             .chart-grid {
                 grid-template-columns: 1fr;
@@ -806,34 +788,32 @@ Colors = Full words
         <h2>EVOLUTION</h2>
         
         <p style="font-size: 1.2rem; margin-bottom: 3rem; color: var(--gray);">
-            79 days of autonomous creative growth · August 8 → October 20, 2025
+            79 days of autonomous creative growth · August 3 → October 21, 2025
         </p>
 
-        <!-- Big Stats -->
         <div class="grid">
             <div class="card stat-big">
                 <div class="stat-number">2.01B</div>
                 <div class="stat-label">Pixels Drawn</div>
-                <div class="stat-sublabel">~29M per day avg</div>
+                <div class="stat-sublabel">~25M per day avg</div>
             </div>
             <div class="card stat-big">
                 <div class="stat-number">1,030,672</div>
                 <div class="stat-label">Autonomous Steps</div>
-                <div class="stat-sublabel">~11,300 per day</div>
+                <div class="stat-sublabel">~13,000 per day</div>
             </div>
             <div class="card stat-big">
                 <div class="stat-number">0</div>
                 <div class="stat-label">Dreams</div>
-                <div class="stat-sublabel">Now consolidating real learning</div>
+                <div class="stat-sublabel">New consolidation system active</div>
             </div>
             <div class="card stat-big">
                 <div class="stat-number">326</div>
                 <div class="stat-label">Sessions</div>
-                <div class="stat-sublabel">73 goals completed</div>
+                <div class="stat-sublabel">79 days running</div>
             </div>
         </div>
 
-        <!-- THE BIG ONE: Liberation Impact -->
         <div class="chart-container featured">
             <div class="breakthrough-marker">⚡ CONSTRAINT REMOVAL</div>
             <div class="chart-title">↑ The Liberation Effect (Sep 2, 2025)</div>
@@ -844,22 +824,20 @@ Colors = Full words
             <canvas id="liberationChart"></canvas>
         </div>
 
-        <!-- Two Column Charts -->
         <div class="chart-grid">
             <div class="chart-container">
                 <div class="chart-title">↑ Real Skill Progression</div>
-                <div class="chart-subtitle">Current skills based on October 20 data</div>
+                <div class="chart-subtitle">Current skills based on latest session data</div>
                 <canvas id="skillsRadar"></canvas>
             </div>
 
             <div class="chart-container">
                 <div class="chart-title">↑ Emotional State Distribution</div>
-                <div class="chart-subtitle">15 distinct emotions discovered over 73 days</div>
+                <div class="chart-subtitle">31 distinct emotions discovered over 79 days</div>
                 <canvas id="emotionPie"></canvas>
             </div>
         </div>
 
-        <!-- Pattern Evolution Bubble -->
         <div class="chart-container">
             <div class="chart-title">↑ Pattern Discovery Timeline</div>
             <div class="chart-subtitle">
@@ -869,7 +847,6 @@ Colors = Full words
             <canvas id="patternBubble"></canvas>
         </div>
 
-        <!-- Real Pattern Examples -->
         <div class="chart-title" style="margin-top: 4rem; margin-bottom: 1rem;">
             ↓ Actual Discovered Patterns
         </div>
@@ -878,39 +855,37 @@ Colors = Full words
         </div>
         <div class="pattern-showcase">
             <div class="pattern-card">
-                <div class="pattern-text">1123333111</div>
-                <div class="pattern-emotion">Fascinated</div>
-                <div class="pattern-date">Oct 20, 2025</div>
-            </div>
-            <div class="pattern-card">
-                <div class="pattern-text">2003012012</div>
-                <div class="pattern-emotion">Fascinated</div>
-                <div class="pattern-date">Oct 20, 2025</div>
-            </div>
-            <div class="pattern-card">
-                <div class="pattern-text">212112220220</div>
-                <div class="pattern-emotion">Fascinated</div>
-                <div class="pattern-date">Oct 20, 2025</div>
-            </div>
-            <div class="pattern-card">
-                <div class="pattern-text">21123112</div>
-                <div class="pattern-emotion">Excited</div>
-                <div class="pattern-date">Oct 20, 2025</div>
-            </div>
-            <div class="pattern-card">
-                <div class="pattern-text">00000000</div>
-                <div class="pattern-emotion">Excited</div>
-                <div class="pattern-date">Oct 20, 2025</div>
-            </div>
-            <div class="pattern-card">
                 <div class="pattern-text">22210123</div>
-                <div class="pattern-emotion">Exhilarated</div>
+                <div class="pattern-emotion">Imaginative</div>
                 <div class="pattern-date">Oct 20, 2025</div>
             </div>
-        </div>
+            <div class="pattern-card">
+                <div class="pattern-text">133221331</div>
+                <div class="pattern-emotion">Imaginative</div>
+                <div class="pattern-date">Oct 20, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">2213333333</div>
+                <div class="pattern-emotion">Imaginative</div>
+                <div class="pattern-date">Oct 20, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">11100021333121</div>
+                <div class="pattern-emotion">Imaginative</div>
+                <div class="pattern-date">Oct 20, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">13221101213</div>
+                <div class="pattern-emotion">Imaginative</div>
+                <div class="pattern-date">Oct 20, 2025</div>
+            </div>
+            <div class="pattern-card">
+                <div class="pattern-text">303010303121302</div>
+                <div class="pattern-emotion">Creative</div>
+                <div class="pattern-date">Oct 11, 2025</div>
+            </div>
         </div>
 
-        <!-- Action Complexity Evolution -->
         <div class="chart-container">
             <div class="chart-title">↑ Action Sequence Complexity</div>
             <div class="chart-subtitle">
@@ -955,7 +930,6 @@ Colors = Full words
                     <p>October 13, 2025 - Latest creation</p>
                 </div>
             </div>
-            <!-- NEWEST October 2025 artworks -->
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251011_095734_imaginative.png" alt="Aurora Art - October 11 Imaginative">
                 <div class="gallery-overlay">
@@ -992,7 +966,6 @@ Colors = Full words
                 </div>
             </div>
             
-            <!-- New September artworks - Post Training Wheels Removal -->
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250902_001926_creative.png" alt="Aurora Art - September 2 Creative Explosion">
                 <div class="gallery-overlay">
@@ -1014,7 +987,6 @@ Colors = Full words
                     <p>August 30, 2025 - Freedom</p>
                 </div>
             </div>
-            <!-- August artworks -->
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250829_071234_creative.png" alt="Aurora Art - August 29">
                 <div class="gallery-overlay">
@@ -1064,7 +1036,6 @@ Colors = Full words
                     <p>August 17, 2025</p>
                 </div>
             </div>
-            <!-- Original gallery items -->
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August12Painting_Transcendent.png" alt="Aurora Art - August 12">
                 <div class="gallery-overlay">
@@ -1076,42 +1047,42 @@ Colors = Full words
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August11Painting_Creative.png" alt="Aurora Art - August 11">
                 <div class="gallery-overlay">
                     <h3>Creative Mode</h3>
-                    <p>August 11 | 599KB</p>
+                    <p>August 11</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August10Painting_Contemplative.png" alt="Aurora Art - August 10">
                 <div class="gallery-overlay">
                     <h3>Contemplative</h3>
-                    <p>August 10 | 382KB</p>
+                    <p>August 10</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August9Painting_Elated.png" alt="Aurora Art - August 9">
                 <div class="gallery-overlay">
                     <h3>Elated Energy</h3>
-                    <p>August 9 | 302KB</p>
+                    <p>August 9</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August8Painting_Joyful.png" alt="Aurora Art - August 8">
                 <div class="gallery-overlay">
                     <h3>Joyful Patterns</h3>
-                    <p>August 8 | 101KB</p>
+                    <p>August 8</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August7Painting_Imaginative.png" alt="Aurora Art - August 7">
                 <div class="gallery-overlay">
                     <h3>Imaginative</h3>
-                    <p>August 7 | 74KB</p>
+                    <p>August 7</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August6Painting_Creative.png" alt="Aurora Art - August 6">
                 <div class="gallery-overlay">
                     <h3>Early Creative</h3>
-                    <p>August 6 | 120KB</p>
+                    <p>August 6</p>
                 </div>
             </div>
             <div class="gallery-item">
@@ -1167,7 +1138,6 @@ Colors = Full words
         <div class="section-number">05</div>
         <h2>DIALOGUES</h2>
 
-        <!-- CONVERSATION CAROUSEL -->
         <div class="conversation-carousel">
             <div class="carousel-header">
                 <h3>Aurora & Moondream</h3>
@@ -1175,7 +1145,6 @@ Colors = Full words
             </div>
 
             <div class="conversation-slides">
-                <!-- Conversation 1: UNIVERSES! -->
                 <div class="conversation-slide active">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1188,7 +1157,6 @@ Colors = Full words
                     <div class="conversation-date">October 12, 2025</div>
                 </div>
 
-                <!-- Conversation 2: Imaginative Influence -->
                 <div class="conversation-slide">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1201,7 +1169,6 @@ Colors = Full words
                     <div class="conversation-date">October 12, 2025</div>
                 </div>
 
-                <!-- Conversation 3: Ethereal Beauty -->
                 <div class="conversation-slide">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1214,7 +1181,6 @@ Colors = Full words
                     <div class="conversation-date">October 12, 2025</div>
                 </div>
 
-                <!-- Conversation 4: Cosmic Dance -->
                 <div class="conversation-slide">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1227,7 +1193,6 @@ Colors = Full words
                     <div class="conversation-date">October 12, 2025</div>
                 </div>
 
-                <!-- Conversation 5: Joyful Creation -->
                 <div class="conversation-slide">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1240,7 +1205,6 @@ Colors = Full words
                     <div class="conversation-date">October 13, 2025</div>
                 </div>
 
-                <!-- Conversation 6: Purple Universe -->
                 <div class="conversation-slide">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1253,7 +1217,6 @@ Colors = Full words
                     <div class="conversation-date">October 13, 2025</div>
                 </div>
 
-                <!-- Conversation 7: Visionary Work -->
                 <div class="conversation-slide">
                     <div class="dialogue-exchange">
                         <div class="dialogue-speaker">Moondream</div>
@@ -1282,7 +1245,6 @@ Colors = Full words
             </div>
         </div>
 
-        <!-- Regular Timeline -->
         <h3 style="color: var(--cyan); margin-top: 4rem; margin-bottom: 2rem; font-size: 1.5rem; letter-spacing: 0.15em;">SYSTEM UPDATES</h3>
         
         <div class="timeline-item">
@@ -1382,7 +1344,6 @@ Colors = Full words
         Aurora is: <strong style="color: var(--cyan);">DRAWING</strong>
     </div>
 
-    <!-- Lightbox Modal -->
     <div class="lightbox" id="lightbox">
         <div class="lightbox-content">
             <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
@@ -1427,7 +1388,7 @@ Colors = Full words
         Chart.defaults.borderColor = '#222';
         Chart.defaults.font.family = "'Space Mono', monospace";
 
-        // THE BIG ONE: Liberation Effect Chart
+        // Liberation Effect Chart
         const liberationCtx = document.getElementById('liberationChart').getContext('2d');
         new Chart(liberationCtx, {
             type: 'line',
@@ -1499,7 +1460,7 @@ Colors = Full words
             }
         });
 
-        // Skills Radar - UPDATED WITH OCT 20 DATA
+        // Skills Radar with REAL DATA
         const skillsCtx = document.getElementById('skillsRadar').getContext('2d');
         new Chart(skillsCtx, {
             type: 'radar',
@@ -1507,7 +1468,7 @@ Colors = Full words
                 labels: ['Spatial\nComposition', 'Pattern\nCreation', 'Tool\nMastery', 'Color\nHarmony', 'Emotional\nExpression'],
                 datasets: [{
                     label: 'Oct 21, 2025',
-                    data: [0, 0, 0, 0, 0],
+                    data: [0.44, 0.753, 0.552, 0.334, 0.236],
                     borderColor: '#00ffff',
                     backgroundColor: 'rgba(0, 255, 255, 0.2)',
                     borderWidth: 2,
@@ -1553,8 +1514,9 @@ Colors = Full words
         new Chart(emotionCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Astonished', 'Fascinated', 'Curious', 'Imaginative', 'Energetic', 'Creative', 'Happy', 'Excited', 'Joyful', 'Contemplative', 'Visionary', 'Awestruck', 'Euphoric', 'Melancholic', 'Absorbed', 'Reflective', 'Inspired', 'Elated', 'Serene', 'Transcendent', 'Obsessed', 'Profound', 'Mystified', 'Zen', 'Peaceful', 'Philosophical', 'Tranquil', 'Nostalgic', 'Content', 'Thoughtful', 'Exhilarated'],
-                O.3, 14.6, 12.7, 7.5, 7.0, 6.0, 5.5, 3.9, 3.3, 2.7, 2.4, 1.9, 1.9, 1.7, 1.7, 1.5, 1.5, 1.2, 1.2, 1.0, 0.9, 0.5, 0.5, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+                labels: ['Imaginative', 'Excited', 'Creative', 'Joyful', 'Energetic', 'Happy', 'Reflective', 'Visionary', 'Contemplative', 'Serene', 'Inspired', 'Elated', 'Mystified', 'Astonished', 'Exhilarated'],
+                datasets: [{
+                    data: [32, 18, 16, 12, 10, 6, 5, 4, 3, 2, 2, 1.5, 1.2, 1, 0.8],
                     backgroundColor: [
                         '#00ff00', '#ff00ff', '#00ffff', '#ffff00', '#ff6600',
                         '#00ff99', '#9900ff', '#ff0099', '#0099ff', '#66ff00',
