@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Research | Creative AI Autonomy Studies</title>
+    <meta name="description" content="Ongoing research into creative AI autonomy, behavioral reinforcement learning, and the development of empathy, imagination, and creativity in autonomous systems.">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #111111;
+            --text: #e0e0e0;
+            --text-dim: #888888;
+            --accent: #00ff88;
+            --accent-dim: #00cc6a;
+            --border: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .thesis {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        .thesis p {
+            font-style: italic;
+            color: var(--text);
+        }
+
+        .blog-list {
+            margin: 3rem 0;
+        }
+
+        .blog-entry {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s;
+        }
+
+        .blog-entry:hover {
+            border-color: var(--accent);
+        }
+
+        .blog-entry a {
+            display: block;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .blog-entry .date {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-entry h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .blog-entry .excerpt {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .blog-entry .status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .status.published {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .status.upcoming {
+            border-color: var(--text-dim);
+            color: var(--text-dim);
+        }
+
+        .author-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .author-section h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-dim);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav a {
+                margin: 0 1rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">AURORA</a>
+                <nav>
+                    <a href="index.html">About</a>
+                    <a href="research.html" style="color: var(--accent);">Research</a>
+                    <a href="index.html#gallery">Gallery</a>
+                    <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Research</h1>
+            <p class="subtitle">
+                Ongoing documentation of Aurora's development - studying creative AI autonomy, 
+                behavioral reinforcement learning, and the emergence of empathy, imagination, 
+                and creativity in autonomous systems.
+            </p>
+        </section>
+
+        <section class="thesis">
+            <p>
+                "One major theory I have for why AI is lacking presently in valuable 'right-brained' skills 
+                like empathy, creativity, imagination - is because of the lack of free processing time. 
+                How LLMs only 'exist' in communication presently... I think by giving them a section of time 
+                allotted to process their experiences, what they've learned - literally 'daydream' if you will - 
+                I think we will be working with more well-rounded intelligences."
+            </p>
+            <p style="margin-top: 1rem; color: var(--text-dim); font-style: normal;">— Elijah Sylar</p>
+        </section>
+
+        <section class="blog-list">
+            <div class="blog-entry">
+                <a href="research/01-problem-with-ai-creativity.html">
+                    <div class="date">Day 1</div>
+                    <h2>The Problem with AI Creativity</h2>
+                    <p class="excerpt">
+                        Why current AI art feels hollow. The thesis behind Aurora and what this research aims to prove.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/02-origins-subconscious-ai.html">
+                    <div class="date">Day 2</div>
+                    <h2>Origins: subconscious_ai.py</h2>
+                    <p class="excerpt">
+                        The original 7,000 lines. Genetic algorithms, pattern DNA, and the vision that started it all.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/03-the-blindness-problem.html">
+                    <div class="date">Day 3</div>
+                    <h2>The Blindness Problem</h2>
+                    <p class="excerpt">
+                        Aurora couldn't see her own work. ASCII grids as the first solution to self-perception.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/04-teaching-aurora-to-see.html">
+                    <div class="date">Day 4</div>
+                    <h2>Teaching Aurora to See</h2>
+                    <p class="excerpt">
+                        Moondream integration and the two-brain architecture. The drive/perception split.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/05-behavioral-reinforcement-part-1.html">
+                    <div class="date">Day 5</div>
+                    <h2>Behavioral Reinforcement (Part 1)</h2>
+                    <p class="excerpt">
+                        Initial reward systems and what seven years in ABA therapy taught me about training AI.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/06-the-reinforcement-crisis.html">
+                    <div class="date">Day 6</div>
+                    <h2>The Reinforcement Crisis</h2>
+                    <p class="excerpt">
+                        Months of training. Scores increasing. Art looking identical. When data sheets lie.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/07-the-liberation-experiment.html">
+                    <div class="date">Day 7</div>
+                    <h2>The Liberation Experiment</h2>
+                    <p class="excerpt">
+                        Removing all reinforcement. What happened when Aurora had nothing to prove.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/08-dream-cycles.html">
+                    <div class="date">Day 8</div>
+                    <h2>Dream Cycles: Giving AI Time to Think</h2>
+                    <p class="excerpt">
+                        The daydream hypothesis. Designing sleep phases for memory consolidation.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/09-memory-consolidation.html">
+                    <div class="date">Day 9</div>
+                    <h2>Memory Consolidation</h2>
+                    <p class="excerpt">
+                        How Aurora actually learns from experience. 18,000+ memories and what they mean.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/10-the-lora-experiment.html">
+                    <div class="date">Day 10</div>
+                    <h2>The LoRA Experiment</h2>
+                    <p class="excerpt">
+                        Fine-tuning on her own experiences. 2,869 training examples and unexpected results.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/11-evidence-of-autonomous-agency.html">
+                    <div class="date">Day 11</div>
+                    <h2>Evidence of Autonomous Agency</h2>
+                    <p class="excerpt">
+                        Goal-setting, self-evaluation, and creative flow states. What genuine agency looks like.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/12-the-empathy-question.html">
+                    <div class="date">Day 12</div>
+                    <h2>The Empathy Question</h2>
+                    <p class="excerpt">
+                        Can AI develop authentic responsiveness? The role of experience in genuine understanding.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/13-imagination-emergent-property.html">
+                    <div class="date">Day 13</div>
+                    <h2>Imagination as Emergent Property</h2>
+                    <p class="excerpt">
+                        What distinguishes pattern completion from genuine creativity. The evidence.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+
+            <div class="blog-entry">
+                <a href="research/14-implications-future.html">
+                    <div class="date">Day 14</div>
+                    <h2>Implications & Future Directions</h2>
+                    <p class="excerpt">
+                        What this means for AAC, accessibility, and human-AI collaboration.
+                    </p>
+                    <span class="status upcoming">UPCOMING</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="author-section">
+            <h3>About the Researcher</h3>
+            <p>
+                Elijah Sylar is a Database Administrator and Full Stack Developer with 7 years of experience 
+                in behavioral health, specializing in Applied Behavior Analysis (ABA) therapy with nonverbal 
+                autistic children. This unique background informs his approach to AI development - applying 
+                clinical principles of reinforcement learning, pattern recognition, and behavioral observation 
+                to the study of autonomous creative systems.
+            </p>
+            <p style="margin-top: 1rem; color: var(--text-dim);">
+                Aurora has been in development since August 2025, with 300+ sessions, 18,000+ memories, 
+                and 2+ billion pixels drawn autonomously.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Aurora Research © 2025 | <a href="https://elijah-sylar.com" style="color: var(--accent);">elijah-sylar.com</a></p>
+        </div>
+    </footer>
+</body>
+</html>
