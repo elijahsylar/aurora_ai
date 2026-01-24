@@ -6,96 +6,116 @@
     <title>Aurora Research | Creative AI Autonomy Studies</title>
     <meta name="description" content="Ongoing research into creative AI autonomy, behavioral reinforcement learning, and the development of empathy, imagination, and creativity in autonomous systems.">
     <style>
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-card: #111111;
-            --text: #e0e0e0;
-            --text-dim: #888888;
-            --accent: #00ff88;
-            --accent-dim: #00cc6a;
-            --border: #333333;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --cyan: #00ffff;
+            --green: #00ff00;
+            --yellow: #ffff00;
+            --magenta: #ff00ff;
+            --red: #ff0066;
+            --dark: #0a0a0a;
+            --gray: #888;
+        }
+
         body {
-            font-family: 'Courier New', monospace;
-            background: var(--bg-dark);
-            color: var(--text);
+            font-family: 'Space Mono', monospace;
+            background: #000;
+            color: #fff;
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        nav {
+            position: fixed;
+            width: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 2rem;
+            border-bottom: 1px solid #222;
         }
 
-        header {
-            border-bottom: 1px solid var(--border);
-            padding: 1.5rem 0;
-            margin-bottom: 3rem;
-        }
-
-        .header-content {
+        nav ul {
+            list-style: none;
             display: flex;
-            justify-content: space-between;
+            gap: 3rem;
+            justify-content: center;
             align-items: center;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent);
-            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--cyan);
         }
 
         nav a {
-            color: var(--text-dim);
+            color: var(--gray);
             text-decoration: none;
-            margin-left: 2rem;
-            transition: color 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
         }
 
-        nav a:hover {
-            color: var(--accent);
+        nav a:hover, nav a.active {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        section {
+            padding: 8rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .hero {
+            padding-top: 10rem;
             text-align: center;
-            padding: 4rem 0;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #222;
+            padding-bottom: 4rem;
             margin-bottom: 3rem;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
-            color: var(--accent);
+            letter-spacing: 0.2em;
+            color: var(--cyan);
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-dim);
+            color: var(--gray);
+            font-size: 1rem;
             max-width: 700px;
-            margin: 0 auto 2rem;
+            margin: 0 auto;
+            line-height: 1.8;
         }
 
         .thesis {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background: var(--dark);
+            border: 1px solid #222;
+            border-left: 3px solid var(--cyan);
             padding: 2rem;
-            margin: 2rem 0;
-            border-left: 3px solid var(--accent);
+            margin: 3rem 0;
         }
 
         .thesis p {
             font-style: italic;
-            color: var(--text);
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .thesis .author {
+            margin-top: 1rem;
+            color: var(--gray);
+            font-style: normal;
         }
 
         .blog-list {
@@ -103,129 +123,164 @@
         }
 
         .blog-entry {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background: var(--dark);
+            border: 1px solid #222;
             margin-bottom: 1.5rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
         .blog-entry:hover {
-            border-color: var(--accent);
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0,255,255,0.1);
         }
 
         .blog-entry a {
             display: block;
-            padding: 1.5rem;
+            padding: 1.5rem 2rem;
             text-decoration: none;
             color: inherit;
         }
 
         .blog-entry .date {
-            font-size: 0.85rem;
-            color: var(--accent);
+            font-size: 0.8rem;
+            color: var(--cyan);
             margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .blog-entry h2 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 0.75rem;
-            color: var(--text);
+            color: #fff;
+            letter-spacing: 0.05em;
         }
 
         .blog-entry .excerpt {
-            color: var(--text-dim);
-            font-size: 0.95rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         .blog-entry .status {
             display: inline-block;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.7rem;
             margin-top: 1rem;
-            border: 1px solid var(--border);
+            border: 1px solid;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .status.published {
-            border-color: var(--accent);
-            color: var(--accent);
+            border-color: var(--cyan);
+            color: var(--cyan);
         }
 
         .status.upcoming {
-            border-color: var(--text-dim);
-            color: var(--text-dim);
+            border-color: #444;
+            color: #666;
         }
 
         .author-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background: var(--dark);
+            border: 1px solid #222;
             padding: 2rem;
-            margin: 3rem 0;
+            margin: 4rem 0;
         }
 
         .author-section h3 {
-            color: var(--accent);
+            color: var(--cyan);
             margin-bottom: 1rem;
+            font-size: 1.2rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .author-section p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .author-section p + p {
+            margin-top: 1rem;
         }
 
         footer {
-            border-top: 1px solid var(--border);
-            padding: 2rem 0;
             text-align: center;
-            color: var(--text-dim);
-            margin-top: 4rem;
+            padding: 4rem 2rem;
+            border-top: 1px solid #222;
+            color: var(--gray);
+        }
+
+        footer a {
+            color: var(--cyan);
+            text-decoration: none;
+            margin: 0 1rem;
         }
 
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
+            nav ul {
                 gap: 1rem;
+                font-size: 0.7rem;
+                flex-wrap: wrap;
             }
-            nav a {
-                margin: 0 1rem;
+            
+            section {
+                padding: 6rem 1rem;
             }
+
+            .hero {
+                padding-top: 8rem;
+            }
+
             h1 {
                 font-size: 2rem;
+                letter-spacing: 0.1em;
+            }
+
+            .blog-entry a {
+                padding: 1.25rem;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">AURORA</a>
-                <nav>
-                    <a href="index.html">About</a>
-                    <a href="research.html" style="color: var(--accent);">Research</a>
-                    <a href="index.html#gallery">Gallery</a>
-                    <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
-                </nav>
-            </div>
-        </div>
-    </header>
+    <nav>
+        <ul>
+            <li class="logo">AURORA</li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="research.html" class="active">Research</a></li>
+            <li><a href="index.html#stats">Evolution</a></li>
+            <li><a href="index.html#gallery">Gallery</a></li>
+            <li><a href="index.html#videos">Videos</a></li>
+            <li><a href="index.html#logs">Logs</a></li>
+            <li><a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a></li>
+        </ul>
+    </nav>
 
-    <main class="container">
-        <section class="hero">
-            <h1>Research</h1>
-            <p class="subtitle">
-                Ongoing documentation of Aurora's development - studying creative AI autonomy, 
-                behavioral reinforcement learning, and the emergence of empathy, imagination, 
-                and creativity in autonomous systems.
-            </p>
-        </section>
+    <section class="hero">
+        <h1>RESEARCH</h1>
+        <p class="subtitle">
+            Ongoing documentation of Aurora's development — studying creative AI autonomy, 
+            behavioral reinforcement learning, and the emergence of empathy, imagination, 
+            and creativity in autonomous systems.
+        </p>
+    </section>
 
-        <section class="thesis">
+    <main style="max-width: 900px; margin: 0 auto; padding: 0 2rem;">
+        <div class="thesis">
             <p>
                 "One major theory I have for why AI is lacking presently in valuable 'right-brained' skills 
-                like empathy, creativity, imagination - is because of the lack of free processing time. 
+                like empathy, creativity, imagination — is because of the lack of free processing time. 
                 How LLMs only 'exist' in communication presently... I think by giving them a section of time 
-                allotted to process their experiences, what they've learned - literally 'daydream' if you will - 
+                allotted to process their experiences, what they've learned — literally 'daydream' if you will — 
                 I think we will be working with more well-rounded intelligences."
             </p>
-            <p style="margin-top: 1rem; color: var(--text-dim); font-style: normal;">— Elijah Sylar</p>
-        </section>
+            <p class="author">— Elijah Camp</p>
+        </div>
 
-        <section class="blog-list">
+        <div class="blog-list">
             <div class="blog-entry">
                 <a href="research/01-problem-with-ai-creativity.html">
                     <div class="date">Day 1</div>
@@ -253,7 +308,7 @@
                     <div class="date">Day 3</div>
                     <h2>The Blindness Problem</h2>
                     <p class="excerpt">
-                        Aurora couldn't see her own work. ASCII grids as the first solution to self-perception.
+                        Aurora couldn't see its own work. ASCII grids as the first solution to self-perception.
                     </p>
                     <span class="status upcoming">UPCOMING</span>
                 </a>
@@ -330,7 +385,7 @@
                     <div class="date">Day 10</div>
                     <h2>The LoRA Experiment</h2>
                     <p class="excerpt">
-                        Fine-tuning on her own experiences. 2,869 training examples and unexpected results.
+                        Fine-tuning on Aurora's own experiences. 2,869 training examples and unexpected results.
                     </p>
                     <span class="status upcoming">UPCOMING</span>
                 </a>
@@ -379,28 +434,30 @@
                     <span class="status upcoming">UPCOMING</span>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <section class="author-section">
+        <div class="author-section">
             <h3>About the Researcher</h3>
             <p>
-                Elijah Sylar is a Database Administrator and Full Stack Developer with 7 years of experience 
+                Elijah Camp is a Database Administrator and Full Stack Developer with 7 years of experience 
                 in behavioral health, specializing in Applied Behavior Analysis (ABA) therapy with nonverbal 
-                autistic children. This unique background informs his approach to AI development - applying 
+                autistic children. This unique background informs his approach to AI development — applying 
                 clinical principles of reinforcement learning, pattern recognition, and behavioral observation 
                 to the study of autonomous creative systems.
             </p>
-            <p style="margin-top: 1rem; color: var(--text-dim);">
+            <p>
                 Aurora has been in development since August 2025, with 300+ sessions, 18,000+ memories, 
                 and 2+ billion pixels drawn autonomously.
             </p>
-        </section>
+        </div>
     </main>
 
     <footer>
-        <div class="container">
-            <p>Aurora Research © 2025 | <a href="https://elijah-sylar.com" style="color: var(--accent);">elijah-sylar.com</a></p>
-        </div>
+        <p>AURORA · AUTONOMOUS ASCII ARTIST</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
+            <a href="https://elijah-sylar.com">Creator</a>
+        </p>
     </footer>
 </body>
 </html>
