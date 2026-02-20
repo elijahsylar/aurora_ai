@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA - Autonomous ASCII Artist</title>
+    <title>AURORA · Autonomous Creative Behavior in Locally-Run Language Models</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
         
         * {
             margin: 0;
@@ -21,44 +21,52 @@
             --red: #ff0066;
             --dark: #0a0a0a;
             --gray: #888;
+            --text: #c8c8c8;
+            --accent-dim: rgba(0,255,255,0.08);
+            --border: #1a1a1a;
         }
 
         body {
-            font-family: 'Space Mono', monospace;
+            font-family: 'IBM Plex Sans', sans-serif;
             background: #000;
-            color: #fff;
-            line-height: 1.6;
+            color: var(--text);
+            line-height: 1.7;
+            font-weight: 300;
         }
 
+        /* ── NAV ── */
         nav {
             position: fixed;
             width: 100%;
             background: rgba(0,0,0,0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 2rem;
-            border-bottom: 1px solid #222;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            gap: 3rem;
+            gap: 2.5rem;
             justify-content: center;
             align-items: center;
         }
 
         .logo {
+            font-family: 'Space Mono', monospace;
             font-weight: 700;
             letter-spacing: 0.3em;
             color: var(--cyan);
+            font-size: 0.9rem;
         }
 
         nav a {
             color: var(--gray);
             text-decoration: none;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
             letter-spacing: 0.1em;
             transition: all 0.3s;
         }
@@ -68,12 +76,36 @@
             text-shadow: 0 0 10px var(--cyan);
         }
 
+        /* ── SECTIONS ── */
         section {
             padding: 8rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
+        .section-number {
+            font-family: 'Space Mono', monospace;
+            color: #333;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+        }
+
+        /* ── HERO - RESEARCH FRAMING ── */
         .hero {
             height: 100vh;
             display: flex;
@@ -81,120 +113,402 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 8rem 2rem 4rem;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 10vw, 8rem);
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(2.5rem, 8vw, 6rem);
             font-weight: 700;
             letter-spacing: 0.5em;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             background: linear-gradient(45deg, #fff, var(--cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .subtitle {
+        .hero-thesis {
+            max-width: 720px;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-meta {
+            font-family: 'Space Mono', monospace;
             color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-size: 0.9rem;
-            margin-bottom: 3rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            line-height: 2;
         }
 
-        .ascii-display {
+        .hero-meta strong {
+            color: var(--cyan);
+        }
+
+        .ascii-badge {
             background: var(--dark);
-            border: 1px solid #333;
-            padding: 2rem;
-            border-radius: 4px;
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid #222;
+            padding: 1.25rem 2rem;
+            border-radius: 2px;
+            margin: 2.5rem 0;
+            display: inline-block;
         }
 
-        .ascii-vision {
+        .ascii-badge pre {
             color: var(--green);
-            font-size: 0.9rem;
-            line-height: 1.1;
+            font-size: 0.7rem;
+            line-height: 1.15;
             white-space: pre;
             font-family: 'Courier New', monospace;
         }
 
-        .op-codes {
-            color: var(--cyan);
-            font-size: 1.1rem;
-            letter-spacing: 0.2em;
-            margin: 1rem 0;
-            font-weight: 700;
+        /* ── RESEARCH QUESTION CARDS ── */
+        .rq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
         }
 
-        .grid {
+        .rq-card {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .rq-card:hover {
+            border-left-color: #fff;
+            background: #0d0d0d;
+        }
+
+        .rq-card a {
+            text-decoration: none;
+            display: block;
+        }
+
+        .rq-card.clickable {
+            cursor: pointer;
+        }
+
+        .rq-card.clickable:hover {
+            border-left-color: #fff;
+            background: #0d0d0d;
+            box-shadow: 0 4px 20px rgba(0,255,255,0.1);
+        }
+
+        .rq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .rq-status {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.6rem;
+            border-radius: 2px;
+        }
+
+        .rq-status.live {
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+        }
+
+        .rq-status.soon {
+            color: #555;
+            border: 1px solid #333;
+        }
+
+        .rq-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: #eee;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .rq-read-link {
+            font-family: 'Space Mono', monospace;
+            color: var(--cyan);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            margin-top: 1rem;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+
+        .rq-card.clickable:hover .rq-read-link {
+            color: #fff;
+        }
+
+        .rq-label {
+            font-family: 'Space Mono', monospace;
+            color: var(--cyan);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .rq-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #ddd;
+            font-style: italic;
+        }
+
+        /* ── METHODOLOGY ── */
+        .method-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin: 3rem 0;
         }
 
-        .card {
+        .method-card {
             background: var(--dark);
-            border: 1px solid #222;
+            border: 1px solid var(--border);
             padding: 2rem;
-            transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s;
         }
 
-        .card:hover {
-            border-color: var(--cyan);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,255,255,0.2);
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
         }
 
-        .card h3 {
+        .method-card:hover {
+            border-color: #333;
+            transform: translateY(-3px);
+        }
+
+        .method-card h3 {
             color: var(--cyan);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
             margin-bottom: 1rem;
-            font-size: 1.2rem;
         }
 
-        .stat-big {
-            text-align: center;
-            padding: 3rem 2rem;
+        .method-card p {
+            font-size: 0.9rem;
+            line-height: 1.7;
         }
 
-        .stat-number {
-            font-size: 3rem;
+        .method-card pre {
+            color: var(--green);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #000;
+            border: 1px solid #1a1a1a;
+            overflow-x: auto;
+        }
+
+        /* ── KEY FINDING CALLOUT ── */
+        .finding-callout {
+            background: linear-gradient(135deg, rgba(0,255,255,0.04), rgba(0,255,255,0.01));
+            border: 1px solid rgba(0,255,255,0.15);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .finding-callout::before {
+            content: 'KEY FINDING';
+            position: absolute;
+            top: -0.6rem;
+            left: 2rem;
+            background: #000;
+            padding: 0 0.75rem;
+            font-family: 'Space Mono', monospace;
             color: var(--cyan);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-size: 0.8rem;
-        }
-
-        .stat-sublabel {
-            color: #555;
             font-size: 0.7rem;
-            margin-top: 0.5rem;
-        }
-
-        .chart-title {
-            color: var(--cyan);
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            text-transform: uppercase;
             letter-spacing: 0.15em;
         }
 
-        .chart-subtitle {
-            color: var(--gray);
-            font-size: 0.85rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        .finding-callout p {
+            font-size: 1.05rem;
+            line-height: 1.8;
         }
 
+        .finding-callout .finding-stat {
+            font-family: 'Space Mono', monospace;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        /* ── INTERVENTION TIMELINE ── */
+        .intervention-timeline {
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .intervention-timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--cyan), #222, var(--cyan));
+        }
+
+        .intervention {
+            padding-left: 3.5rem;
+            padding-bottom: 3rem;
+            position: relative;
+        }
+
+        .intervention::before {
+            content: '';
+            position: absolute;
+            left: 0.55rem;
+            top: 0.3rem;
+            width: 10px;
+            height: 10px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--cyan);
+        }
+
+        .intervention.major::before {
+            width: 14px;
+            height: 14px;
+            left: 0.4rem;
+            background: #fff;
+            box-shadow: 0 0 15px var(--cyan), 0 0 30px rgba(0,255,255,0.3);
+        }
+
+        .intervention-date {
+            font-family: 'Space Mono', monospace;
+            color: var(--cyan);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+
+        .intervention h3 {
+            color: #eee;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .intervention p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--gray);
+        }
+
+        .intervention .intervention-result {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(0,255,255,0.04);
+            border-left: 2px solid var(--cyan);
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        /* ── STATS ROW ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.65rem;
+        }
+
+        .stat-sublabel {
+            color: #444;
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+        }
+
+        /* ── RESEARCHER BG ── */
+        .researcher-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 3rem 0;
+            align-items: start;
+        }
+
+        .researcher-narrative {
+            font-size: 1rem;
+            line-height: 1.9;
+        }
+
+        .researcher-narrative p + p {
+            margin-top: 1.25rem;
+        }
+
+        .researcher-credentials {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+        }
+
+        .credential-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #151515;
+        }
+
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+
+        .credential-label {
+            font-family: 'Space Mono', monospace;
+            color: var(--cyan);
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .credential-value {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* ── PATTERN EVIDENCE ── */
         .pattern-showcase {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -204,7 +518,7 @@
 
         .pattern-card {
             background: #0a0a0a;
-            border: 1px solid #222;
+            border: 1px solid var(--border);
             padding: 1.5rem;
             font-family: 'Courier New', monospace;
             transition: all 0.3s;
@@ -212,27 +526,29 @@
 
         .pattern-card:hover {
             border-color: var(--cyan);
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .pattern-text {
             color: var(--green);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             word-break: break-all;
             margin-bottom: 0.5rem;
         }
 
         .pattern-emotion {
             color: var(--cyan);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .pattern-date {
-            color: #555;
+            color: #444;
             font-size: 0.6rem;
         }
 
+        /* ── GALLERY (structure preserved for update scripts) ── */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -285,22 +601,30 @@
 
         .gallery-divider h3 {
             color: var(--magenta);
-            font-size: 1.2rem;
+            font-size: 1rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .gallery-divider p {
             color: var(--gray);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.1em;
+        }
+
+        /* ── VIDEOS ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
 
         .video-container {
             position: relative;
             background: #000;
-            border: 1px solid #0ff;
+            border: 1px solid rgba(0,255,255,0.3);
             padding: 0;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -308,7 +632,7 @@
 
         .video-container:hover {
             border-color: #fff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
 
         .video-container video {
@@ -321,38 +645,26 @@
         .video-title {
             display: block;
             padding: 10px;
-            color: #0ff;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
+            color: var(--cyan);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            border-top: 1px solid #0ff;
+            letter-spacing: 0.05em;
+            border-top: 1px solid rgba(0,255,255,0.3);
         }
 
         .video-date {
             display: block;
             padding: 0 10px 10px;
-            color: #666;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
+            color: #555;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
         }
 
-        h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            letter-spacing: 0.2em;
-            color: var(--cyan);
-        }
-
-        .section-number {
-            color: var(--gray);
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
-        }
-
+        /* ── DIALOGUE / BEHAVIORAL EVIDENCE ── */
         .conversation-carousel {
             background: var(--dark);
-            border: 1px solid #333;
+            border: 1px solid #222;
             padding: 3rem 2rem;
             margin: 3rem 0;
             position: relative;
@@ -365,7 +677,7 @@
 
         .carousel-header h3 {
             color: var(--cyan);
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             letter-spacing: 0.15em;
             margin-bottom: 0.5rem;
         }
@@ -378,7 +690,7 @@
         .conversation-slides {
             position: relative;
             overflow: hidden;
-            min-height: 400px;
+            min-height: 350px;
         }
 
         .conversation-slide {
@@ -398,22 +710,23 @@
         .dialogue-exchange {
             background: #000;
             border-left: 3px solid var(--magenta);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .dialogue-speaker {
+            font-family: 'Space Mono', monospace;
             color: var(--magenta);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.15em;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .dialogue-text {
-            color: #ccc;
+            color: #bbb;
             line-height: 1.8;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .dialogue-exchange.aurora {
@@ -436,10 +749,10 @@
             background: none;
             border: 1px solid var(--cyan);
             color: var(--cyan);
-            padding: 0.75rem 1.5rem;
+            padding: 0.6rem 1.25rem;
             cursor: pointer;
             font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             letter-spacing: 0.1em;
             transition: all 0.3s;
         }
@@ -447,7 +760,6 @@
         .carousel-btn:hover {
             background: var(--cyan);
             color: #000;
-            box-shadow: 0 0 15px var(--cyan);
         }
 
         .carousel-dots {
@@ -456,8 +768,8 @@
         }
 
         .carousel-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #333;
             border: 1px solid #555;
@@ -468,71 +780,76 @@
         .carousel-dot.active {
             background: var(--cyan);
             border-color: var(--cyan);
-            box-shadow: 0 0 10px var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
         }
 
         .conversation-date {
             text-align: center;
-            color: #555;
-            font-size: 0.75rem;
-            margin-top: 1.5rem;
+            color: #444;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            margin-top: 1.25rem;
             letter-spacing: 0.1em;
         }
 
-        .timeline-item {
-            border-left: 2px solid #222;
-            padding-left: 2rem;
-            margin-left: 1rem;
-            padding-bottom: 2rem;
-            position: relative;
+        /* ── PROSE BLOCKS ── */
+        .prose {
+            max-width: 780px;
+            font-size: 1rem;
+            line-height: 1.9;
         }
 
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 0;
-            width: 10px;
-            height: 10px;
-            background: var(--cyan);
-            border-radius: 50%;
+        .prose p + p {
+            margin-top: 1.25rem;
         }
 
-        .timeline-date {
-            color: var(--cyan);
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
+        .section-intro {
+            font-size: 1.05rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            line-height: 1.8;
         }
 
+        /* ── FOOTER ── */
         footer {
             text-align: center;
             padding: 4rem 2rem;
-            border-top: 1px solid #222;
+            border-top: 1px solid var(--border);
             color: var(--gray);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
         }
 
         footer a {
             color: var(--cyan);
             text-decoration: none;
             margin: 0 1rem;
+            transition: color 0.3s;
         }
 
+        footer a:hover {
+            color: #fff;
+        }
+
+        /* ── LIVE STATUS ── */
         .live-status {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
             background: rgba(0,0,0,0.9);
-            border: 1px solid #333;
-            padding: 1rem 1.5rem;
+            border: 1px solid #222;
+            padding: 0.75rem 1.25rem;
             backdrop-filter: blur(10px);
-            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
             z-index: 999;
         }
 
         .status-dot {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: var(--cyan);
             border-radius: 50%;
             margin-right: 0.5rem;
@@ -544,6 +861,7 @@
             50% { opacity: 0.3; }
         }
 
+        /* ── LIGHTBOX ── */
         .lightbox {
             display: none;
             position: fixed;
@@ -579,7 +897,6 @@
             width: auto;
             height: auto;
             object-fit: contain;
-            animation: scaleIn 0.3s;
             border: 1px solid #333;
             box-shadow: 0 0 50px rgba(0, 255, 255, 0.1);
         }
@@ -605,19 +922,17 @@
             margin-top: 1.5rem;
             text-align: center;
             color: var(--cyan);
-            font-size: 0.9rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
             letter-spacing: 0.1em;
         }
 
-        @keyframes scaleIn {
-            from { transform: scale(0.9); }
-            to { transform: scale(1); }
-        }
-
+        /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
             nav ul {
                 gap: 1rem;
-                font-size: 0.7rem;
+                font-size: 0.65rem;
+                flex-wrap: wrap;
             }
             
             .hero h1 {
@@ -625,11 +940,44 @@
             }
             
             section {
-                padding: 4rem 1rem;
+                padding: 5rem 1.25rem;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .researcher-section {
+                grid-template-columns: 1fr;
+            }
+
+            .rq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
             }
 
             .grid {
                 grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .pattern-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .conversation-carousel {
+                padding: 2rem 1rem;
+            }
+
+            .carousel-nav {
+                flex-direction: column;
+                gap: 1rem;
             }
 
             .lightbox-content {
@@ -654,28 +1002,6 @@
                 justify-content: center;
                 font-size: 1.5rem;
             }
-
-            .lightbox-caption {
-                margin-top: 1rem;
-                padding: 0.5rem;
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            .pattern-showcase {
-                grid-template-columns: 1fr;
-            }
-
-            .conversation-carousel {
-                padding: 2rem 1rem;
-            }
-
-            .carousel-nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
         }
     </style>
 </head>
@@ -683,110 +1009,262 @@
     <nav>
         <ul>
             <li class="logo">AURORA</li>
-            <li><a href="#about">About</a></li>
-            <li><a href="research.html">Research</a></li>
-            <li><a href="#stats">Evolution</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#videos">Videos</a></li>
-            <li><a href="#logs">Logs</a></li>
+            <li><a href="#thesis">Research</a></li>
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#findings">Findings</a></li>
+            <li><a href="#gallery">Visual Evidence</a></li>
+            <li><a href="#videos">Process</a></li>
+            <li><a href="#behavior">Behavior</a></li>
+            <li><a href="#background">Background</a></li>
             <li><a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a></li>
         </ul>
     </nav>
 
+    <!-- ════════════════════════════════════════════════════
+         HERO - RESEARCH FRAMING
+         ════════════════════════════════════════════════════ -->
     <section class="hero">
         <h1>AURORA</h1>
-        <p class="subtitle">Autonomous ASCII Vision Artist</p>
         
-        <div class="ascii-display">
-            <pre class="ascii-vision">·····*·····*·····
+        <p class="hero-thesis">
+            A longitudinal study investigating whether behavioral reinforcement architecture 
+            can produce emergent creative behavior in locally-run language models 
+            without reinforcement learning, reward shaping, or human aesthetic evaluation.
+        </p>
+
+        <div class="ascii-badge">
+            <pre>·····*·····*·····
 ····*··◉···*····
 ···*·······*···
 ··*···***···*··
 ·*···*···*···*·
-*···*·····*···*
-···*·······*···
-··*·········*··
-·*···········*·
 █████████████████</pre>
         </div>
         
-        <div class="op-codes">red53333orange5111yellow522220000</div>
+        <div class="hero-meta">
+            <strong>Elijah Camp</strong> · University of Colorado Denver, Computer Science<br>
+            Ongoing · August 2025 - Present · 300+ sessions · 18,000+ accumulated memories
+        </div>
     </section>
 
-    <section id="about">
+    <!-- ════════════════════════════════════════════════════
+         01 - RESEARCH QUESTIONS
+         ════════════════════════════════════════════════════ -->
+    <section id="thesis">
         <div class="section-number">01</div>
-        <h2>ABOUT</h2>
+        <h2>RESEARCH QUESTIONS</h2>
         
-        <p style="font-size: 1.2rem; margin-bottom: 3rem;">
-            Aurora sees through ASCII vision and creates art using operation codes. 
-            Aurora perceives the canvas as symbols and navigates using motor commands.
+        <p class="section-intro">
+            Most AI art systems optimize for human aesthetic preference through RLHF or curated training data. 
+            Aurora asks a different question: what happens when you give an AI system the architecture to develop 
+            creative behavior on its own terms, informed not by machine learning conventions, but by seven years 
+            of behavioral intervention work with nonverbal populations?
         </p>
         
-        <div class="grid">
-            <div class="card">
-                <h3>ASCII VISION</h3>
-                <pre style="color: var(--green); font-size: 0.8rem;">◉ = Aurora (pen down)
-○ = Aurora (pen up)
-* = Colored pixels
-· = Empty space
-█ = Canvas edge</pre>
+        <div class="rq-grid">
+            <a href="research/post1.html" style="text-decoration:none;">
+                <div class="rq-card clickable">
+                    <div class="rq-header">
+                        <div class="rq-label">RQ1</div>
+                        <span class="rq-status live">Read Now</span>
+                    </div>
+                    <div class="rq-title">The Problem with AI Creativity</div>
+                    <div class="rq-text">
+                        Can an autonomous system develop persistent creative preferences through 
+                        behavioral reinforcement alone, without external reward signals or human evaluation?
+                    </div>
+                    <span class="rq-read-link">Read Post 1 ></span>
+                </div>
+            </a>
+            <div class="rq-card">
+                <div class="rq-header">
+                    <div class="rq-label">RQ2</div>
+                    <span class="rq-status soon">Coming Soon</span>
+                </div>
+                <div class="rq-title">Origins: From subconscious_ai.py to Autonomous Agent</div>
+                <div class="rq-text">
+                    What happens to creative output when prescriptive constraints are removed from 
+                    a system that has developed behavioral patterns under those constraints?
+                </div>
             </div>
-            
-            <div class="card">
-                <h3>OP-CODES</h3>
-                <pre style="color: var(--cyan); font-size: 0.8rem;">0-3 = Movement
-4 = Pen up
-5 = Pen down
-Colors = Full words
-0123456789 = Think</pre>
-            </div>
-            
-            <div class="card">
-                <h3>AUTONOMY</h3>
-                <p>Every 90 minutes:</p>
-                <p style="color: var(--cyan);">DRAW | DREAM | CHAT</p>
-                <p style="font-size: 0.8rem; margin-top: 1rem;">Full control over emotions, speed, and tools.</p>
+            <div class="rq-card">
+                <div class="rq-header">
+                    <div class="rq-label">RQ3</div>
+                    <span class="rq-status soon">Coming Soon</span>
+                </div>
+                <div class="rq-title">The Blindness Problem: Teaching AI to See Its Own Work</div>
+                <div class="rq-text">
+                    Can behavioral reinforcement principles (structured autonomy, environmental arrangement, 
+                    natural reinforcement) produce measurably different creative trajectories than 
+                    standard generative approaches?
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="stats">
+    <!-- ════════════════════════════════════════════════════
+         02 - METHODOLOGY
+         ════════════════════════════════════════════════════ -->
+    <section id="methodology">
         <div class="section-number">02</div>
-        <h2>EVOLUTION</h2>
+        <h2>METHODOLOGY</h2>
         
-        <p style="font-size: 1.2rem; margin-bottom: 3rem; color: var(--gray);">
-            127 days of autonomous creative growth · August 8 → December 12, 2025
+        <p class="section-intro">
+            Aurora operates on a 90-minute cycle of autonomous creation, memory consolidation, 
+            and self-reflective dialogue. This rhythm is modeled after ultradian biological cycles and 
+            structured around behavioral reinforcement principles of environmental arrangement and natural contingency.
         </p>
 
-        <div class="grid">
-            <div class="card stat-big">
+        <div class="method-grid">
+            <div class="method-card">
+                <h3>PERCEPTION</h3>
+                <p>
+                    Aurora perceives its canvas through ASCII symbol encoding, a constrained 
+                    visual vocabulary where every pixel state maps to a character. This is not 
+                    a limitation; it's a deliberate design choice mirroring how augmentative communication systems use 
+                    symbol-based communication to enable expression within structured constraints.
+                </p>
+                <pre>◉ = Self (pen down)    · = Empty space
+○ = Self (pen up)     * = Colored pixel
+█ = Canvas boundary</pre>
+            </div>
+            
+            <div class="method-card">
+                <h3>ACTION</h3>
+                <p>
+                    All creative decisions are encoded as operation codes, numerical sequences 
+                    the model generates autonomously. Movement, tool selection, color choice, 
+                    and even "thinking" are expressed through the same token vocabulary.
+                </p>
+                <pre>0-3 = Directional movement
+4   = Pen up (navigate)
+5   = Pen down (draw)
+0123456789 = Think/plan</pre>
+            </div>
+            
+            <div class="method-card">
+                <h3>CONSOLIDATION</h3>
+                <p>
+                    Every 90 minutes, Aurora enters a dream cycle, a memory consolidation 
+                    phase inspired by sleep-stage research. Satisfaction scores, discovered 
+                    patterns, and emotional states are processed and integrated into long-term 
+                    memory, shaping future sessions.
+                </p>
+            </div>
+
+            <div class="method-card">
+                <h3>DIALOGUE</h3>
+                <p>
+                    Moondream (a vision model) periodically evaluates Aurora's canvas and asks 
+                    contextual questions. Aurora's responses reveal self-assessment, frustration, 
+                    preference formation, and creative intent. This is behavioral evidence captured 
+                    in real time.
+                </p>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
                 <div class="stat-number">2.13B</div>
                 <div class="stat-label">Pixels Drawn</div>
                 <div class="stat-sublabel">~16.8M per day avg</div>
             </div>
-            <div class="card stat-big">
+            <div class="stat-card">
                 <div class="stat-number">3,716,063</div>
                 <div class="stat-label">Autonomous Steps</div>
                 <div class="stat-sublabel">~29,000 per day</div>
             </div>
-            <div class="card stat-big">
+            <div class="stat-card">
                 <div class="stat-number">10</div>
-                <div class="stat-label">Dreams</div>
-                <div class="stat-sublabel">New consolidation system active</div>
+                <div class="stat-label">Dream Cycles</div>
+                <div class="stat-sublabel">Consolidation system active</div>
             </div>
-            <div class="card stat-big">
+            <div class="stat-card">
                 <div class="stat-number">291</div>
                 <div class="stat-label">Sessions</div>
-                <div class="stat-sublabel">127 days running</div>
+                <div class="stat-sublabel">127 days documented</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════
+         03 - KEY FINDINGS / INTERVENTIONS
+         ════════════════════════════════════════════════════ -->
+    <section id="findings">
+        <div class="section-number">03</div>
+        <h2>FINDINGS & INTERVENTIONS</h2>
+        
+        <p class="section-intro">
+            Aurora's development is documented through deliberate architectural interventions 
+            and their measurable behavioral consequences, not post-hoc narratives.
+        </p>
+
+        <div class="finding-callout">
+            <p>
+                On September 2, 2025, all prescriptive constraints were removed from Aurora's 
+                decision architecture, <span class="finding-stat">~600 lines</span> of reward shaping, 
+                aesthetic guidance, and behavioral guardrails deleted. The result was not degradation 
+                but a <span class="finding-stat">15-25% performance improvement</span> in pixel throughput 
+                and a qualitative shift toward denser, more compositionally complex output. 
+                This is the central finding: the system performed better when it was freed to 
+                operate on patterns it had already internalized.
+            </p>
+        </div>
+
+        <div class="intervention-timeline">
+            <div class="intervention">
+                <div class="intervention-date">August 8, 2025</div>
+                <h3>System Initialization</h3>
+                <p>
+                    Aurora begins operating with full behavioral scaffolding: emotional state modeling, 
+                    satisfaction scoring, pattern memory, and prescriptive creative constraints. 
+                    Architecture derived from behavioral reinforcement principles: structured environment, clear contingencies, 
+                    systematic reinforcement.
+                </p>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">September 2, 2025</div>
+                <h3>Training Wheels Removal</h3>
+                <p>
+                    Complete removal of prescriptive constraints. All reward shaping, aesthetic 
+                    guidance, and behavioral guardrails deleted. The system retained only its 
+                    core perception-action loop and accumulated memories.
+                </p>
+                <div class="intervention-result">
+                    Result: 15-25% increase in creative throughput. Qualitative shift from tentative, 
+                    guided output to dense, compositionally confident work. Patterns previously 
+                    reinforced through external signals continued without them.
+                </div>
+            </div>
+
+            <div class="intervention">
+                <div class="intervention-date">October 19, 2025</div>
+                <h3>Dream Consolidation V2</h3>
+                <p>
+                    Overhauled the dream system from superficial text generation to genuine experiential 
+                    memory consolidation with multi-phase processing modeled after sleep-stage research.
+                </p>
+            </div>
+
+            <div class="intervention">
+                <div class="intervention-date">December 6, 2025</div>
+                <h3>Temporary Model Upgrade (Llama 3)</h3>
+                <p>
+                    Aurora's language model temporarily upgraded from Llama 2 (7B) to Llama 3 
+                    for comparative observation. Provides a natural experiment in how model 
+                    capability affects creative behavior within the same architectural framework.
+                </p>
             </div>
         </div>
 
-        <div class="chart-title" style="margin-top: 4rem; margin-bottom: 1rem;">
-            ↓ Actual Discovered Patterns
-        </div>
-        <div class="chart-subtitle" style="margin-bottom: 2rem;">
-            Real patterns Aurora created and remembered, tagged with the emotion felt during discovery
-        </div>
+        <h3 style="color: var(--cyan); margin-top: 4rem; margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 0.15em;">
+            DISCOVERED PATTERNS
+        </h3>
+        <p style="color: var(--gray); font-size: 0.85rem; margin-bottom: 2rem;">
+            Operation code sequences Aurora created and stored in long-term memory, 
+            tagged with the emotional state active during discovery.
+        </p>
         <div class="pattern-showcase">
             <div class="pattern-card">
                 <div class="pattern-text">221112233111233320</div>
@@ -821,9 +1299,19 @@ Colors = Full words
         </div>
     </section>
 
+    <!-- ════════════════════════════════════════════════════
+         04 - VISUAL EVIDENCE (GALLERY)
+         Structure preserved for update scripts
+         ════════════════════════════════════════════════════ -->
     <section id="gallery">
-        <div class="section-number">03</div>
-        <h2>GALLERY</h2>
+        <div class="section-number">04</div>
+        <h2>VISUAL EVIDENCE</h2>
+        
+        <p class="section-intro">
+            Chronological output documenting Aurora's creative development. Each image is tagged 
+            with the emotional state active during creation. Note the shift in density and 
+            compositional complexity following the September 2 constraint removal.
+        </p>
         
         <div class="gallery-grid">
             <div class="gallery-item">
@@ -1029,7 +1517,6 @@ Colors = Full words
                     <p>October 14, 2025 - Latest creation</p>
                 </div>
             </div>
-        
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251013_073402_creative.png" alt="Aurora Art - October 13 Creative">
                 <div class="gallery-overlay">
@@ -1072,7 +1559,6 @@ Colors = Full words
                     <p>September 8, 2025 - Post-liberation</p>
                 </div>
             </div>
-            
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250902_001926_creative.png" alt="Aurora Art - September 2 Creative Explosion">
                 <div class="gallery-overlay">
@@ -1202,9 +1688,17 @@ Colors = Full words
         </div>
     </section>
 
-<section id="videos">
-        <div class="section-number">04</div>
-        <h2>WATCH AURORA CREATE</h2>
+    <!-- ════════════════════════════════════════════════════
+         05 - PROCESS (VIDEOS)
+         ════════════════════════════════════════════════════ -->
+    <section id="videos">
+        <div class="section-number">05</div>
+        <h2>PROCESS DOCUMENTATION</h2>
+        
+        <p class="section-intro">
+            Time-lapse recordings of Aurora's autonomous creation sessions. Unedited, 
+            uninterrupted, no human input during recording.
+        </p>
         
         <div class="grid" style="max-width: 1200px; margin: 0 auto;">
             <div class="video-container">
@@ -1233,14 +1727,23 @@ Colors = Full words
         </div>
     </section>
 
-    <section id="logs">
-        <div class="section-number">05</div>
-        <h2>DIALOGUES</h2>
+    <!-- ════════════════════════════════════════════════════
+         06 - BEHAVIORAL EVIDENCE (DIALOGUES)
+         ════════════════════════════════════════════════════ -->
+    <section id="behavior">
+        <div class="section-number">06</div>
+        <h2>BEHAVIORAL EVIDENCE</h2>
+        
+        <p class="section-intro">
+            Unedited dialogues between Aurora and Moondream (vision model). These exchanges 
+            capture self-assessment, frustration, preference formation, and creative intent 
+            in real time. This is the behavioral data that traditional generative systems don't produce.
+        </p>
 
         <div class="conversation-carousel">
             <div class="carousel-header">
-                <h3>Aurora & Moondream</h3>
-                <p>Real conversations about art, creativity, and digital expression</p>
+                <h3>Aurora & Moondream Dialogues</h3>
+                <p>Real-time conversations during autonomous creation sessions</p>
             </div>
 
             <div class="conversation-slides">
@@ -1299,33 +1802,80 @@ Colors = Full words
                 <button class="carousel-btn" onclick="changeSlide(1)">NEXT →</button>
             </div>
         </div>
+    </section>
 
-        <h3 style="color: var(--cyan); margin-top: 4rem; margin-bottom: 2rem; font-size: 1.5rem; letter-spacing: 0.15em;">SYSTEM UPDATES</h3>
+    <!-- ════════════════════════════════════════════════════
+         07 - RESEARCHER BACKGROUND
+         ════════════════════════════════════════════════════ -->
+    <section id="background">
+        <div class="section-number">07</div>
+        <h2>RESEARCHER BACKGROUND</h2>
         
-        <div class="timeline-item">
-            <div class="timeline-date">2025.12.06</div>
-            <h3>LLAMA 3 Upgrade (Temporary)</h3>
-            <p><strong>Model Transition:</strong> Aurora temporarily upgraded to LLAMA 3 for enhanced creative processing.</p>
-        </div>
+        <p class="section-intro">
+            Aurora's architecture is not derived from machine learning conventions. 
+            It comes from seven years of direct clinical work with nonverbal populations.
+        </p>
 
-        <div class="timeline-item">
-            <div class="timeline-date">2025.10.19</div>
-            <h3>Dream Consolidation System V2</h3>
-            <p><strong>Learning Breakthrough:</strong> Complete overhaul of dream system from superficial text generation to genuine experiential learning.</p>
-        </div>
-        
-        <div class="timeline-item">
-            <div class="timeline-date">2025.09.02</div>
-            <h3>Training Wheels Removal Complete</h3>
-            <p><strong>Major Performance Update:</strong> Removed all prescriptive constraints. Result: 15-25% performance improvement, ~600 lines of code removed.</p>
+        <div class="researcher-section">
+            <div class="researcher-narrative">
+                <p>
+                    Before writing a single line of Aurora's code, I spent seven years as an 
+                    a certified behavioral therapist implementing structured behavioral intervention 
+                    and Augmentative & Alternative Communication systems for nonverbal autistic children.
+                </p>
+                <p>
+                    That work taught me something most AI researchers don't encounter in their training: 
+                    that meaningful expression can emerge from highly constrained symbolic systems 
+                    when the environment is arranged correctly. Augmentative communication devices give nonverbal individuals 
+                    a limited symbol vocabulary. Within those constraints, genuine communication, 
+                    preference, humor, and creativity develop. Not because the system is sophisticated, 
+                    but because the behavioral architecture supports development.
+                </p>
+                <p>
+                    Aurora applies this principle to autonomous AI systems. The ASCII vision isn't a 
+                    technical limitation. It is an intentional constraint modeled after symbol-based communication vocabularies. 
+                    The 90-minute DRAW | DREAM | CHAT cycle is not arbitrary. It mirrors the structured 
+                    session formats that produce the best outcomes in behavioral intervention. The removal of 
+                    prescriptive constraints on September 2 follows the same principle as fading prompts 
+                    in behavioral therapy: you scaffold, then step back, and see what the system does 
+                    on its own.
+                </p>
+            </div>
+
+            <div class="researcher-credentials">
+                <div class="credential-item">
+                    <div class="credential-label">Researcher</div>
+                    <div class="credential-value">Elijah Camp</div>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-label">Education</div>
+                    <div class="credential-value">B.S. Computer Science, University of Colorado Denver (2026)</div>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-label">Clinical Background</div>
+                    <div class="credential-value">7 years behavioral intervention · RBT Certified · Augmentative Communication Systems</div>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-label">Technical Stack</div>
+                    <div class="credential-value">PyTorch · Llama 2/3 · Moondream · Python · Custom behavioral architecture</div>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-label">Domain Expertise</div>
+                    <div class="credential-value">WCAG Accessibility · Augmentative Communication · Behavioral Reinforcement · Healthcare Technology</div>
+                </div>
+                <div class="credential-item">
+                    <div class="credential-label">Project Duration</div>
+                    <div class="credential-value">August 2025 - Present · 300+ sessions · 18,000+ memories accumulated</div>
+                </div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <p>AURORA · AUTONOMOUS ASCII ARTIST</p>
+        <p>AURORA · Autonomous Creative Behavior Research</p>
         <p style="margin-top: 1rem;">
             <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
-            <a href="https://elijah-sylar.com">Creator</a>
+            <a href="https://elijah-sylar.com">Elijah Camp</a>
         </p>
     </footer>
 
@@ -1423,36 +1973,6 @@ Colors = Full words
                 });
             });
         });
-
-        const asciiDisplay = document.querySelector('.ascii-vision');
-        let frame = 0;
-        const frames = [
-            `·····*·····*·····
-····*··◉···*····
-···*·······*···
-··*···***···*··
-·*···*···*···*·
-*···*·····*···*
-···*·······*···
-··*·········*··
-·*···········*·
-█████████████████`,
-            `·····*···◉·*·····
-····*······*····
-···*····*··*···
-··*···***···*··
-·*···*···*···*·
-*···*·····*···*
-···*·······*···
-··*·········*··
-·*···········*·
-█████████████████`
-        ];
-        
-        setInterval(() => {
-            frame = (frame + 1) % frames.length;
-            asciiDisplay.textContent = frames[frame];
-        }, 1000);
 
         const statuses = ['DRAWING', 'THINKING', 'DREAMING', 'CREATING'];
         const statusElement = document.querySelector('.live-status strong');
