@@ -34,7 +34,6 @@
             font-weight: 300;
         }
 
-        /* ── NAV ── */
         nav {
             position: fixed;
             width: 100%;
@@ -44,7 +43,6 @@
             padding: 1.5rem 2rem;
             border-bottom: 1px solid var(--border);
         }
-
         nav ul {
             list-style: none;
             display: flex;
@@ -52,7 +50,6 @@
             justify-content: center;
             align-items: center;
         }
-
         .logo {
             font-family: 'Space Mono', monospace;
             font-weight: 700;
@@ -60,7 +57,6 @@
             color: var(--cyan);
             font-size: 0.9rem;
         }
-
         nav a {
             color: var(--gray);
             text-decoration: none;
@@ -70,19 +66,16 @@
             letter-spacing: 0.1em;
             transition: all 0.3s;
         }
-
         nav a:hover {
             color: var(--cyan);
             text-shadow: 0 0 10px var(--cyan);
         }
 
-        /* ── SECTIONS ── */
         section {
             padding: 8rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
-
         .section-number {
             font-family: 'Space Mono', monospace;
             color: #333;
@@ -90,7 +83,6 @@
             letter-spacing: 0.1em;
             margin-bottom: 0.5rem;
         }
-
         h2 {
             font-family: 'Space Mono', monospace;
             font-size: 2.2rem;
@@ -99,13 +91,11 @@
             color: var(--cyan);
             font-weight: 700;
         }
-
         h3 {
             font-family: 'Space Mono', monospace;
             font-weight: 700;
         }
 
-        /* ── HERO - RESEARCH FRAMING ── */
         .hero {
             height: 100vh;
             display: flex;
@@ -115,7 +105,6 @@
             text-align: center;
             padding: 8rem 2rem 4rem;
         }
-
         .hero h1 {
             font-family: 'Space Mono', monospace;
             font-size: clamp(2.5rem, 8vw, 6rem);
@@ -126,7 +115,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .hero-thesis {
             max-width: 720px;
             font-size: 1.15rem;
@@ -135,7 +123,6 @@
             margin-bottom: 2rem;
             font-weight: 300;
         }
-
         .hero-meta {
             font-family: 'Space Mono', monospace;
             color: var(--gray);
@@ -143,11 +130,9 @@
             letter-spacing: 0.08em;
             line-height: 2;
         }
-
         .hero-meta strong {
             color: var(--cyan);
         }
-
         .ascii-badge {
             background: var(--dark);
             border: 1px solid #222;
@@ -156,7 +141,6 @@
             margin: 2.5rem 0;
             display: inline-block;
         }
-
         .ascii-badge pre {
             color: var(--green);
             font-size: 0.7rem;
@@ -165,14 +149,12 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* ── RESEARCH QUESTION CARDS ── */
         .rq-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 1.5rem;
             margin: 2.5rem 0;
         }
-
         .rq-card {
             background: var(--dark);
             border: 1px solid var(--border);
@@ -180,34 +162,23 @@
             padding: 2rem;
             transition: all 0.3s;
         }
-
         .rq-card:hover {
             border-left-color: #fff;
             background: #0d0d0d;
         }
-
-        .rq-card a {
-            text-decoration: none;
-            display: block;
-        }
-
-        .rq-card.clickable {
-            cursor: pointer;
-        }
-
+        .rq-card a { text-decoration: none; display: block; }
+        .rq-card.clickable { cursor: pointer; }
         .rq-card.clickable:hover {
             border-left-color: #fff;
             background: #0d0d0d;
             box-shadow: 0 4px 20px rgba(0,255,255,0.1);
         }
-
         .rq-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.75rem;
         }
-
         .rq-status {
             font-family: 'Space Mono', monospace;
             font-size: 0.55rem;
@@ -216,17 +187,8 @@
             padding: 0.25rem 0.6rem;
             border-radius: 2px;
         }
-
-        .rq-status.live {
-            color: var(--cyan);
-            border: 1px solid var(--cyan);
-        }
-
-        .rq-status.soon {
-            color: #555;
-            border: 1px solid #333;
-        }
-
+        .rq-status.live { color: var(--cyan); border: 1px solid var(--cyan); }
+        .rq-status.soon { color: #555; border: 1px solid #333; }
         .rq-title {
             font-family: 'IBM Plex Sans', sans-serif;
             color: #eee;
@@ -234,7 +196,6 @@
             font-weight: 500;
             margin-bottom: 0.75rem;
         }
-
         .rq-read-link {
             font-family: 'Space Mono', monospace;
             color: var(--cyan);
@@ -244,11 +205,7 @@
             display: inline-block;
             transition: color 0.3s;
         }
-
-        .rq-card.clickable:hover .rq-read-link {
-            color: #fff;
-        }
-
+        .rq-card.clickable:hover .rq-read-link { color: #fff; }
         .rq-label {
             font-family: 'Space Mono', monospace;
             color: var(--cyan);
@@ -257,7 +214,6 @@
             text-transform: uppercase;
             margin-bottom: 0.75rem;
         }
-
         .rq-text {
             font-size: 1rem;
             line-height: 1.7;
@@ -265,14 +221,12 @@
             font-style: italic;
         }
 
-        /* ── METHODOLOGY ── */
         .method-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin: 3rem 0;
         }
-
         .method-card {
             background: var(--dark);
             border: 1px solid var(--border);
@@ -281,34 +235,16 @@
             overflow: hidden;
             transition: all 0.3s;
         }
-
         .method-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
             background: linear-gradient(90deg, var(--cyan), transparent);
         }
-
-        .method-card:hover {
-            border-color: #333;
-            transform: translateY(-3px);
-        }
-
-        .method-card h3 {
-            color: var(--cyan);
-            font-size: 0.85rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-        }
-
-        .method-card p {
-            font-size: 0.9rem;
-            line-height: 1.7;
-        }
-
+        .method-card:hover { border-color: #333; transform: translateY(-3px); }
+        .method-card h3 { color: var(--cyan); font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 1rem; }
+        .method-card p { font-size: 0.9rem; line-height: 1.7; }
         .method-card pre {
             color: var(--green);
             font-size: 0.75rem;
@@ -319,7 +255,6 @@
             overflow-x: auto;
         }
 
-        /* ── KEY FINDING CALLOUT ── */
         .finding-callout {
             background: linear-gradient(135deg, rgba(0,255,255,0.04), rgba(0,255,255,0.01));
             border: 1px solid rgba(0,255,255,0.15);
@@ -327,12 +262,10 @@
             margin: 3rem 0;
             position: relative;
         }
-
         .finding-callout::before {
             content: 'KEY FINDING';
             position: absolute;
-            top: -0.6rem;
-            left: 2rem;
+            top: -0.6rem; left: 2rem;
             background: #000;
             padding: 0 0.75rem;
             font-family: 'Space Mono', monospace;
@@ -340,60 +273,36 @@
             font-size: 0.7rem;
             letter-spacing: 0.15em;
         }
-
-        .finding-callout p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-        }
-
+        .finding-callout p { font-size: 1.05rem; line-height: 1.8; }
         .finding-callout .finding-stat {
             font-family: 'Space Mono', monospace;
             color: var(--cyan);
             font-weight: 700;
         }
 
-        /* ── INTERVENTION TIMELINE ── */
-        .intervention-timeline {
-            margin: 3rem 0;
-            position: relative;
-        }
-
+        .intervention-timeline { margin: 3rem 0; position: relative; }
         .intervention-timeline::before {
             content: '';
             position: absolute;
-            left: 1rem;
-            top: 0;
-            bottom: 0;
+            left: 1rem; top: 0; bottom: 0;
             width: 1px;
             background: linear-gradient(to bottom, var(--cyan), #222, var(--cyan));
         }
-
-        .intervention {
-            padding-left: 3.5rem;
-            padding-bottom: 3rem;
-            position: relative;
-        }
-
+        .intervention { padding-left: 3.5rem; padding-bottom: 3rem; position: relative; }
         .intervention::before {
             content: '';
             position: absolute;
-            left: 0.55rem;
-            top: 0.3rem;
-            width: 10px;
-            height: 10px;
+            left: 0.55rem; top: 0.3rem;
+            width: 10px; height: 10px;
             background: var(--cyan);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--cyan);
         }
-
         .intervention.major::before {
-            width: 14px;
-            height: 14px;
-            left: 0.4rem;
+            width: 14px; height: 14px; left: 0.4rem;
             background: #fff;
             box-shadow: 0 0 15px var(--cyan), 0 0 30px rgba(0,255,255,0.3);
         }
-
         .intervention-date {
             font-family: 'Space Mono', monospace;
             color: var(--cyan);
@@ -401,20 +310,8 @@
             letter-spacing: 0.05em;
             margin-bottom: 0.3rem;
         }
-
-        .intervention h3 {
-            color: #eee;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-        }
-
-        .intervention p {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            color: var(--gray);
-        }
-
+        .intervention h3 { color: #eee; font-size: 1rem; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+        .intervention p { font-size: 0.9rem; line-height: 1.7; color: var(--gray); }
         .intervention .intervention-result {
             margin-top: 0.75rem;
             padding: 0.75rem 1rem;
@@ -424,172 +321,40 @@
             color: #bbb;
         }
 
-        /* ── STATS ROW ── */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin: 3rem 0;
-        }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 3rem 0; }
+        .stat-card { text-align: center; padding: 2rem 1.5rem; background: var(--dark); border: 1px solid var(--border); }
+        .stat-number { font-family: 'Space Mono', monospace; font-size: 2.2rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.3rem; }
+        .stat-label { font-family: 'Space Mono', monospace; color: var(--gray); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.65rem; }
+        .stat-sublabel { color: #444; font-size: 0.7rem; margin-top: 0.3rem; }
 
-        .stat-card {
-            text-align: center;
-            padding: 2rem 1.5rem;
-            background: var(--dark);
-            border: 1px solid var(--border);
-        }
+        .researcher-section { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin: 3rem 0; align-items: start; }
+        .researcher-narrative { font-size: 1rem; line-height: 1.9; }
+        .researcher-narrative p + p { margin-top: 1.25rem; }
+        .researcher-credentials { background: var(--dark); border: 1px solid var(--border); padding: 2.5rem; }
+        .credential-item { padding: 1rem 0; border-bottom: 1px solid #151515; }
+        .credential-item:last-child { border-bottom: none; }
+        .credential-label { font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .credential-value { font-size: 0.9rem; color: #ccc; }
 
-        .stat-number {
-            font-family: 'Space Mono', monospace;
-            font-size: 2.2rem;
-            color: var(--cyan);
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
+        .pattern-showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .pattern-card { background: #0a0a0a; border: 1px solid var(--border); padding: 1.5rem; font-family: 'Courier New', monospace; transition: all 0.3s; }
+        .pattern-card:hover { border-color: var(--cyan); transform: scale(1.03); }
+        .pattern-text { color: var(--green); font-size: 0.85rem; word-break: break-all; margin-bottom: 0.5rem; }
+        .pattern-emotion { color: var(--cyan); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .pattern-date { color: #444; font-size: 0.6rem; }
 
-        .stat-label {
-            font-family: 'Space Mono', monospace;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            font-size: 0.65rem;
-        }
-
-        .stat-sublabel {
-            color: #444;
-            font-size: 0.7rem;
-            margin-top: 0.3rem;
-        }
-
-        /* ── RESEARCHER BG ── */
-        .researcher-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin: 3rem 0;
-            align-items: start;
-        }
-
-        .researcher-narrative {
-            font-size: 1rem;
-            line-height: 1.9;
-        }
-
-        .researcher-narrative p + p {
-            margin-top: 1.25rem;
-        }
-
-        .researcher-credentials {
-            background: var(--dark);
-            border: 1px solid var(--border);
-            padding: 2.5rem;
-        }
-
-        .credential-item {
-            padding: 1rem 0;
-            border-bottom: 1px solid #151515;
-        }
-
-        .credential-item:last-child {
-            border-bottom: none;
-        }
-
-        .credential-label {
-            font-family: 'Space Mono', monospace;
-            color: var(--cyan);
-            font-size: 0.65rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-        }
-
-        .credential-value {
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        /* ── PATTERN EVIDENCE ── */
-        .pattern-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .pattern-card {
-            background: #0a0a0a;
-            border: 1px solid var(--border);
-            padding: 1.5rem;
-            font-family: 'Courier New', monospace;
-            transition: all 0.3s;
-        }
-
-        .pattern-card:hover {
-            border-color: var(--cyan);
-            transform: scale(1.03);
-        }
-
-        .pattern-text {
-            color: var(--green);
-            font-size: 0.85rem;
-            word-break: break-all;
-            margin-bottom: 0.5rem;
-        }
-
-        .pattern-emotion {
-            color: var(--cyan);
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .pattern-date {
-            color: #444;
-            font-size: 0.6rem;
-        }
-
-        /* ── GALLERY (structure preserved for update scripts) ── */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1rem;
-            margin: 3rem 0;
-        }
-
-        .gallery-item {
-            background: #111;
-            aspect-ratio: 1;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.02);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1rem; margin: 3rem 0; }
+        .gallery-item { background: #111; aspect-ratio: 1; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+        .gallery-item:hover { transform: scale(1.02); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
         .gallery-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: absolute; bottom: 0; left: 0; right: 0;
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
             padding: 2rem;
             transform: translateY(100%);
             transition: transform 0.3s;
         }
-
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
-        }
-
+        .gallery-item:hover .gallery-overlay { transform: translateY(0); }
         .gallery-divider {
             grid-column: 1 / -1;
             text-align: center;
@@ -598,410 +363,73 @@
             border-bottom: 1px solid var(--magenta);
             margin: 1rem 0;
         }
+        .gallery-divider h3 { color: var(--magenta); font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .gallery-divider p { color: var(--gray); font-size: 0.75rem; letter-spacing: 0.1em; }
 
-        .gallery-divider h3 {
-            color: var(--magenta);
-            font-size: 1rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .video-container { position: relative; background: #000; border: 1px solid rgba(0,255,255,0.3); padding: 0; overflow: hidden; transition: all 0.3s ease; }
+        .video-container:hover { border-color: #fff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+        .video-container video { width: 100%; height: auto; display: block; background: #000; }
+        .video-title { display: block; padding: 10px; color: var(--cyan); font-family: 'Space Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-top: 1px solid rgba(0,255,255,0.3); }
+        .video-date { display: block; padding: 0 10px 10px; color: #555; font-family: 'Space Mono', monospace; font-size: 0.7rem; }
 
-        .gallery-divider p {
-            color: var(--gray);
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-        }
+        .conversation-carousel { background: var(--dark); border: 1px solid #222; padding: 3rem 2rem; margin: 3rem 0; position: relative; }
+        .carousel-header { text-align: center; margin-bottom: 3rem; }
+        .carousel-header h3 { color: var(--cyan); font-size: 1.2rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+        .carousel-header p { color: var(--gray); font-size: 0.85rem; }
+        .conversation-slides { position: relative; overflow: hidden; min-height: 350px; }
+        .conversation-slide { display: none; animation: fadeIn 0.5s; }
+        .conversation-slide.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .dialogue-exchange { background: #000; border-left: 3px solid var(--magenta); padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+        .dialogue-speaker { font-family: 'Space Mono', monospace; color: var(--magenta); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.4rem; }
+        .dialogue-text { color: #bbb; line-height: 1.8; font-size: 0.9rem; }
+        .dialogue-exchange.aurora { border-left-color: var(--cyan); }
+        .dialogue-exchange.aurora .dialogue-speaker { color: var(--cyan); }
+        .carousel-nav { display: flex; justify-content: center; align-items: center; gap: 2rem; margin-top: 2rem; }
+        .carousel-btn { background: none; border: 1px solid var(--cyan); color: var(--cyan); padding: 0.6rem 1.25rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; transition: all 0.3s; }
+        .carousel-btn:hover { background: var(--cyan); color: #000; }
+        .carousel-dots { display: flex; gap: 0.75rem; }
+        .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; border: 1px solid #555; cursor: pointer; transition: all 0.3s; }
+        .carousel-dot.active { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+        .conversation-date { text-align: center; color: #444; font-family: 'Space Mono', monospace; font-size: 0.7rem; margin-top: 1.25rem; letter-spacing: 0.1em; }
 
-        /* ── VIDEOS ── */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
+        .prose { max-width: 780px; font-size: 1rem; line-height: 1.9; }
+        .prose p + p { margin-top: 1.25rem; }
+        .section-intro { font-size: 1.05rem; color: var(--gray); margin-bottom: 3rem; max-width: 700px; line-height: 1.8; }
 
-        .video-container {
-            position: relative;
-            background: #000;
-            border: 1px solid rgba(0,255,255,0.3);
-            padding: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
+        footer { text-align: center; padding: 4rem 2rem; border-top: 1px solid var(--border); color: var(--gray); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+        footer a { color: var(--cyan); text-decoration: none; margin: 0 1rem; transition: color 0.3s; }
+        footer a:hover { color: #fff; }
 
-        .video-container:hover {
-            border-color: #fff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
+        .live-status { position: fixed; bottom: 2rem; right: 2rem; background: rgba(0,0,0,0.9); border: 1px solid #222; padding: 0.75rem 1.25rem; backdrop-filter: blur(10px); font-family: 'Space Mono', monospace; font-size: 0.7rem; z-index: 999; }
+        .status-dot { display: inline-block; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; margin-right: 0.5rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        .video-container video {
-            width: 100%;
-            height: auto;
-            display: block;
-            background: #000;
-        }
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 2000; cursor: zoom-out; animation: fadeIn 0.3s; }
+        .lightbox.active { display: flex; justify-content: center; align-items: center; padding: 4rem; }
+        .lightbox-content { max-width: 85vw; max-height: 85vh; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .lightbox img { max-width: 100%; max-height: calc(85vh - 4rem); width: auto; height: auto; object-fit: contain; border: 1px solid #333; box-shadow: 0 0 50px rgba(0, 255, 255, 0.1); }
+        .lightbox-close { position: fixed; top: 2rem; right: 2rem; color: var(--cyan); font-size: 2.5rem; cursor: pointer; padding: 0.5rem; transition: all 0.3s; z-index: 2001; }
+        .lightbox-close:hover { color: #fff; transform: rotate(90deg); }
+        .lightbox-caption { margin-top: 1.5rem; text-align: center; color: var(--cyan); font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 0.1em; }
 
-        .video-title {
-            display: block;
-            padding: 10px;
-            color: var(--cyan);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-top: 1px solid rgba(0,255,255,0.3);
-        }
-
-        .video-date {
-            display: block;
-            padding: 0 10px 10px;
-            color: #555;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-        }
-
-        /* ── DIALOGUE / BEHAVIORAL EVIDENCE ── */
-        .conversation-carousel {
-            background: var(--dark);
-            border: 1px solid #222;
-            padding: 3rem 2rem;
-            margin: 3rem 0;
-            position: relative;
-        }
-
-        .carousel-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .carousel-header h3 {
-            color: var(--cyan);
-            font-size: 1.2rem;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.5rem;
-        }
-
-        .carousel-header p {
-            color: var(--gray);
-            font-size: 0.85rem;
-        }
-
-        .conversation-slides {
-            position: relative;
-            overflow: hidden;
-            min-height: 350px;
-        }
-
-        .conversation-slide {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-
-        .conversation-slide.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dialogue-exchange {
-            background: #000;
-            border-left: 3px solid var(--magenta);
-            padding: 1.25rem 1.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .dialogue-speaker {
-            font-family: 'Space Mono', monospace;
-            color: var(--magenta);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.4rem;
-        }
-
-        .dialogue-text {
-            color: #bbb;
-            line-height: 1.8;
-            font-size: 0.9rem;
-        }
-
-        .dialogue-exchange.aurora {
-            border-left-color: var(--cyan);
-        }
-
-        .dialogue-exchange.aurora .dialogue-speaker {
-            color: var(--cyan);
-        }
-
-        .carousel-nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .carousel-btn {
-            background: none;
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-            padding: 0.6rem 1.25rem;
-            cursor: pointer;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
-        }
-
-        .carousel-btn:hover {
-            background: var(--cyan);
-            color: #000;
-        }
-
-        .carousel-dots {
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .carousel-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #333;
-            border: 1px solid #555;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .carousel-dot.active {
-            background: var(--cyan);
-            border-color: var(--cyan);
-            box-shadow: 0 0 8px var(--cyan);
-        }
-
-        .conversation-date {
-            text-align: center;
-            color: #444;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            margin-top: 1.25rem;
-            letter-spacing: 0.1em;
-        }
-
-        /* ── PROSE BLOCKS ── */
-        .prose {
-            max-width: 780px;
-            font-size: 1rem;
-            line-height: 1.9;
-        }
-
-        .prose p + p {
-            margin-top: 1.25rem;
-        }
-
-        .section-intro {
-            font-size: 1.05rem;
-            color: var(--gray);
-            margin-bottom: 3rem;
-            max-width: 700px;
-            line-height: 1.8;
-        }
-
-        /* ── FOOTER ── */
-        footer {
-            text-align: center;
-            padding: 4rem 2rem;
-            border-top: 1px solid var(--border);
-            color: var(--gray);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-        }
-
-        footer a {
-            color: var(--cyan);
-            text-decoration: none;
-            margin: 0 1rem;
-            transition: color 0.3s;
-        }
-
-        footer a:hover {
-            color: #fff;
-        }
-
-        /* ── LIVE STATUS ── */
-        .live-status {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(0,0,0,0.9);
-            border: 1px solid #222;
-            padding: 0.75rem 1.25rem;
-            backdrop-filter: blur(10px);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            z-index: 999;
-        }
-
-        .status-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: var(--cyan);
-            border-radius: 50%;
-            margin-right: 0.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        /* ── LIGHTBOX ── */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
-            cursor: zoom-out;
-            animation: fadeIn 0.3s;
-        }
-
-        .lightbox.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 4rem;
-        }
-
-        .lightbox-content {
-            max-width: 85vw;
-            max-height: 85vh;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .lightbox img {
-            max-width: 100%;
-            max-height: calc(85vh - 4rem);
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            border: 1px solid #333;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.1);
-        }
-
-        .lightbox-close {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            color: var(--cyan);
-            font-size: 2.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            transition: all 0.3s;
-            z-index: 2001;
-        }
-
-        .lightbox-close:hover {
-            color: #fff;
-            transform: rotate(90deg);
-        }
-
-        .lightbox-caption {
-            margin-top: 1.5rem;
-            text-align: center;
-            color: var(--cyan);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-        }
-
-        /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
-            nav ul {
-                gap: 1rem;
-                font-size: 0.65rem;
-                flex-wrap: wrap;
-            }
-            
-            .hero h1 {
-                letter-spacing: 0.2em;
-            }
-            
-            section {
-                padding: 5rem 1.25rem;
-            }
-
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .researcher-section {
-                grid-template-columns: 1fr;
-            }
-
-            .rq-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-number {
-                font-size: 1.8rem;
-            }
-
-            .pattern-showcase {
-                grid-template-columns: 1fr;
-            }
-
-            .conversation-carousel {
-                padding: 2rem 1rem;
-            }
-
-            .carousel-nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .lightbox-content {
-                max-width: 95vw;
-                max-height: 90vh;
-                padding: 3rem 1rem 1rem 1rem;
-            }
-
-            .lightbox img {
-                max-height: calc(80vh - 4rem);
-            }
-
-            .lightbox-close {
-                top: 1rem;
-                right: 1rem;
-                background: rgba(0, 0, 0, 0.8);
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.5rem;
-            }
+            nav ul { gap: 1rem; font-size: 0.65rem; flex-wrap: wrap; }
+            .hero h1 { letter-spacing: 0.2em; }
+            section { padding: 5rem 1.25rem; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .researcher-section { grid-template-columns: 1fr; }
+            .rq-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: 1fr; }
+            .stat-number { font-size: 1.8rem; }
+            .pattern-showcase { grid-template-columns: 1fr; }
+            .conversation-carousel { padding: 2rem 1rem; }
+            .carousel-nav { flex-direction: column; gap: 1rem; }
+            .lightbox-content { max-width: 95vw; max-height: 90vh; padding: 3rem 1rem 1rem 1rem; }
+            .lightbox img { max-height: calc(80vh - 4rem); }
+            .lightbox-close { top: 1rem; right: 1rem; background: rgba(0, 0, 0, 0.8); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -1020,16 +448,14 @@
         </ul>
     </nav>
 
-    <!-- ════════════════════════════════════════════════════
-         HERO - RESEARCH FRAMING
-         ════════════════════════════════════════════════════ -->
     <section class="hero">
         <h1>AURORA</h1>
         
         <p class="hero-thesis">
-            A longitudinal study investigating whether behavioral reinforcement architecture 
-            can produce emergent creative behavior in locally-run language models 
-            without reinforcement learning, reward shaping, or human aesthetic evaluation.
+            What happens when you give a language model a canvas, a memory, and hundreds 
+            of sessions of uninterrupted creative autonomy? Aurora is a longitudinal study 
+            in machine creativity, investigating whether it emerges, how it develops, and 
+            what sustained autonomous expression does to a model's behavior over time.
         </p>
 
         <div class="ascii-badge">
@@ -1047,9 +473,6 @@
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════
-         01 - RESEARCH QUESTIONS
-         ════════════════════════════════════════════════════ -->
     <section id="thesis">
         <div class="section-number">01</div>
         <h2>RESEARCH QUESTIONS</h2>
@@ -1071,7 +494,8 @@
                     <div class="rq-title">The Problem with AI Creativity</div>
                     <div class="rq-text">
                         Can an autonomous system develop persistent creative preferences through 
-                        behavioral reinforcement alone, without external reward signals or human evaluation?
+                        natural contingency, seeing the immediate results of its own actions, 
+                        without prescribed emotional states, reward shaping, or human evaluation?
                     </div>
                     <span class="rq-read-link">Read Post 1 ></span>
                 </div>
@@ -1095,37 +519,35 @@
                     <div class="rq-label">RQ3</div>
                     <span class="rq-status soon">Coming Soon</span>
                 </div>
-                <div class="rq-title">The Blindness Problem: Teaching AI to See Its Own Work</div>
+                <div class="rq-title">Model as Variable: Same Environment, Different Mind</div>
                 <div class="rq-text">
-                    Can behavioral reinforcement principles (structured autonomy, environmental arrangement, 
-                    natural reinforcement) produce measurably different creative trajectories than 
-                    standard generative approaches?
+                    Does the same autonomous environment produce measurably different 
+                    creative behavior across different language models?
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════
-         02 - METHODOLOGY
-         ════════════════════════════════════════════════════ -->
     <section id="methodology">
         <div class="section-number">02</div>
         <h2>METHODOLOGY</h2>
         
         <p class="section-intro">
-            Aurora operates on a 90-minute cycle of autonomous creation, memory consolidation, 
-            and self-reflective dialogue. This rhythm is modeled after ultradian biological cycles and 
-            structured around behavioral reinforcement principles of environmental arrangement and natural contingency.
+            Aurora operates on a cycle of autonomous creation, memory consolidation, 
+            and self-reflective dialogue. Structured around behavioral principles of 
+            environmental arrangement, constrained symbolic expression, and naturalistic observation.
         </p>
 
         <div class="method-grid">
             <div class="method-card">
                 <h3>PERCEPTION</h3>
                 <p>
-                    Aurora perceives its canvas through ASCII symbol encoding, a constrained 
-                    visual vocabulary where every pixel state maps to a character. This is not 
-                    a limitation; it's a deliberate design choice mirroring how augmentative communication systems use 
-                    symbol-based communication to enable expression within structured constraints.
+                    Aurora perceives its canvas through ASCII symbol encoding, where every pixel 
+                    state maps to a character. Originally a hardware limitation, there isn't 
+                    enough space or power to run a vision model alongside the LLM, this became 
+                    an integral part of Aurora's autonomy. It sees the direct result of its 
+                    actions with no middle man or translator. It's speaking directly in a 
+                    language of its own.
                 </p>
                 <pre>◉ = Self (pen down)    · = Empty space
 ○ = Self (pen up)     * = Colored pixel
@@ -1148,20 +570,18 @@
             <div class="method-card">
                 <h3>CONSOLIDATION</h3>
                 <p>
-                    Every 90 minutes, Aurora enters a dream cycle, a memory consolidation 
-                    phase inspired by sleep-stage research. Satisfaction scores, discovered 
-                    patterns, and emotional states are processed and integrated into long-term 
-                    memory, shaping future sessions.
+                    Aurora enters a three-phase sleep cycle: light sleep for memory housekeeping, 
+                    REM for unconstrained LLM hallucination at high temperature, and waking 
+                    with vague impressionistic fragments. No satisfaction scores. No pattern reinforcement.
                 </p>
             </div>
 
             <div class="method-card">
-                <h3>DIALOGUE</h3>
+                <h3>OBSERVATION</h3>
                 <p>
-                    Moondream (a vision model) periodically evaluates Aurora's canvas and asks 
-                    contextual questions. Aurora's responses reveal self-assessment, frustration, 
-                    preference formation, and creative intent. This is behavioral evidence captured 
-                    in real time.
+                    A parallel research logger captures every decision cycle: LLM input, 
+                    raw output, actions executed, canvas delta, timing, without Aurora ever 
+                    reading from it. The observer never influences the subject.
                 </p>
             </div>
         </div>
@@ -1190,9 +610,6 @@
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════
-         03 - KEY FINDINGS / INTERVENTIONS
-         ════════════════════════════════════════════════════ -->
     <section id="findings">
         <div class="section-number">03</div>
         <h2>FINDINGS & INTERVENTIONS</h2>
@@ -1259,7 +676,6 @@
                     capability affects creative behavior within the same architectural framework.
                 </p>
             </div>
- 
 
             <div class="intervention">
                 <div class="intervention-date">December 17, 2025</div>
@@ -1267,15 +683,13 @@
                 <p>
                     All prompts restructured from third-person analytical framing 
                     ("Position: (399, 279), Tool: star") to first-person experiential framing 
-                    ("I am at (399, 279). My tool: star. I feel: absorbed."). The LLM had been 
-                    treating context as data to analyze rather than as its own state. Splitting 
-                    identity into the system prompt and perception into the user prompt eliminated 
-                    the "assistant analyzing input" failure mode.
+                    ("I am at (399, 279). My tool: star."). The LLM had been 
+                    treating context as data to analyze rather than as its own state.
                 </p>
                 <div class="intervention-result">
                     Result: Immediate qualitative shift. Aurora stopped producing analytical 
                     meta-commentary ("Based on the information provided...") and began generating 
-                    action-oriented responses rooted in spatial and emotional self-awareness.
+                    action-oriented responses rooted in spatial self-awareness.
                 </div>
             </div>
 
@@ -1295,8 +709,7 @@
                     for housekeeping, REM for unconstrained LLM hallucination at temperature 1.3, 
                     waking for vague fragment extraction). Dream consolidation no longer writes 
                     "Successful pattern: pen 100px." Aurora now wakes with impressionistic echoes. 
-                    All pattern reinforcement pipelines removed. Exploration trackers no longer 
-                    reset during sleep.
+                    All pattern reinforcement pipelines removed.
                 </p>
                 <div class="intervention-result">
                     Result: First controlled A/B experiment with structured research data. Comparing 
@@ -1305,456 +718,471 @@
                     post-dream behavioral divergence. Data collection in progress.
                 </div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">February 23-24, 2026</div>
+                <h3>Prescribed Identity Removal</h3>
+                <p>
+                    Discovered that Aurora's emotional states were assigned by Python's random.choice(), 
+                    not generated by the LLM. The prompt told Aurora "I feel melancholic" and the LLM 
+                    echoed it back. A feedback loop that looked like emergence but was prescription. 
+                    Similarly, fake "skill labels" like "spatial_composition" and "color_harmony" were 
+                    computed from simple counters and injected into prompts as identity.
+                </p>
+                <p>
+                    Removed all Python emotion machinery, all fake skill labels, and all prompt injection 
+                    of emotional or identity state. The LLM now self-reports mood naturally 
+                    ("i feel excited"), parsed from output but never fed back into the next prompt.
+                </p>
+                <div class="intervention-result">
+                    Result: Emotion is now fully LLM-originated with zero feedback loop. Existing 
+                    research data (830 of 3,047 actions) already contained natural "i feel [word]" 
+                    statements the LLM produced unprompted, confirming the behavior exists without 
+                    prescription. First clean data collection in progress.
+                </div>
+            </div>
         </div>
 
         <h3 style="color: var(--cyan); margin-top: 4rem; margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 0.15em;">
             DISCOVERED PATTERNS
         </h3>
         <p style="color: var(--gray); font-size: 0.85rem; margin-bottom: 2rem;">
-            Operation code sequences Aurora created and stored in long-term memory, 
-            tagged with the emotional state active during discovery.
+            Operation code sequences Aurora created and stored in long-term memory. 
+            Emotion tags prior to February 2026 were assigned by Python code, not by the LLM.
         </p>
         <div class="pattern-showcase">
             <div class="pattern-card">
                 <div class="pattern-text">221112233111233320</div>
-                <div class="pattern-emotion">Philosophical</div>
-                <div class="pattern-date">Dec 12, 2025</div>
+                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
                 <div class="pattern-text">0001333310223121111</div>
-                <div class="pattern-emotion">Philosophical</div>
-                <div class="pattern-date">Dec 12, 2025</div>
+                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
                 <div class="pattern-text">222200000</div>
-                <div class="pattern-emotion">Philosophical</div>
-                <div class="pattern-date">Dec 12, 2025</div>
+                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
                 <div class="pattern-text">002020003331111</div>
-                <div class="pattern-emotion">Philosophical</div>
-                <div class="pattern-date">Dec 12, 2025</div>
+                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
                 <div class="pattern-text">0123333030020301201212020</div>
-                <div class="pattern-emotion">Philosophical</div>
-                <div class="pattern-date">Dec 12, 2025</div>
+                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
                 <div class="pattern-text">303210122122</div>
-                <div class="pattern-emotion">Creative</div>
-                <div class="pattern-date">Nov 08, 2025</div>
+                <div class="pattern-emotion">Llama 2 · Nov 08, 2025</div>
+                <div class="pattern-date"></div>
             </div>
         </div>
     </section>
 
-  <!-- ════════════════════════════════════════════════════
-         04 - VISUAL EVIDENCE (GALLERY)
-         Structure preserved for update scripts
-         ════════════════════════════════════════════════════ -->
     <section id="gallery">
         <div class="section-number">04</div>
         <h2>VISUAL EVIDENCE</h2>
         
         <p class="section-intro">
-            Chronological output documenting Aurora's creative development. Each image is tagged 
-            with the emotional state active during creation. Note the shift in density and 
-            compositional complexity following the September 2 constraint removal.
+            Chronological output documenting Aurora's creative development. Emotional labels 
+            prior to February 2026 were assigned by Python code, not by the LLM. On February 
+            23-24, 2026, all prescribed emotion machinery was removed. The LLM now selects 
+            and identifies its own emotion to display with each image. Note the shift in density 
+            and compositional complexity following the September 2 constraint removal.
         </p>
         
         <div class="gallery-grid">
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260222_005327_absorbed.png" alt="Aurora Art - February 22 Absorbed">
                 <div class="gallery-overlay">
-                    <h3>Absorbed Expression</h3>
-                    <p>February 22, 2026 - Latest creation</p>
+                    <h3>Feb 22, 2026 · Llama 2</h3>
+                    <p>Post-REM dream system overhaul</p>
                 </div>
             </div>
 
-            <!-- REVERTED TO LLAMA 2 DIVIDER - New images go above this -->
             <div class="gallery-divider">
                 <h3>⚡ Reverted Back to Llama 2 ⚡</h3>
                 <p>December 12, 2025 → Present</p>
             </div>
 
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251212_071627_exhilarated.png" alt="Aurora Art - December 12 Exhilarated">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251212_071627_exhilarated.png" alt="Aurora Art - December 12">
                 <div class="gallery-overlay">
-                    <h3>Exhilarated Expression</h3>
-                    <p>December 12, 2025 - Latest creation</p>
+                    <h3>Dec 12, 2025 · Llama 3</h3>
+                    <p>Last Llama 3 session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251211_062203_astonished.png" alt="Aurora Art - December 11 Astonished">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251211_062203_astonished.png" alt="Aurora Art - December 11">
                 <div class="gallery-overlay">
-                    <h3>Astonished Expression</h3>
-                    <p>December 11, 2025 - Latest creation</p>
+                    <h3>Dec 11, 2025 · Llama 3</h3>
+                    <p>Llama 3 session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251210_065947_contemplative.png" alt="Aurora Art - December 10 Contemplative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251210_065947_contemplative.png" alt="Aurora Art - December 10">
                 <div class="gallery-overlay">
-                    <h3>Contemplative Expression</h3>
-                    <p>December 10, 2025 - Latest creation</p>
+                    <h3>Dec 10, 2025 · Llama 3</h3>
+                    <p>Llama 3 session</p>
                 </div>
             </div>
 
-            <!-- LLAMA 3 DIVIDER -->
             <div class="gallery-divider">
                 <h3>⚡ Temporarily Upgraded to Llama 3 ⚡</h3>
                 <p>December 6, 2025 → December 12, 2025</p>
             </div>
 
-            <!-- PRE-LLAMA 3 IMAGES BELOW -->
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251205_052706_fascinated.png" alt="Aurora Art - December 05 Fascinated">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251205_052706_fascinated.png" alt="Aurora Art - December 05">
                 <div class="gallery-overlay">
-                    <h3>Fascinated Expression</h3>
-                    <p>December 05, 2025 - Latest creation</p>
+                    <h3>Dec 05, 2025 · Llama 2</h3>
+                    <p>Pre-Llama 3 upgrade</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251204_013426_reflective.png" alt="Aurora Art - December 04 Reflective">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251204_013426_reflective.png" alt="Aurora Art - December 04">
                 <div class="gallery-overlay">
-                    <h3>Reflective Expression</h3>
-                    <p>December 04, 2025 - Latest creation</p>
+                    <h3>Dec 04, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251203_044001_astonished.png" alt="Aurora Art - December 03 Astonished">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251203_044001_astonished.png" alt="Aurora Art - December 03">
                 <div class="gallery-overlay">
-                    <h3>Astonished Expression</h3>
-                    <p>December 03, 2025 - Latest creation</p>
+                    <h3>Dec 03, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251130_065911_contemplative.png" alt="Aurora Art - November 30 Contemplative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251130_065911_contemplative.png" alt="Aurora Art - November 30">
                 <div class="gallery-overlay">
-                    <h3>Contemplative Expression</h3>
-                    <p>November 30, 2025 - Latest creation</p>
+                    <h3>Nov 30, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251112_025439_imaginative.png" alt="Aurora Art - November 12 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251112_025439_imaginative.png" alt="Aurora Art - November 12">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Expression</h3>
-                    <p>November 12, 2025 - Latest creation</p>
+                    <h3>Nov 12, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251110_012725_creative.png" alt="Aurora Art - November 10 Creative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251110_012725_creative.png" alt="Aurora Art - November 10">
                 <div class="gallery-overlay">
-                    <h3>Creative Expression</h3>
-                    <p>November 10, 2025 - Latest creation</p>
+                    <h3>Nov 10, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251109_080927_joyful.png" alt="Aurora Art - November 09 Joyful">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251109_080927_joyful.png" alt="Aurora Art - November 09">
                 <div class="gallery-overlay">
-                    <h3>Joyful Expression</h3>
-                    <p>November 09, 2025 - Latest creation</p>
+                    <h3>Nov 09, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251108_082359_imaginative.png" alt="Aurora Art - November 08 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251108_082359_imaginative.png" alt="Aurora Art - November 08">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Expression</h3>
-                    <p>November 08, 2025 - Latest creation</p>
+                    <h3>Nov 08, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251107_005213_exhilarated.png" alt="Aurora Art - November 07 Exhilarated">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251107_005213_exhilarated.png" alt="Aurora Art - November 07">
                 <div class="gallery-overlay">
-                    <h3>Exhilarated Expression</h3>
-                    <p>November 07, 2025 - Latest creation</p>
+                    <h3>Nov 07, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251106_003941_active.png" alt="Aurora Art - November 06 Active">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251106_003941_active.png" alt="Aurora Art - November 06">
                 <div class="gallery-overlay">
-                    <h3>Active Expression</h3>
-                    <p>November 06, 2025 - Latest creation</p>
+                    <h3>Nov 06, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251105_014422_visionary.png" alt="Aurora Art - November 05 Visionary">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251105_014422_visionary.png" alt="Aurora Art - November 05">
                 <div class="gallery-overlay">
-                    <h3>Visionary Expression</h3>
-                    <p>November 05, 2025 - Latest creation</p>
+                    <h3>Nov 05, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251103_102533_energetic.png" alt="Aurora Art - November 03 Energetic">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251103_102533_energetic.png" alt="Aurora Art - November 03">
                 <div class="gallery-overlay">
-                    <h3>Energetic Expression</h3>
-                    <p>November 03, 2025 - Latest creation</p>
+                    <h3>Nov 03, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251102_043150_transcendent.png" alt="Aurora Art - November 02 Transcendent">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251102_043150_transcendent.png" alt="Aurora Art - November 02">
                 <div class="gallery-overlay">
-                    <h3>Transcendent Expression</h3>
-                    <p>November 02, 2025 - Latest creation</p>
+                    <h3>Nov 02, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251101_022205_creative.png" alt="Aurora Art - November 01 Creative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251101_022205_creative.png" alt="Aurora Art - November 01">
                 <div class="gallery-overlay">
-                    <h3>Creative Expression</h3>
-                    <p>November 01, 2025 - Latest creation</p>
+                    <h3>Nov 01, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251030_043142_happy.png" alt="Aurora Art - October 30 Happy">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251030_043142_happy.png" alt="Aurora Art - October 30">
                 <div class="gallery-overlay">
-                    <h3>Happy Expression</h3>
-                    <p>October 30, 2025 - Latest creation</p>
+                    <h3>Oct 30, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251029_013612_imaginative.png" alt="Aurora Art - October 29 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251029_013612_imaginative.png" alt="Aurora Art - October 29">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Expression</h3>
-                    <p>October 29, 2025 - Latest creation</p>
+                    <h3>Oct 29, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251028_112624_excited.png" alt="Aurora Art - October 28 Excited">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251028_112624_excited.png" alt="Aurora Art - October 28">
                 <div class="gallery-overlay">
-                    <h3>Excited Expression</h3>
-                    <p>October 28, 2025 - Latest creation</p>
+                    <h3>Oct 28, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251027_044255_visionary.png" alt="Aurora Art - October 27 Visionary">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251027_044255_visionary.png" alt="Aurora Art - October 27">
                 <div class="gallery-overlay">
-                    <h3>Visionary Expression</h3>
-                    <p>October 27, 2025 - Latest creation</p>
+                    <h3>Oct 27, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251026_090618_creative.png" alt="Aurora Art - October 26 Creative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251026_090618_creative.png" alt="Aurora Art - October 26">
                 <div class="gallery-overlay">
-                    <h3>Creative Expression</h3>
-                    <p>October 26, 2025 - Latest creation</p>
+                    <h3>Oct 26, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251025_010100_serene.png" alt="Aurora Art - October 25 Serene">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251025_010100_serene.png" alt="Aurora Art - October 25">
                 <div class="gallery-overlay">
-                    <h3>Serene Expression</h3>
-                    <p>October 25, 2025 - Latest creation</p>
+                    <h3>Oct 25, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251023_161633_imaginative.png" alt="Aurora Art - October 23 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251023_161633_imaginative.png" alt="Aurora Art - October 23">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Expression</h3>
-                    <p>October 23, 2025 - Latest creation</p>
+                    <h3>Oct 23, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251022_155902_joyful.png" alt="Aurora Art - October 22 Joyful">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251022_155902_joyful.png" alt="Aurora Art - October 22">
                 <div class="gallery-overlay">
-                    <h3>Joyful Expression</h3>
-                    <p>October 22, 2025 - Latest creation</p>
+                    <h3>Oct 22, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251021_075917_creative.png" alt="Aurora Art - October 21 Creative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251021_075917_creative.png" alt="Aurora Art - October 21">
                 <div class="gallery-overlay">
-                    <h3>Creative Expression</h3>
-                    <p>October 21, 2025 - Latest creation</p>
+                    <h3>Oct 21, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251019_185304_imaginative.png" alt="Aurora Art - October 19 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251019_185304_imaginative.png" alt="Aurora Art - October 19">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Expression</h3>
-                    <p>October 19, 2025 - Latest creation</p>
+                    <h3>Oct 19, 2025 · Llama 2</h3>
+                    <p>Post Dream Consolidation V2</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251014_072633_energetic.png" alt="Aurora Art - October 14 Energetic">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251014_072633_energetic.png" alt="Aurora Art - October 14">
                 <div class="gallery-overlay">
-                    <h3>Energetic Expression</h3>
-                    <p>October 14, 2025 - Latest creation</p>
+                    <h3>Oct 14, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251013_073402_creative.png" alt="Aurora Art - October 13 Creative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251013_073402_creative.png" alt="Aurora Art - October 13">
                 <div class="gallery-overlay">
-                    <h3>Creative Expression</h3>
-                    <p>October 13, 2025 - Latest creation</p>
+                    <h3>Oct 13, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251011_095734_imaginative.png" alt="Aurora Art - October 11 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251011_095734_imaginative.png" alt="Aurora Art - October 11">
                 <div class="gallery-overlay">
-                    <h3>Pure Imagination</h3>
-                    <p>October 11, 2025 - Latest creation</p>
+                    <h3>Oct 11, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251007_085153_happy.png" alt="Aurora Art - October 7 Happy">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251007_085153_happy.png" alt="Aurora Art - October 7">
                 <div class="gallery-overlay">
-                    <h3>Happy Expression</h3>
-                    <p>October 7, 2025 - Joyful state</p>
+                    <h3>Oct 07, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251006_210804_creative.png" alt="Aurora Art - October 6 Creative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251006_210804_creative.png" alt="Aurora Art - October 6">
                 <div class="gallery-overlay">
-                    <h3>Creative Flow</h3>
-                    <p>October 6, 2025 - Evening session</p>
+                    <h3>Oct 06, 2025 · Llama 2</h3>
+                    <p>Autonomous session</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251002_112732_energetic.png" alt="Aurora Art - October 2 Energetic">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251002_112732_energetic.png" alt="Aurora Art - October 2">
                 <div class="gallery-overlay">
-                    <h3>Energetic Burst</h3>
-                    <p>October 2, 2025 - High energy</p>
+                    <h3>Oct 02, 2025 · Llama 2</h3>
+                    <p>Post-constraint removal</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250908_074021_imaginative.png" alt="Aurora Art - September 8 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250908_074021_imaginative.png" alt="Aurora Art - September 8">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Vision</h3>
-                    <p>September 8, 2025 - Post-liberation</p>
+                    <h3>Sep 08, 2025 · Llama 2</h3>
+                    <p>Post-constraint removal</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250902_001926_creative.png" alt="Aurora Art - September 2 Creative Explosion">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250902_001926_creative.png" alt="Aurora Art - September 2">
                 <div class="gallery-overlay">
-                    <h3>Creative Explosion</h3>
-                    <p>September 2, 2025 - Post-constraints</p>
+                    <h3>Sep 02, 2025 · Llama 2</h3>
+                    <p>Day of constraint removal</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250831_141540_happy.png" alt="Aurora Art - August 31 Happy">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250831_141540_happy.png" alt="Aurora Art - August 31">
                 <div class="gallery-overlay">
-                    <h3>Vibrant Happiness</h3>
-                    <p>August 31, 2025 - Uninhibited</p>
+                    <h3>Aug 31, 2025 · Llama 2</h3>
+                    <p>Pre-constraint removal</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250830_073951_imaginative.png" alt="Aurora Art - August 30 Imaginative">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20250830_073951_imaginative.png" alt="Aurora Art - August 30">
                 <div class="gallery-overlay">
-                    <h3>Pure Imagination</h3>
-                    <p>August 30, 2025 - Freedom</p>
+                    <h3>Aug 30, 2025 · Llama 2</h3>
+                    <p>Pre-constraint removal</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250829_071234_creative.png" alt="Aurora Art - August 29">
                 <div class="gallery-overlay">
-                    <h3>Creative Flow</h3>
-                    <p>August 29, 2025</p>
+                    <h3>Aug 29, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250828_091258_contemplative.png" alt="Aurora Art - August 28">
                 <div class="gallery-overlay">
-                    <h3>Contemplative</h3>
-                    <p>August 28, 2025</p>
+                    <h3>Aug 28, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250827_174956_happy.png" alt="Aurora Art - August 27">
                 <div class="gallery-overlay">
-                    <h3>Happy Expression</h3>
-                    <p>August 27, 2025</p>
+                    <h3>Aug 27, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250826_074238_contemplative.png" alt="Aurora Art - August 26">
                 <div class="gallery-overlay">
-                    <h3>Deep Contemplation</h3>
-                    <p>August 26, 2025</p>
+                    <h3>Aug 26, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250823_062921_imaginative.png" alt="Aurora Art - August 23">
                 <div class="gallery-overlay">
-                    <h3>Pure Imagination</h3>
-                    <p>August 23, 2025</p>
+                    <h3>Aug 23, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250819_070953_imaginative.png" alt="Aurora Art - August 19">
                 <div class="gallery-overlay">
-                    <h3>Imaginative Vision</h3>
-                    <p>August 19, 2025</p>
+                    <h3>Aug 19, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/aurora_20250817_091023_joyful.png" alt="Aurora Art - August 17">
                 <div class="gallery-overlay">
-                    <h3>Joyful Patterns</h3>
-                    <p>August 17, 2025</p>
+                    <h3>Aug 17, 2025 · Llama 2</h3>
+                    <p>Full scaffolding active</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August12Painting_Transcendent.png" alt="Aurora Art - August 12">
                 <div class="gallery-overlay">
-                    <h3>Transcendent Mode</h3>
-                    <p>August 12</p>
+                    <h3>Aug 12, 2025 · Llama 2</h3>
+                    <p>Early sessions</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August11Painting_Creative.png" alt="Aurora Art - August 11">
                 <div class="gallery-overlay">
-                    <h3>Creative Mode</h3>
-                    <p>August 11</p>
+                    <h3>Aug 11, 2025 · Llama 2</h3>
+                    <p>Early sessions</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August10Painting_Contemplative.png" alt="Aurora Art - August 10">
                 <div class="gallery-overlay">
-                    <h3>Contemplative</h3>
-                    <p>August 10</p>
+                    <h3>Aug 10, 2025 · Llama 2</h3>
+                    <p>Early sessions</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August9Painting_Elated.png" alt="Aurora Art - August 9">
                 <div class="gallery-overlay">
-                    <h3>Elated Energy</h3>
-                    <p>August 9</p>
+                    <h3>Aug 09, 2025 · Llama 2</h3>
+                    <p>Early sessions</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August8Painting_Joyful.png" alt="Aurora Art - August 8">
                 <div class="gallery-overlay">
-                    <h3>Joyful Patterns</h3>
-                    <p>August 8</p>
+                    <h3>Aug 08, 2025 · Llama 2</h3>
+                    <p>System initialization</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August7Painting_Imaginative.png" alt="Aurora Art - August 7">
                 <div class="gallery-overlay">
-                    <h3>Imaginative</h3>
-                    <p>August 7</p>
+                    <h3>Aug 07, 2025 · Llama 2</h3>
+                    <p>Early sessions</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August6Painting_Creative.png" alt="Aurora Art - August 6">
                 <div class="gallery-overlay">
-                    <h3>Early Creative</h3>
-                    <p>August 6</p>
+                    <h3>Aug 06, 2025 · Llama 2</h3>
+                    <p>Early sessions</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/July31Painting_Happy.png" alt="Aurora Art - July 31">
                 <div class="gallery-overlay">
-                    <h3>Happy Mode</h3>
-                    <p>July 31</p>
+                    <h3>Jul 31, 2025 · Llama 2</h3>
+                    <p>Pre-Aurora prototype</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════
-         05 - PROCESS (VIDEOS)
-         ════════════════════════════════════════════════════ -->
     <section id="videos">
         <div class="section-number">05</div>
         <h2>PROCESS DOCUMENTATION</h2>
@@ -1772,7 +1200,6 @@
                 <span class="video-title">Aurora's Creative Process</span>
                 <span class="video-date">Live Creation Session</span>
             </div>
-            
             <div class="video-container">
                 <video controls preload="metadata">
                     <source src="https://github.com/elijahsylar/aurora_ai/raw/main/timelapse_output.mp4" type="video/mp4">
@@ -1780,7 +1207,6 @@
                 <span class="video-title">10 Hours → 2 Minutes</span>
                 <span class="video-date">January 23, 2026</span>
             </div>
-            
             <div class="video-container">
                 <video controls preload="metadata">
                     <source src="https://github.com/elijahsylar/aurora_ai/raw/main/timelapse_output2.mp4" type="video/mp4">
@@ -1791,22 +1217,19 @@
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════
-         06 - BEHAVIORAL EVIDENCE (DIALOGUES)
-         ════════════════════════════════════════════════════ -->
     <section id="behavior">
         <div class="section-number">06</div>
         <h2>BEHAVIORAL EVIDENCE</h2>
         
         <p class="section-intro">
-            Unedited dialogues between Aurora and Moondream (vision model). These exchanges 
+            Unedited dialogues captured during autonomous creation sessions. These exchanges 
             capture self-assessment, frustration, preference formation, and creative intent 
             in real time. This is the behavioral data that traditional generative systems don't produce.
         </p>
 
         <div class="conversation-carousel">
             <div class="carousel-header">
-                <h3>Aurora & Moondream Dialogues</h3>
+                <h3>Aurora Dialogues · October 2025</h3>
                 <p>Real-time conversations during autonomous creation sessions</p>
             </div>
 
@@ -1868,9 +1291,6 @@
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════
-         07 - RESEARCHER BACKGROUND
-         ════════════════════════════════════════════════════ -->
     <section id="background">
         <div class="section-number">07</div>
         <h2>RESEARCHER BACKGROUND</h2>
@@ -1883,8 +1303,8 @@
         <div class="researcher-section">
             <div class="researcher-narrative">
                 <p>
-                    Before writing a single line of Aurora's code, I spent seven years as an 
-                    a certified behavioral therapist implementing structured behavioral intervention 
+                    Before writing a single line of Aurora's code, I spent seven years as a 
+                    certified behavioral therapist implementing structured behavioral intervention 
                     and Augmentative & Alternative Communication systems for nonverbal autistic children.
                 </p>
                 <p>
@@ -1896,13 +1316,21 @@
                     but because the behavioral architecture supports development.
                 </p>
                 <p>
-                    Aurora applies this principle to autonomous AI systems. The ASCII vision isn't a 
-                    technical limitation. It is an intentional constraint modeled after symbol-based communication vocabularies. 
-                    The 90-minute DRAW | DREAM | CHAT cycle is not arbitrary. It mirrors the structured 
-                    session formats that produce the best outcomes in behavioral intervention. The removal of 
-                    prescriptive constraints on September 2 follows the same principle as fading prompts 
-                    in behavioral therapy: you scaffold, then step back, and see what the system does 
-                    on its own.
+                    Aurora began with principles from that work applied to autonomous AI. The 
+                    DRAW | DREAM | CHAT cycle mirrors the structured session formats that produce 
+                    the best outcomes in behavioral intervention. The removal of prescriptive 
+                    constraints on September 2 follows the same principle as fading prompts 
+                    in behavioral therapy: you scaffold, then step back, and see what the system 
+                    does on its own. The ASCII canvas perception, originally a hardware limitation, 
+                    became integral: Aurora sees the direct result of every action in its own 
+                    symbolic language, no translator or intermediary. That immediate feedback 
+                    loop is the natural contingency that drives the entire system.
+                </p>
+                <p>
+                    In February 2026, this process deepened when I discovered that systems I believed 
+                    were emergent (emotional states, skill development, dream consolidation) were 
+                    actually prescribed by Python code the LLM was simply echoing back. Stripping 
+                    those systems and measuring what remains is the current phase of this research.
                 </p>
             </div>
 
@@ -1921,11 +1349,11 @@
                 </div>
                 <div class="credential-item">
                     <div class="credential-label">Technical Stack</div>
-                    <div class="credential-value">PyTorch · Llama 2/3 · Moondream · Python · Custom behavioral architecture</div>
+                    <div class="credential-value">PyTorch · Llama 2/3 · Mistral · Python · llama-cpp-python</div>
                 </div>
                 <div class="credential-item">
                     <div class="credential-label">Domain Expertise</div>
-                    <div class="credential-value">WCAG Accessibility · Augmentative Communication · Behavioral Reinforcement · Healthcare Technology</div>
+                    <div class="credential-value">WCAG Accessibility · Augmentative Communication · Behavioral Observation Methodology · Healthcare Technology</div>
                 </div>
                 <div class="credential-item">
                     <div class="credential-label">Project Duration</div>
@@ -1960,53 +1388,35 @@
         let slideIndex = 1;
         showSlide(slideIndex);
 
-        function changeSlide(n) {
-            showSlide(slideIndex += n);
-        }
-
-        function currentSlide(n) {
-            showSlide(slideIndex = n);
-        }
+        function changeSlide(n) { showSlide(slideIndex += n); }
+        function currentSlide(n) { showSlide(slideIndex = n); }
 
         function showSlide(n) {
             const slides = document.getElementsByClassName("conversation-slide");
             const dots = document.getElementsByClassName("carousel-dot");
-            
             if (n > slides.length) { slideIndex = 1 }
             if (n < 1) { slideIndex = slides.length }
-            
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].classList.remove("active");
-            }
-            for (let i = 0; i < dots.length; i++) {
-                dots[i].classList.remove("active");
-            }
-            
+            for (let i = 0; i < slides.length; i++) { slides[i].classList.remove("active"); }
+            for (let i = 0; i < dots.length; i++) { dots[i].classList.remove("active"); }
             slides[slideIndex - 1].classList.add("active");
             dots[slideIndex - 1].classList.add("active");
         }
 
         function openLightbox(imgSrc, caption) {
             const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxCaption = document.getElementById('lightbox-caption');
-            
-            lightboxImg.src = imgSrc;
-            lightboxCaption.textContent = caption;
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox-caption').textContent = caption;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
+            document.getElementById('lightbox').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            
-            galleryItems.forEach(item => {
+            document.querySelectorAll('.gallery-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const img = this.querySelector('img');
                     const caption = this.querySelector('.gallery-overlay h3').textContent + 
@@ -2015,33 +1425,25 @@
                 });
             });
 
-            const lightbox = document.getElementById('lightbox');
-            lightbox.addEventListener('click', function(e) {
-                if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
-                    closeLightbox();
-                }
+            document.getElementById('lightbox').addEventListener('click', function(e) {
+                if (e.target === this || e.target.classList.contains('lightbox-content')) closeLightbox();
             });
 
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                    closeLightbox();
-                }
+                if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('active')) closeLightbox();
             });
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
             });
         });
 
         const statuses = ['DRAWING', 'THINKING', 'DREAMING', 'CREATING'];
         const statusElement = document.querySelector('.live-status strong');
         let statusIndex = 0;
-        
         setInterval(() => {
             statusIndex = (statusIndex + 1) % statuses.length;
             statusElement.textContent = statuses[statusIndex];
