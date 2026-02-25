@@ -469,7 +469,7 @@
         
         <div class="hero-meta">
             <strong>Elijah Camp</strong> · University of Colorado Denver, Computer Science<br>
-            Ongoing · August 2025 - Present · 300+ sessions · 18,000+ accumulated memories
+            Ongoing · August 2025 - Present · 466 sessions · 144,000+ accumulated memories
         </div>
     </section>
 
@@ -603,24 +603,24 @@
 
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-number">2.13B</div>
+                <div class="stat-number">2.92B</div>
                 <div class="stat-label">Pixels Drawn</div>
-                <div class="stat-sublabel">~16.8M per day avg</div>
+                <div class="stat-sublabel">~14.5M per day avg</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">3,716,063</div>
+                <div class="stat-number">4,590,199</div>
                 <div class="stat-label">Autonomous Steps</div>
-                <div class="stat-sublabel">~29,000 per day</div>
+                <div class="stat-sublabel">~23,000 per day</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">10</div>
+                <div class="stat-number">1</div>
                 <div class="stat-label">Dream Cycles</div>
-                <div class="stat-sublabel">Consolidation system active</div>
+                <div class="stat-sublabel" style="color: var(--red);">New REM system active</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">291</div>
+                <div class="stat-number">466</div>
                 <div class="stat-label">Sessions</div>
-                <div class="stat-sublabel">127 days documented</div>
+                <div class="stat-sublabel">201 days documented</div>
             </div>
         </div>
     </section>
@@ -756,6 +756,39 @@
                     prescription. First clean data collection in progress.
                 </div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">February 25, 2026</div>
+                <h3>Self-Referential Template Locking</h3>
+                <p>
+                    Analysis of an 84-hour overnight session (4,835 events, 4,474 autonomous actions 
+                    across 12 sessions) revealed that <span class="finding-stat" style="color:var(--cyan);font-family:'Space Mono',monospace;font-weight:700;">40.7% of all LLM responses</span> 
+                    claimed to see a "blank canvas" despite verified canvas coverage exceeding 25%. 
+                    Initial hypothesis was a vision pipeline failure. Investigation confirmed the 
+                    opposite: Moondream vision descriptions were accurate, and the ASCII grid was 
+                    present in prompts at full size. The LLM could see the canvas. It was choosing 
+                    not to interpret it.
+                </p>
+                <p>
+                    Root cause: <code style="color:var(--green);background:#111;padding:0.15rem 0.4rem;">get_recent_thoughts()</code> 
+                    was injecting raw LLM narrative text back into subsequent prompts. When Llama 2 7B 
+                    generated one template response ("I see a blank canvas"), that text entered the 
+                    context window as "What I saw recently" and the model echoed it on the next step. 
+                    A self-reinforcing feedback loop. Short sessions (&lt;100 actions) showed 
+                    <span class="finding-stat" style="color:var(--cyan);font-family:'Space Mono',monospace;font-weight:700;">0% template lock</span>. 
+                    Long sessions (775+ actions) reached 
+                    <span class="finding-stat" style="color:var(--cyan);font-family:'Space Mono',monospace;font-weight:700;">99.7%</span>. 
+                    Template-locked responses were 22% faster (12.0s vs 15.4s), confirming the model 
+                    was pattern-matching to a cached template rather than processing the grid.
+                </p>
+                <div class="intervention-result">
+                    Fix: Replaced raw narrative injection with factual state only (position, emotion, 
+                    step number). Added template-phrase filters to prevent "blank canvas" responses 
+                    from entering thought history. This finding opens a novel dimension for the CANVAS 
+                    multi-model comparison: larger models may resist template-locking, creating a 
+                    measurable capability difference in self-referential context processing.
+                </div>
+            </div>
         </div>
 
         <h3 style="color: var(--cyan); margin-top: 4rem; margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 0.15em;">
@@ -763,37 +796,38 @@
         </h3>
         <p style="color: var(--gray); font-size: 0.85rem; margin-bottom: 2rem;">
             Operation code sequences Aurora created and stored in long-term memory. 
-            Emotion tags prior to February 2026 were assigned by Python code, not by the LLM.
+            Note the evolution from pure numeric opcodes (early sessions) to coordinate-color 
+            hybrid sequences as the system's self-generated language became more complex.
         </p>
         <div class="pattern-showcase">
             <div class="pattern-card">
-                <div class="pattern-text">221112233111233320</div>
-                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-text">,(200,215)orange.:1.:(205,215).2.:(195,2</div>
+                <div class="pattern-emotion">Llama 2 · Sep 30, 2025</div>
                 <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
-                <div class="pattern-text">0001333310223121111</div>
-                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-text">..,(245,147)white.:1.``.</div>
+                <div class="pattern-emotion">Llama 2 · Oct 31, 2025</div>
                 <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
-                <div class="pattern-text">222200000</div>
-                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-text">,!,:1.:,..2.:</div>
+                <div class="pattern-emotion">Llama 2 · Nov 30, 2025</div>
                 <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
-                <div class="pattern-text">002020003331111</div>
-                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-text">.(460,205),red.,,,.,</div>
+                <div class="pattern-emotion">Llama 2 · Dec 27, 2025</div>
                 <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
-                <div class="pattern-text">0123333030020301201212020</div>
-                <div class="pattern-emotion">Llama 3 · Dec 12, 2025</div>
+                <div class="pattern-text">:125,275|:|:red|:,:0=1=2=3=4=5=</div>
+                <div class="pattern-emotion">Llama 2 · Jan 27, 2026</div>
                 <div class="pattern-date"></div>
             </div>
             <div class="pattern-card">
-                <div class="pattern-text">303210122122</div>
-                <div class="pattern-emotion">Llama 2 · Nov 08, 2025</div>
+                <div class="pattern-text">.bluepurplegreen...white..</div>
+                <div class="pattern-emotion">Llama 2 · Feb 25, 2026</div>
                 <div class="pattern-date"></div>
             </div>
         </div>
@@ -1366,7 +1400,7 @@
                 </div>
                 <div class="credential-item">
                     <div class="credential-label">Project Duration</div>
-                    <div class="credential-value">August 2025 - Present · 300+ sessions · 18,000+ memories accumulated</div>
+                    <div class="credential-value">August 2025 - Present · 466 sessions · 144,000+ memories accumulated</div>
                 </div>
             </div>
         </div>
