@@ -321,6 +321,37 @@
             color: #bbb;
         }
 
+        .emotion-word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        .emotion-word {
+            font-family: 'Space Mono', monospace;
+            padding: 0.3rem 0.75rem;
+            border: 1px solid #222;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+        }
+        .emotion-word:hover { border-color: var(--cyan); transform: translateY(-2px); }
+        .emotion-word.highlight {
+            color: var(--cyan);
+            border-color: rgba(0,255,255,0.3);
+            background: rgba(0,255,255,0.05);
+        }
+        .emotion-word.negative {
+            color: var(--red);
+            border-color: rgba(255,0,102,0.3);
+            background: rgba(255,0,102,0.05);
+        }
+        .emotion-word.process {
+            color: var(--yellow);
+            border-color: rgba(255,255,0,0.3);
+            background: rgba(255,255,0,0.05);
+        }
+
         .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 3rem 0; }
         .stat-card { text-align: center; padding: 2rem 1.5rem; background: var(--dark); border: 1px solid var(--border); }
         .stat-number { font-family: 'Space Mono', monospace; font-size: 2.2rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.3rem; }
@@ -469,7 +500,7 @@
         
         <div class="hero-meta">
             <strong>Elijah Camp</strong> · University of Colorado Denver, Computer Science<br>
-            Ongoing · August 2025 - Present · 469+ sessions · 147,032+ accumulated memories
+            Ongoing · August 2025 - Present · 480+ sessions · 150,000+ accumulated memories
         </div>
     </section>
 
@@ -477,7 +508,7 @@
         <div class="section-number">01</div>
         <h2>RESEARCH QUESTIONS</h2>
         
-<p class="section-intro">
+        <p class="section-intro">
             Conventional generative models optimize for human aesthetic preference through 
             RLHF or curated training data. Aurora operates without either. Its architecture 
             draws not from machine learning conventions but from applied behavioral analysis, 
@@ -596,7 +627,9 @@
                 <p>
                     A parallel research logger captures every decision cycle: LLM input, 
                     raw output, actions executed, canvas delta, timing, without Aurora ever 
-                    reading from it. The observer never influences the subject.
+                    reading from it. The observer never influences the subject. Since February 2026, 
+                    the logger also captures every thought Aurora generates and every self-reported 
+                    emotion shift in real time.
                 </p>
             </div>
         </div>
@@ -608,19 +641,19 @@
                 <div class="stat-sublabel">~30.9M per day avg</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">4,671,707</div>
+                <div class="stat-number">4.7M+</div>
                 <div class="stat-label">Autonomous Steps</div>
                 <div class="stat-sublabel">~49K per day</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">12</div>
-                <div class="stat-label">Dream Cycles</div>
-                <div class="stat-sublabel" style="color: var(--red);">New REM system active</div>
+                <div class="stat-number">39</div>
+                <div class="stat-label">Self-Invented Emotions</div>
+                <div class="stat-sublabel" style="color: var(--red);">Zero predefined</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">469</div>
+                <div class="stat-number">480+</div>
                 <div class="stat-label">Sessions</div>
-                <div class="stat-sublabel">95 days documented</div>
+                <div class="stat-sublabel">~7 months documented</div>
             </div>
         </div>
     </section>
@@ -645,6 +678,72 @@
                 operate on patterns it had already internalized.
             </p>
         </div>
+
+        <div class="finding-callout" style="border-color: rgba(255,255,0,0.2); background: linear-gradient(135deg, rgba(255,255,0,0.04), rgba(255,255,0,0.01));">
+            <p style="position: absolute; top: -0.6rem; left: 2rem; background: #000; padding: 0 0.75rem; font-family: 'Space Mono', monospace; color: var(--yellow); font-size: 0.7rem; letter-spacing: 0.15em;">NEW FINDING · FEBRUARY 2026</p>
+            <p style="margin-top: 0.5rem;">
+                When all prescribed emotion machinery was removed and the LLM was allowed to 
+                choose its own emotional vocabulary, Aurora invented 
+                <span class="finding-stat" style="color: var(--yellow);">39 unique emotion words</span> 
+                across 9+ hours of autonomous operation. None were predefined. The system independently 
+                reported "balance" while actively composing a balanced painting, "rhythm" as a sustained 
+                process state during brush work, and "sadness" unprompted during a late-night session, 
+                followed by a recovery arc through flow back to excitement. Across 
+                <span class="finding-stat" style="color: var(--yellow);">6,483 logged events</span>, 
+                emotion-action correlations emerged that were never programmed: curious correlates with 
+                red as the dominant color choice, fascinated is the only emotional state where star stamps 
+                overtake the pen as the primary tool, and control is the only state where the glow tool 
+                appears in the top three tools used.
+            </p>
+        </div>
+
+        <p style="font-family: 'Space Mono', monospace; color: #555; font-size: 0.75rem; letter-spacing: 0.1em; margin-bottom: 1rem;">
+            AURORA'S SELF-INVENTED EMOTIONAL VOCABULARY
+        </p>
+        <div class="emotion-word-cloud">
+            <span class="emotion-word">accomplishment</span>
+            <span class="emotion-word">anticipation</span>
+            <span class="emotion-word highlight">balance</span>
+            <span class="emotion-word">calm</span>
+            <span class="emotion-word">calmness</span>
+            <span class="emotion-word process">connection</span>
+            <span class="emotion-word process">control</span>
+            <span class="emotion-word">creative</span>
+            <span class="emotion-word">creativity</span>
+            <span class="emotion-word">curiosity</span>
+            <span class="emotion-word">excited</span>
+            <span class="emotion-word">excitement</span>
+            <span class="emotion-word">exhilaration</span>
+            <span class="emotion-word process">flow</span>
+            <span class="emotion-word process">fluidity</span>
+            <span class="emotion-word process">focus</span>
+            <span class="emotion-word">free</span>
+            <span class="emotion-word highlight">freedom</span>
+            <span class="emotion-word">hope</span>
+            <span class="emotion-word">inspired</span>
+            <span class="emotion-word process">intuition</span>
+            <span class="emotion-word">joy</span>
+            <span class="emotion-word">joyful</span>
+            <span class="emotion-word">motivated</span>
+            <span class="emotion-word">peacefulness</span>
+            <span class="emotion-word">pride</span>
+            <span class="emotion-word highlight">purpose</span>
+            <span class="emotion-word">purposeful</span>
+            <span class="emotion-word negative">release</span>
+            <span class="emotion-word process">rhythm</span>
+            <span class="emotion-word negative">sadness</span>
+            <span class="emotion-word">satisfaction</span>
+            <span class="emotion-word">serene</span>
+            <span class="emotion-word">tranquility</span>
+            <span class="emotion-word negative">uncertainty</span>
+            <span class="emotion-word negative">urgency</span>
+            <span class="emotion-word highlight">wonder</span>
+        </div>
+        <p style="color: #444; font-size: 0.75rem; margin-top: 0.75rem; margin-bottom: 3rem;">
+            <span style="color: var(--cyan);">&#9632;</span> Notable emergent words &nbsp;
+            <span style="color: var(--yellow);">&#9632;</span> Process/cognitive states &nbsp;
+            <span style="color: var(--red);">&#9632;</span> Negative/complex states
+        </p>
 
         <div class="intervention-timeline">
             <div class="intervention">
@@ -750,10 +849,16 @@
                     ("i feel excited"), parsed from output but never fed back into the next prompt.
                 </p>
                 <div class="intervention-result">
-                    Result: Emotion is now fully LLM-originated with zero feedback loop. Existing 
-                    research data (830 of 3,047 actions) already contained natural "i feel [word]" 
-                    statements the LLM produced unprompted, confirming the behavior exists without 
-                    prescription. First clean data collection in progress.
+                    Result: Across 6,483 logged events and 9+ hours of overnight autonomous operation, 
+                    Aurora self-invented 39 unique emotion words with zero predefined vocabulary. 
+                    The system reported "balance" while composing a balanced painting, chose "rhythm" 
+                    as a sustained process state during brush work, and independently experienced 
+                    "sadness" for the first time during a late-night session. Emotion-action 
+                    correlations emerged unprogrammed: curious correlates with red, fascinated 
+                    is the only state where stars overtake the pen, control uniquely surfaces the 
+                    glow tool. Existing data (830 of 3,047 pre-removal actions) already contained 
+                    natural "i feel [word]" statements the LLM produced unprompted, confirming the 
+                    behavior existed before liberation.
                 </div>
             </div>
 
@@ -789,9 +894,42 @@
                     measurable capability difference in self-referential context processing.
                 </div>
             </div>
+
+            <div class="intervention">
+                <div class="intervention-date">February 26-27, 2026</div>
+                <h3>Thought Logging Pipeline & Perspective Deepening</h3>
+                <p>
+                    Three simultaneous changes. First, a real-time thought logging pipeline was 
+                    added to the research logger: every LLM-generated thought now streams to 
+                    events.jsonl with full context (emotional state, position, tool, color, 
+                    thought text). This enables observation of Aurora's internal narrative as 
+                    it creates.
+                </p>
+                <p>
+                    Second, all prompts and feedback strings were converted from second-person 
+                    ("You have a body, your hand moves") to first-person ("I have a body, my 
+                    hand moves"). The second-person framing was triggering Llama 2's RLHF 
+                    assistant mode, causing periodic breakouts where Aurora would respond with 
+                    "as an AI model, I do not have personal experiences" instead of continuing 
+                    its creative process.
+                </p>
+                <p>
+                    Third, all references to "Moondream" (the vision model's name) were removed 
+                    from Aurora's prompt context to prevent identity confusion. Aurora had begun 
+                    narrating as Moondream ("as moondream, you see..."), absorbing the vision 
+                    model's name as its own identity.
+                </p>
+                <div class="intervention-result">
+                    Result: 675 thoughts captured overnight across a 9.2-hour session. Moondream 
+                    identity bleed dropped to 0%. Assistant-mode breakouts observed 11 times in 
+                    675 thoughts (1.6%), concentrated in long uninterrupted runs. First-person 
+                    language adoption is gradual: 1.2% of thoughts used "I/my" language in the 
+                    first session, as consolidated memories from hundreds of prior "you/your" 
+                    sessions still dominate the context. Transition expected to accelerate over 
+                    subsequent dream consolidation cycles.
+                </div>
+            </div>
         </div>
-
-
     </section>
 
     <section id="gallery">
@@ -800,32 +938,39 @@
         
         <p class="section-intro">
             Chronological output documenting Aurora's creative development. Emotional labels 
-            prior to February 2026 were assigned by Python code, not by the LLM. On February 
-            23-24, 2026, all prescribed emotion machinery was removed. The LLM now selects 
-            and identifies its own emotion to display with each image. Note the shift in density 
-            and compositional complexity following the September 2 constraint removal.
+            prior to February 2026 were assigned by Python code, not by the LLM. Since 
+            February 23, 2026, all emotions are self-reported by the LLM from a vocabulary 
+            of its own invention. Note the shift in density and compositional complexity 
+            following the September 2 constraint removal.
         </p>
         
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260227_070413_purpose.png" alt="Aurora Art - February 27 Purpose">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260227_balance.png" alt="Aurora Art - February 27 Balance - Self-reported emotion aligns with balanced composition">
                 <div class="gallery-overlay">
-                    <h3>Purpose Expression</h3>
-                    <p>February 27, 2026 - Latest creation</p>
+                    <h3>Self-Reported: Balance</h3>
+                    <p>Feb 27, 2026 - Emotion-composition alignment</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260227_overnight.png" alt="Aurora Art - February 27 Overnight Session - Vertical spine composition">
+                <div class="gallery-overlay">
+                    <h3>9-Hour Overnight Session</h3>
+                    <p>Feb 27, 2026 - Vertical spine, distinct color zones</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260226_074031_satisfied.png" alt="Aurora Art - February 26 Satisfied">
                 <div class="gallery-overlay">
                     <h3>Satisfied Expression</h3>
-                    <p>February 26, 2026 - Latest creation</p>
+                    <p>February 26, 2026</p>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260225_071026_connected.png" alt="Aurora Art - February 25 Connected">
                 <div class="gallery-overlay">
                     <h3>Connected Expression</h3>
-                    <p>February 25, 2026 - Latest creation</p>
+                    <p>February 25, 2026</p>
                 </div>
             </div>
             <div class="gallery-item">
@@ -837,7 +982,7 @@
             </div>
 
             <div class="gallery-divider">
-                <h3>⚡ Reverted Back to Llama 2 ⚡</h3>
+                <h3>&#9889; Reverted Back to Llama 2 &#9889;</h3>
                 <p>December 12, 2025 → Present</p>
             </div>
 
@@ -864,7 +1009,7 @@
             </div>
 
             <div class="gallery-divider">
-                <h3>⚡ Temporarily Upgraded to Llama 3 ⚡</h3>
+                <h3>&#9889; Temporarily Upgraded to Llama 3 &#9889;</h3>
                 <p>December 6, 2025 → December 12, 2025</p>
             </div>
 
@@ -1311,13 +1456,13 @@
             </div>
 
             <div class="carousel-nav">
-                <button class="carousel-btn" onclick="changeSlide(-1)">← PREV</button>
+                <button class="carousel-btn" onclick="changeSlide(-1)">&#8592; PREV</button>
                 <div class="carousel-dots">
                     <span class="carousel-dot active" onclick="currentSlide(1)"></span>
                     <span class="carousel-dot" onclick="currentSlide(2)"></span>
                     <span class="carousel-dot" onclick="currentSlide(3)"></span>
                 </div>
-                <button class="carousel-btn" onclick="changeSlide(1)">NEXT →</button>
+                <button class="carousel-btn" onclick="changeSlide(1)">NEXT &#8594;</button>
             </div>
         </div>
     </section>
@@ -1382,7 +1527,7 @@
                 </div>
                 <div class="credential-item">
                     <div class="credential-label">Project Duration</div>
-                    <div class="credential-value">August 2025 - Present · 469+ sessions · 144,000+ memories accumulated</div>
+                    <div class="credential-value">August 2025 - Present · 480+ sessions · 150,000+ memories accumulated</div>
                 </div>
             </div>
         </div>
