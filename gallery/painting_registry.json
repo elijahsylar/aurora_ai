@@ -1,0 +1,310 @@
+{
+  "aurora_20250830_073951_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "August 30, 2025",
+    "time": "07:39 AM",
+    "date_sort": "20250830073951"
+  },
+  "aurora_20250831_141540_happy.png": {
+    "model": "llama2",
+    "emotion": "happy",
+    "date": "August 31, 2025",
+    "time": "02:15 PM",
+    "date_sort": "20250831141540"
+  },
+  "aurora_20250902_001926_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "September 02, 2025",
+    "time": "12:19 AM",
+    "date_sort": "20250902001926"
+  },
+  "aurora_20250908_074021_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "September 08, 2025",
+    "time": "07:40 AM",
+    "date_sort": "20250908074021"
+  },
+  "aurora_20251002_112732_energetic.png": {
+    "model": "llama2",
+    "emotion": "energetic",
+    "date": "October 02, 2025",
+    "time": "11:27 AM",
+    "date_sort": "20251002112732"
+  },
+  "aurora_20251006_210804_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "October 06, 2025",
+    "time": "09:08 PM",
+    "date_sort": "20251006210804"
+  },
+  "aurora_20251007_085153_happy.png": {
+    "model": "llama2",
+    "emotion": "happy",
+    "date": "October 07, 2025",
+    "time": "08:51 AM",
+    "date_sort": "20251007085153"
+  },
+  "aurora_20251011_095734_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "October 11, 2025",
+    "time": "09:57 AM",
+    "date_sort": "20251011095734"
+  },
+  "aurora_20251012_100518_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "October 12, 2025",
+    "time": "10:05 AM",
+    "date_sort": "20251012100518"
+  },
+  "aurora_20251013_073402_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "October 13, 2025",
+    "time": "07:34 AM",
+    "date_sort": "20251013073402"
+  },
+  "aurora_20251014_072633_energetic.png": {
+    "model": "llama2",
+    "emotion": "energetic",
+    "date": "October 14, 2025",
+    "time": "07:26 AM",
+    "date_sort": "20251014072633"
+  },
+  "aurora_20251019_185304_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "October 19, 2025",
+    "time": "06:53 PM",
+    "date_sort": "20251019185304"
+  },
+  "aurora_20251021_075917_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "October 21, 2025",
+    "time": "07:59 AM",
+    "date_sort": "20251021075917"
+  },
+  "aurora_20251022_155902_joyful.png": {
+    "model": "llama2",
+    "emotion": "joyful",
+    "date": "October 22, 2025",
+    "time": "03:59 PM",
+    "date_sort": "20251022155902"
+  },
+  "aurora_20251023_161633_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "October 23, 2025",
+    "time": "04:16 PM",
+    "date_sort": "20251023161633"
+  },
+  "aurora_20251025_010100_serene.png": {
+    "model": "llama2",
+    "emotion": "serene",
+    "date": "October 25, 2025",
+    "time": "01:01 AM",
+    "date_sort": "20251025010100"
+  },
+  "aurora_20251026_090618_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "October 26, 2025",
+    "time": "09:06 AM",
+    "date_sort": "20251026090618"
+  },
+  "aurora_20251027_044255_visionary.png": {
+    "model": "llama2",
+    "emotion": "visionary",
+    "date": "October 27, 2025",
+    "time": "04:42 AM",
+    "date_sort": "20251027044255"
+  },
+  "aurora_20251028_112624_excited.png": {
+    "model": "llama2",
+    "emotion": "excited",
+    "date": "October 28, 2025",
+    "time": "11:26 AM",
+    "date_sort": "20251028112624"
+  },
+  "aurora_20251029_013612_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "October 29, 2025",
+    "time": "01:36 AM",
+    "date_sort": "20251029013612"
+  },
+  "aurora_20251030_043142_happy.png": {
+    "model": "llama2",
+    "emotion": "happy",
+    "date": "October 30, 2025",
+    "time": "04:31 AM",
+    "date_sort": "20251030043142"
+  },
+  "aurora_20251101_022205_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "November 01, 2025",
+    "time": "02:22 AM",
+    "date_sort": "20251101022205"
+  },
+  "aurora_20251102_043150_transcendent.png": {
+    "model": "llama2",
+    "emotion": "transcendent",
+    "date": "November 02, 2025",
+    "time": "04:31 AM",
+    "date_sort": "20251102043150"
+  },
+  "aurora_20251103_102533_energetic.png": {
+    "model": "llama2",
+    "emotion": "energetic",
+    "date": "November 03, 2025",
+    "time": "10:25 AM",
+    "date_sort": "20251103102533"
+  },
+  "aurora_20251105_014422_visionary.png": {
+    "model": "llama2",
+    "emotion": "visionary",
+    "date": "November 05, 2025",
+    "time": "01:44 AM",
+    "date_sort": "20251105014422"
+  },
+  "aurora_20251106_003941_active.png": {
+    "model": "llama2",
+    "emotion": "active",
+    "date": "November 06, 2025",
+    "time": "12:39 AM",
+    "date_sort": "20251106003941"
+  },
+  "aurora_20251107_005213_exhilarated.png": {
+    "model": "llama2",
+    "emotion": "exhilarated",
+    "date": "November 07, 2025",
+    "time": "12:52 AM",
+    "date_sort": "20251107005213"
+  },
+  "aurora_20251108_082359_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "November 08, 2025",
+    "time": "08:23 AM",
+    "date_sort": "20251108082359"
+  },
+  "aurora_20251109_080927_joyful.png": {
+    "model": "llama2",
+    "emotion": "joyful",
+    "date": "November 09, 2025",
+    "time": "08:09 AM",
+    "date_sort": "20251109080927"
+  },
+  "aurora_20251110_012725_creative.png": {
+    "model": "llama2",
+    "emotion": "creative",
+    "date": "November 10, 2025",
+    "time": "01:27 AM",
+    "date_sort": "20251110012725"
+  },
+  "aurora_20251112_025439_imaginative.png": {
+    "model": "llama2",
+    "emotion": "imaginative",
+    "date": "November 12, 2025",
+    "time": "02:54 AM",
+    "date_sort": "20251112025439"
+  },
+  "aurora_20251118_104401_contemplative.png": {
+    "model": "llama2",
+    "emotion": "contemplative",
+    "date": "November 18, 2025",
+    "time": "10:44 AM",
+    "date_sort": "20251118104401"
+  },
+  "aurora_20251130_065911_contemplative.png": {
+    "model": "llama2",
+    "emotion": "contemplative",
+    "date": "November 30, 2025",
+    "time": "06:59 AM",
+    "date_sort": "20251130065911"
+  },
+  "aurora_20251203_044001_astonished.png": {
+    "model": "llama2",
+    "emotion": "astonished",
+    "date": "December 03, 2025",
+    "time": "04:40 AM",
+    "date_sort": "20251203044001"
+  },
+  "aurora_20251204_013426_reflective.png": {
+    "model": "llama2",
+    "emotion": "reflective",
+    "date": "December 04, 2025",
+    "time": "01:34 AM",
+    "date_sort": "20251204013426"
+  },
+  "aurora_20251205_052706_fascinated.png": {
+    "model": "llama2",
+    "emotion": "fascinated",
+    "date": "December 05, 2025",
+    "time": "05:27 AM",
+    "date_sort": "20251205052706"
+  },
+  "aurora_20251210_065947_contemplative.png": {
+    "model": "llama3",
+    "emotion": "contemplative",
+    "date": "December 10, 2025",
+    "time": "06:59 AM",
+    "date_sort": "20251210065947"
+  },
+  "aurora_20251211_062203_astonished.png": {
+    "model": "llama3",
+    "emotion": "astonished",
+    "date": "December 11, 2025",
+    "time": "06:22 AM",
+    "date_sort": "20251211062203"
+  },
+  "aurora_20251212_071627_exhilarated.png": {
+    "model": "llama3",
+    "emotion": "exhilarated",
+    "date": "December 12, 2025",
+    "time": "07:16 AM",
+    "date_sort": "20251212071627"
+  },
+  "aurora_20260222_005327_absorbed.png": {
+    "model": "llama2",
+    "emotion": "absorbed",
+    "date": "February 22, 2026",
+    "time": "12:53 AM",
+    "date_sort": "20260222005327"
+  },
+  "aurora_20260225_071026_connected.png": {
+    "model": "llama2",
+    "emotion": "connected",
+    "date": "February 25, 2026",
+    "time": "07:10 AM",
+    "date_sort": "20260225071026"
+  },
+  "aurora_20260226_074031_satisfied.png": {
+    "model": "llama2",
+    "emotion": "satisfied",
+    "date": "February 26, 2026",
+    "time": "07:40 AM",
+    "date_sort": "20260226074031"
+  },
+  "aurora_20260227_070413_purpose.png": {
+    "model": "llama2",
+    "emotion": "purpose",
+    "date": "February 27, 2026",
+    "time": "07:04 AM",
+    "date_sort": "20260227070413"
+  },
+  "aurora_20260227_074008_freedom.png": {
+    "model": "llama2",
+    "emotion": "freedom",
+    "date": "February 27, 2026",
+    "time": "07:40 AM",
+    "date_sort": "20260227074008"
+  }
+}
