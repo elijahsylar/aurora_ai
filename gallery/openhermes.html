@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURORA · OpenHermes 2.5 7B Gallery</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #000; color: #c8c8c8;
+            line-height: 1.7; font-weight: 300;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed; width: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000; padding: 1.5rem 2rem;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; justify-content: center; align-items: center; }
+        .logo { font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 0.3em; color: #ffff00; font-size: 0.9rem; }
+        nav a { color: #888; text-decoration: none; text-transform: uppercase; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; transition: color 0.3s; }
+        nav a:hover { color: #ffff00; }
+
+        /* Header */
+        .gallery-header {
+            padding: 8rem 2rem 3rem;
+            max-width: 1400px; margin: 0 auto;
+            border-bottom: 3px solid #ffff00;
+        }
+        .gallery-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem; font-weight: 700;
+            letter-spacing: 0.15em; color: #ffff00;
+            margin-bottom: 0.5rem;
+        }
+        .gallery-header .subtitle {
+            color: #888; font-size: 1rem; margin-bottom: 0.5rem;
+        }
+        .gallery-header .count {
+            font-family: 'Space Mono', monospace;
+            color: #555; font-size: 0.75rem; letter-spacing: 0.1em;
+        }
+
+        /* Gallery grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px; margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .painting-card {
+            background: #080808;
+            border: 1px solid #1a1a1a;
+            overflow: hidden; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .painting-card:first-child {
+            grid-column: 1 / -1;
+            max-width: 700px;
+        }
+        .painting-card:first-child .painting-image {
+            aspect-ratio: 1;
+        }
+        .painting-card::before {
+            content: ''; display: block;
+            height: 3px; background: #ffff00;
+            transition: height 0.3s;
+        }
+        .painting-card:hover {
+            transform: translateY(-4px);
+            border-color: #333;
+            box-shadow: 0 8px 40px #ffff0020;
+        }
+        .painting-card:hover::before { height: 4px; }
+
+        .painting-image {
+            aspect-ratio: 1;
+            overflow: hidden; background: #050505;
+        }
+        .painting-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s, filter 0.4s;
+            filter: brightness(0.9);
+        }
+        .painting-card:hover .painting-image img {
+            transform: scale(1.03);
+            filter: brightness(1);
+        }
+
+        .painting-info {
+            padding: 1rem 1.25rem;
+        }
+        .painting-emotion {
+            font-family: 'Space Mono', monospace;
+            color: #ffff00; font-size: 1rem;
+            font-weight: 700; letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        .painting-date {
+            font-family: 'Space Mono', monospace;
+            color: #555; font-size: 0.7rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000; cursor: zoom-out;
+        }
+        .lightbox.active {
+            display: flex; justify-content: center;
+            align-items: center; padding: 4rem;
+        }
+        .lightbox img {
+            max-width: 85vw; max-height: 85vh;
+            object-fit: contain;
+            border: 1px solid #333;
+            box-shadow: 0 0 50px #ffff0020;
+        }
+        .lightbox-close {
+            position: fixed; top: 2rem; right: 2rem;
+            color: #ffff00; font-size: 2.5rem;
+            cursor: pointer; z-index: 2001;
+            transition: all 0.3s;
+        }
+        .lightbox-close:hover { color: #fff; transform: rotate(90deg); }
+        .lightbox-caption {
+            position: fixed; bottom: 3rem;
+            text-align: center; width: 100%;
+            color: #ffff00; font-family: 'Space Mono', monospace;
+            font-size: 0.85rem; letter-spacing: 0.1em;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 3rem 2rem;
+            font-family: 'Space Mono', monospace;
+            color: #ffff00; font-size: 0.75rem;
+            text-decoration: none; letter-spacing: 0.08em;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #fff; }
+
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+            .painting-card:first-child { max-width: 100%; }
+            .gallery-header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="logo">AURORA</li>
+            <li><a href="../index.html#thesis">Research</a></li>
+            <li><a href="../index.html#models">Models</a></li>
+            <li><a href="../index.html#gallery">Gallery</a></li>
+            <li><a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <div class="gallery-header">
+        <h1>OpenHermes 2.5 7B</h1>
+        <div class="subtitle">Mistral fine-tune · Nous Research</div>
+        <div class="count">1 PAINTING · NEWEST FIRST</div>
+    </div>
+
+    <div class="gallery-grid">
+        <!-- GALLERY_INSERT_POINT -->
+            <div class="painting-card" onclick="openLightbox('https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260301_082651_grows.png', 'grows — March 01, 2026')">
+                <div class="painting-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260301_082651_grows.png" alt="grows" loading="lazy">
+                </div>
+                <div class="painting-info">
+                    <div class="painting-emotion">"grows"</div>
+                    <div class="painting-date">March 01, 2026 · 08:26 AM</div>
+                </div>
+            </div>
+    </div>
+
+    <a href="../index.html#gallery" class="back-link">← BACK TO ALL MODELS</a>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img src="" alt="" id="lightbox-img">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <script>
+        function openLightbox(src, caption) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-caption').textContent = caption;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>
