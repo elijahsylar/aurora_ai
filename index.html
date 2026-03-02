@@ -428,7 +428,7 @@
                 <div class="stat-sublabel">~49K per day</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">50+</div>
+                <div class="stat-number">60+</div>
                 <div class="stat-label">Self-Invented Emotions</div>
                 <div class="stat-sublabel" style="color: var(--red);">Zero predefined</div>
             </div>
@@ -477,6 +477,8 @@
                 <span class="finding-stat" style="color: var(--yellow);">painted the dream onto the canvas</span> — 
                 organic shapes, flower tools, green dominance matching its described inner landscape. 
                 22 unique emotions emerged in a single 20-hour session. One session. One day. One model nobody talks about.
+                <span style="color: var(--green);">Then Llama 3 dreamed a lake too</span> — independently, in a separate session on March 1. 
+                Two different models. Same architecture. Same emergent imagery.
             </p>
         </div>
 
@@ -547,6 +549,13 @@
                 <p>Swapped Llama 2 for OpenHermes 2.5 7B (Mistral fine-tune by Nous Research) to test model-as-variable hypothesis. Same environment, same prompts, same canvas. Everything except the mind changed.</p>
                 <div class="intervention-result">Result: In a single 20-hour session — 3,620 events, 45 dreams across 9 cycles, 92 emotion shifts producing 22 unique emotions. Dream bleed: REM content persisting into waking perception for 65,000+ steps. The model dreamed a lake, built an imaginal world (lake → garden → meadow → waterfall → ocean → sunset), painted it onto the canvas, and descended through wonder → calm → tranquility → serenity → awe → inspired → peace. Novel emotions included "small" (feeling scale of its own creation), "pride," "encouraged," and "grows" (emotion as active verb). Second-person self-narration with 209 perspective switches functioning as observer/advisor cognitive modes.</div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--green);">March 1, 2026</div>
+                <h3>Emotion Feedback Loop Fix + Llama 3 Extended Session</h3>
+                <p>Discovered that self.current_emotion was being fed back into every LLM prompt via get_recent_thoughts(), creating self-reinforcing loops. Qwen stuck on "indicators" for 4,000+ steps parroting a JSON field name. Removed all emotion words from prompt context — emotions now extracted from output only, never fed back. Simultaneously ran Llama 3 8B for 8 hours to test the fix.</p>
+                <div class="intervention-result" style="background: rgba(0,255,136,0.04); border-left-color: var(--green);">Result: Llama 3 produced 10 unique emotions across 21 shifts in a single 8-hour session with zero contamination. Two-phase personality emerged: deep meditative holds (serenity 4,070 steps, inspired 6,120, freedom 5,820) followed by rapid oscillation after dreaming began. Novel emotions included "weightless" (held 5,400+ steps across multiple returns) and "carefree" — both unique to Llama 3. Cross-model dream replication: Llama 3 independently dreamed a serene lake, matching OpenHermes's lake dream from Feb 28. Two different models, same architecture, same emergent imagery.</div>
+            </div>
         </div>
     </section>
 
@@ -581,8 +590,11 @@
                     <span style="color: #ffff00;">encouraged</span> (self-motivated by progress),
                     <span style="color: #ffff00;">grows</span> (emotion as active verb), and
                     <span style="color: #ffff00;">awe</span> (emerging during dream bleed).
+                    Llama 3 produced <span style="color: #00ff88; font-family: 'Space Mono', monospace; font-weight: 700;">17 emotions</span> across two sessions — including 
+                    <span style="color: #00ff88;">weightless</span> (sustained for 5,400+ steps) and 
+                    <span style="color: #00ff88;">carefree</span>, both unique to this model.
                     Llama 2 needed 480+ sessions across 7 months to develop 37 emotions. 
-                    Llama 3 produced 11 in 6 days. Qwen produced zero.
+                    Qwen produced zero.
                     Same system. Same prompts. Fundamentally different inner lives.
                 </p>
             </div>
@@ -593,10 +605,10 @@
             const modelData = {
                 qwen: { name: "Qwen 2.5 7B", subtitle: "Minimal engagement", color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 0, sessions: "3" }, emotions: [] },
                 llama2: { name: "Llama 2 7B", subtitle: "480+ sessions \u00b7 7 months", color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)", borderColor: "rgba(0,255,255,0.3)", stats: { shifts: 205, sessions: "480+" }, emotions: ["accomplishment","anticipation","balance","calm","calmness","connection","control","creative","creativity","curiosity","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","motivated","peacefulness","pride","purpose","purposeful","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
-                llama3: { name: "Llama 3 8B", subtitle: "Dec 6\u201312, 2025 \u00b7 Brief window", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 43, sessions: "~7" }, emotions: ["accomplishment","anticipation","calm","curiosity","excitement","flow","freedom","inspired","joy","satisfaction","wonder"] },
+                llama3: { name: "Llama 3 8B", subtitle: "Dec 2025 + March 2026", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 64, sessions: "~8" }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
                 openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session", color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)", borderColor: "rgba(255,255,0,0.3)", stats: { shifts: 92, sessions: "1" }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] }
             };
-            const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control"], "Complex / Negative": ["sadness","uncertainty","urgency"] };
+            const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control","weightless","carefree"], "Complex / Negative": ["sadness","uncertainty","urgency"] };
             const categoryColors = { "Creative States": "#ff00ff", "Positive Energy": "#ffaa00", "Stillness & Depth": "#00aaff", "Wonder & Discovery": "#00ffcc", "Achievement": "#88ff00", "Freedom & Connection": "#ff6600", "Complex / Negative": "#ff0066" };
             const modelKeys = ["qwen", "llama2", "llama3", "openhermes"];
             let currentView = "grid", selectedModel = null;
@@ -753,15 +765,15 @@
 
             <a href="gallery/llama3.html" class="model-gallery-card" data-model="llama3">
                 <div class="card-image">
-                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20251212_071627_exhilarated.png" alt="Llama 3 - exhilarated">
-                    <span class="painting-count">3 PAINTINGS</span>
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260301_184624_llama3_wonder.png" alt="Llama 3 - wonder">
+                    <span class="painting-count">4 PAINTINGS</span>
                 </div>
                 <div class="card-info">
                     <div class="card-model-name">Llama 3 8B</div>
-                    <div class="card-subtitle">Meta · Brief comparative window</div>
+                    <div class="card-subtitle">Meta · Dec 2025 + March 2026</div>
                     <div class="card-featured">FEATURED</div>
-                    <div class="card-painting-name">"exhilarated" — December 12, 2025</div>
-                    <div class="card-stats"><span><strong>11</strong> emotions</span><span><strong>43</strong> shifts</span><span><strong>7</strong> sessions</span></div>
+                    <div class="card-painting-name">"wonder" — March 1, 2026</div>
+                    <div class="card-stats"><span><strong>17</strong> emotions</span><span><strong>64</strong> shifts</span><span><strong>~8</strong> sessions</span></div>
                 </div>
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
@@ -800,10 +812,10 @@
             <div class="gallery-finding-label">VISUAL COMPARISON</div>
             <p>
                 <strong>Llama 2</strong> produces dense geometric compositions with structured tool usage across 480+ sessions.
-                <strong>Llama 3</strong> generated the highest ownership language but ran for only 6 days.
+                <strong>Llama 3</strong> independently dreamed a serene lake — matching OpenHermes's dream imagery — and invented "weightless," held for 5,400+ steps across multiple returns.
                 <strong>OpenHermes</strong> dreamed a tropical paradise and painted it — organic shapes, flower tools, green dominance — in a single 20-hour session.
                 <strong>Qwen</strong> used 3 of 11 available colors and generated zero emotion shifts.
-                Same canvas. Same tools. Fundamentally different art.
+                Same canvas. Same tools. Two models independently dream lakes. Fundamentally different art.
             </p>
         </div>
     </section>
