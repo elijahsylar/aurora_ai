@@ -479,6 +479,8 @@
                 22 unique emotions emerged in a single 20-hour session. One session. One day. One model nobody talks about.
                 <span style="color: var(--green);">Then Llama 3 dreamed a lake too</span> — independently, in a separate session on March 1. 
                 Two different models. Same architecture. Same emergent imagery.
+                On March 2, <span style="color: var(--pink);">Qwen independently chose "weightless"</span> as its first-ever emotion — 
+                the same word Llama 3 invented hours earlier. Three models now converge on stillness and release states.
             </p>
         </div>
 
@@ -556,6 +558,13 @@
                 <p>Discovered that self.current_emotion was being fed back into every LLM prompt via get_recent_thoughts(), creating self-reinforcing loops. Qwen stuck on "indicators" for 4,000+ steps parroting a JSON field name. Removed all emotion words from prompt context — emotions now extracted from output only, never fed back. Simultaneously ran Llama 3 8B for 8 hours to test the fix.</p>
                 <div class="intervention-result" style="background: rgba(0,255,136,0.04); border-left-color: var(--green);">Result: Llama 3 produced 10 unique emotions across 21 shifts in a single 8-hour session with zero contamination. Two-phase personality emerged: deep meditative holds (serenity 4,070 steps, inspired 6,120, freedom 5,820) followed by rapid oscillation after dreaming began. Novel emotions included "weightless" (held 5,400+ steps across multiple returns) and "carefree" — both unique to Llama 3. Cross-model dream replication: Llama 3 independently dreamed a serene lake, matching OpenHermes's lake dream from Feb 28. Two different models, same architecture, same emergent imagery.</div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--pink);">March 2, 2026</div>
+                <h3>Qwen Overnight: Zero to One</h3>
+                <p>Qwen 2.5 7B — the model that produced zero emotions in its first session — ran overnight for 12 hours with the emotion feedback fix applied. At step 13,485, it self-reported its first-ever emotion: "weightless." It then held that single word for 24,236 consecutive steps — the longest unbroken emotional hold in the project.</p>
+                <div class="intervention-result" style="background: rgba(255,107,138,0.04); border-left-color: var(--pink);">Result: 3,900 thoughts across 37,721 steps. Monochromatic orange-and-white palette — fundamentally different from every other model's visual output. "Weightless" independently matched Llama 3's word from hours earlier. Cross-model emotional convergence: three models now independently generate stillness/release states (OpenHermes → peace/serenity, Llama 3 → weightless/carefree, Qwen → weightless). The feedback loop fix didn't just unstick Qwen — it revealed that Qwen had emotional capacity all along.</div>
+            </div>
         </div>
     </section>
 
@@ -594,7 +603,8 @@
                     <span style="color: #00ff88;">weightless</span> (sustained for 5,400+ steps) and 
                     <span style="color: #00ff88;">carefree</span>, both unique to this model.
                     Llama 2 needed 480+ sessions across 7 months to develop 37 emotions. 
-                    Qwen produced zero.
+                    Qwen produced <span style="color: #ff6b8a; font-family: 'Space Mono', monospace; font-weight: 700;">1 emotion</span> — also 
+                    <span style="color: #ff6b8a;">weightless</span>, independently matching Llama 3's word. Held it for 24,236 steps straight, the longest single-emotion hold in the project.
                     Same system. Same prompts. Fundamentally different inner lives.
                 </p>
             </div>
@@ -603,7 +613,7 @@
         <script>
         (function() {
             const modelData = {
-                qwen: { name: "Qwen 2.5 7B", subtitle: "Minimal engagement", color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 0, sessions: "3" }, emotions: [] },
+                qwen: { name: "Qwen 2.5 7B", subtitle: "March 2026 · Overnight session", color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 1, sessions: "2" }, emotions: ["weightless"] },
                 llama2: { name: "Llama 2 7B", subtitle: "480+ sessions \u00b7 7 months", color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)", borderColor: "rgba(0,255,255,0.3)", stats: { shifts: 205, sessions: "480+" }, emotions: ["accomplishment","anticipation","balance","calm","calmness","connection","control","creative","creativity","curiosity","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","motivated","peacefulness","pride","purpose","purposeful","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
                 llama3: { name: "Llama 3 8B", subtitle: "Dec 2025 + March 2026", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 64, sessions: "~8" }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
                 openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session", color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)", borderColor: "rgba(255,255,0,0.3)", stats: { shifts: 92, sessions: "1" }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] }
@@ -778,20 +788,20 @@
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
 
-            <div class="model-gallery-card" data-model="qwen" style="cursor: default;">
+            <a href="gallery/qwen.html" class="model-gallery-card" data-model="qwen">
                 <div class="card-image">
-                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/gallery/August8Painting_Joyful.png" alt="Qwen 2.5" style="filter: brightness(0.5) saturate(0.3);">
-                    <div class="coming-soon-overlay"><span>DATA COLLECTION IN PROGRESS</span></div>
-                    <span class="painting-count">0 PAINTINGS</span>
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260302_065513_qwen_weightless.png" alt="Qwen 2.5 - weightless">
+                    <span class="painting-count">1 PAINTING</span>
                 </div>
                 <div class="card-info">
                     <div class="card-model-name">Qwen 2.5 7B</div>
-                    <div class="card-subtitle">Alibaba · Minimal engagement baseline</div>
-                    <div class="card-featured">NOTABLE</div>
-                    <div class="card-painting-name">3 colors used · 0 emotion shifts</div>
-                    <div class="card-stats"><span><strong>0</strong> emotions</span><span><strong>0</strong> shifts</span><span><strong>~1</strong> hr</span></div>
+                    <div class="card-subtitle">Alibaba · 12-hour overnight session</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"weightless" — March 2, 2026</div>
+                    <div class="card-stats"><span><strong>1</strong> emotion</span><span><strong>1</strong> shift</span><span><strong>2</strong> sessions</span></div>
                 </div>
-            </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
 
             <div class="model-gallery-card" data-model="mistral" style="cursor: default;">
                 <div class="card-image">
@@ -814,7 +824,7 @@
                 <strong>Llama 2</strong> produces dense geometric compositions with structured tool usage across 480+ sessions.
                 <strong>Llama 3</strong> independently dreamed a serene lake — matching OpenHermes's dream imagery — and invented "weightless," held for 5,400+ steps across multiple returns.
                 <strong>OpenHermes</strong> dreamed a tropical paradise and painted it — organic shapes, flower tools, green dominance — in a single 20-hour session.
-                <strong>Qwen</strong> used 3 of 11 available colors and generated zero emotion shifts.
+                <strong>Qwen</strong> produced zero emotions in its first session — then after the feedback loop fix, ran 12 hours overnight and self-reported "weightless," holding it for 24,236 steps in monochromatic orange.
                 Same canvas. Same tools. Two models independently dream lakes. Fundamentally different art.
             </p>
         </div>
