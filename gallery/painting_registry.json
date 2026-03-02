@@ -320,5 +320,12 @@
     "date": "March 01, 2026",
     "time": "06:46 PM",
     "date_sort": "20260301184624"
+  },
+  "aurora_20260302_065513_qwen_weightless.png": {
+    "model": "qwen",
+    "emotion": "weightless",
+    "date": "March 02, 2026",
+    "time": "06:55 AM",
+    "date_sort": "20260302065513"
   }
 }
