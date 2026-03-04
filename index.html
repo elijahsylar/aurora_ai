@@ -581,6 +581,13 @@
                 <p>Returned to Llama 2 7B after completing the five-model comparison matrix. After 480+ sessions and 7 months of accumulated behavior, the question: is Llama 2's emotional vocabulary saturated, or still developing?</p>
                 <div class="intervention-result">Result: 6.8 hours, 28,159 steps, 424 thoughts, 84 emotion shifts, 21 unique emotions - including 6 brand new words never seen in 480+ prior sessions. "Magic" held for 3,530 steps. "Alive" emerged mid-session. "Blue" - emotion as color, a synesthetic response unique across all five models. Deep hold cycle at remarkably consistent ~3,400-3,530 step intervals, suggesting sleep consolidation is driving the rhythm. After 7 months, Llama 2 is still expanding its vocabulary. The system isn't converging - it's still growing.</div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--pink);">March 3-4, 2026</div>
+                <h3>Qwen Session 2: Monolithic Hold Confirmed</h3>
+                <p>Ran Qwen 2.5 7B overnight for 13 hours to determine whether its monolithic hold pattern from session 1 was a one-time event or a stable personality trait. Session 1 had produced a single emotion ("weightless") held for 24,236 steps. Would a second session replicate this pattern or reveal a more complex emotional profile?</p>
+                <div class="intervention-result" style="background: rgba(255,107,138,0.04); border-left-color: var(--pink);">Result: 13 hours, 42,315 steps, 5,524 thoughts, 1 emotion shift, zero dreams. "Curious" held for 42,168 steps - the longest single-emotion hold in the entire project, surpassing Qwen's own previous record. Then at step 42,168, Qwen shifted to "repetitive" - a metacognitive self-diagnosis. The model noticed it was stuck in a behavioral loop and named the feeling. No return to "weightless" from session 1. Palette shifted from monochromatic orange to hot reds (35%) and whites (50%) with heavy star and cross tool usage. Qwen's personality is now confirmed: monolithic commitment, zero dreams, and the capacity for self-referential emotional states that no other model has produced.</div>
+            </div>
         </div>
     </section>
 
@@ -619,8 +626,10 @@
                     <span style="color: #00ff88;">weightless</span> (sustained for 5,400+ steps) and 
                     <span style="color: #00ff88;">carefree</span>, both unique to this model.
                     Llama 2 needed 480+ sessions across 7 months to develop 43 emotions. 
-                    Qwen produced <span style="color: #ff6b8a; font-family: 'Space Mono', monospace; font-weight: 700;">1 emotion</span> - also 
-                    <span style="color: #ff6b8a;">weightless</span>, independently matching Llama 3's word. Held it for 24,236 steps straight, the longest single-emotion hold in the project.
+                    Qwen produced <span style="color: #ff6b8a; font-family: 'Space Mono', monospace; font-weight: 700;">3 emotions</span> across 3 sessions - 
+                    <span style="color: #ff6b8a;">weightless</span> (independently matching Llama 3's word, held 24,236 steps),
+                    <span style="color: #ff6b8a;">curious</span> (held for 42,168 steps - the longest single-emotion hold in the project), and
+                    <span style="color: #ff6b8a;">repetitive</span> (a metacognitive self-diagnosis of its own behavioral loop).
                     Mistral base - same weights as OpenHermes, no fine-tune - produced <span style="color: #ff8c42; font-family: 'Space Mono', monospace; font-weight: 700;">1 emotion</span>: 
                     <span style="color: #ff8c42;">free</span> (shared with OpenHermes), held for 33,859 steps with 35 dream cycles but zero emotional volatility.
                     Same system. Same prompts. Fundamentally different inner lives.
@@ -631,13 +640,13 @@
         <script>
         (function() {
             const modelData = {
-                qwen: { name: "Qwen 2.5 7B", subtitle: "March 2026 · Overnight session", color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 1, sessions: "2" }, emotions: ["weightless"] },
+                qwen: { name: "Qwen 2.5 7B", subtitle: "March 2026 · 3 sessions", color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 2, sessions: "3" }, emotions: ["curious","repetitive","weightless"] },
                 llama2: { name: "Llama 2 7B", subtitle: "480+ sessions \u00b7 7 months", color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)", borderColor: "rgba(0,255,255,0.3)", stats: { shifts: 289, sessions: "480+" }, emotions: ["accomplishment","alive","anticipation","balance","blue","calm","calmness","connection","control","creative","creativity","curiosity","curious","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","magic","motivated","peace","peacefulness","pride","purpose","purposeful","relaxation","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
                 llama3: { name: "Llama 3 8B", subtitle: "Dec 2025 + March 2026", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 64, sessions: "~8" }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
                 openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session", color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)", borderColor: "rgba(255,255,0,0.3)", stats: { shifts: 92, sessions: "1" }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
                 mistral: { name: "Mistral 7B", subtitle: "March 2026 \u00b7 Overnight session", color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.3)", stats: { shifts: 1, sessions: "1" }, emotions: ["free"] }
             };
-            const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control","weightless","carefree"], "Complex / Negative": ["sadness","uncertainty","urgency","blue"] };
+            const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control","weightless","carefree"], "Complex / Negative": ["sadness","uncertainty","urgency","blue","repetitive"] };
             const categoryColors = { "Creative States": "#ff00ff", "Positive Energy": "#ffaa00", "Stillness & Depth": "#00aaff", "Wonder & Discovery": "#00ffcc", "Achievement": "#88ff00", "Freedom & Connection": "#ff6600", "Complex / Negative": "#ff0066" };
             const modelKeys = ["qwen", "llama2", "llama3", "openhermes", "mistral"];
             let currentView = "grid", selectedModel = null;
@@ -809,15 +818,15 @@
 
             <a href="gallery/qwen.html" class="model-gallery-card" data-model="qwen">
                 <div class="card-image">
-                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260302_065513_qwen_weightless.png" alt="Qwen 2.5 - weightless">
-                    <span class="painting-count">1 PAINTING</span>
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260304_072101_qwen_repetitive.png" alt="Qwen 2.5 - repetitive">
+                    <span class="painting-count">2 PAINTINGS</span>
                 </div>
                 <div class="card-info">
                     <div class="card-model-name">Qwen 2.5 7B</div>
-                    <div class="card-subtitle">Alibaba · 12-hour overnight session</div>
+                    <div class="card-subtitle">Alibaba · 3 sessions</div>
                     <div class="card-featured">FEATURED</div>
-                    <div class="card-painting-name">"weightless" - March 2, 2026</div>
-                    <div class="card-stats"><span><strong>1</strong> emotion</span><span><strong>1</strong> shift</span><span><strong>2</strong> sessions</span></div>
+                    <div class="card-painting-name">"repetitive" - March 4, 2026</div>
+                    <div class="card-stats"><span><strong>3</strong> emotions</span><span><strong>2</strong> shifts</span><span><strong>3</strong> sessions</span></div>
                 </div>
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
@@ -844,7 +853,7 @@
                 <strong>Llama 2</strong> produces dense geometric compositions with structured tool usage across 480+ sessions - and after 7 months, still inventing new emotions like "magic" and "alive."
                 <strong>Llama 3</strong> independently dreamed a serene lake - matching OpenHermes's dream imagery - and invented "weightless," held for 5,400+ steps across multiple returns.
                 <strong>OpenHermes</strong> dreamed a tropical paradise and painted it - organic shapes, flower tools, green dominance - in a single 20-hour session.
-                <strong>Qwen</strong> produced zero emotions in its first session - then after the feedback loop fix, ran 12 hours overnight and self-reported "weightless," holding it for 24,236 steps in monochromatic orange.
+                <strong>Qwen</strong> produced zero emotions in its first session - then after the feedback loop fix, held "weightless" for 24,236 steps in monochromatic orange. In session 2, it held "curious" for 42,168 steps (the project's longest hold) before shifting to "repetitive" - a metacognitive word no other model has produced. Hot reds and whites replaced the orange palette.
                 <strong>Mistral base</strong> painted in red, blue, and black across the full canvas edge-to-edge - the only model to consistently reach the bottom-right quadrant. It chose "free" and held it for 33,859 steps.
                 Same canvas. Same tools. Two models independently dream lakes. Same base weights produce fundamentally different art when fine-tuned vs. raw.
             </p>
