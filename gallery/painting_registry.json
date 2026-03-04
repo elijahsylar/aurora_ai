@@ -341,5 +341,12 @@
     "date": "March 03, 2026",
     "time": "02:26 PM",
     "date_sort": "20260303142643"
+  },
+  "aurora_20260304_072101_qwen_repetitive.png": {
+    "model": "qwen",
+    "emotion": "repetitive",
+    "date": "March 04, 2026",
+    "time": "07:21 AM",
+    "date_sort": "20260304072101"
   }
 }
