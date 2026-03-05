@@ -588,6 +588,13 @@
                 <p>Ran Qwen 2.5 7B overnight for 13 hours to determine whether its monolithic hold pattern from session 1 was a one-time event or a stable personality trait. Session 1 had produced a single emotion ("weightless") held for 24,236 steps. Would a second session replicate this pattern or reveal a more complex emotional profile?</p>
                 <div class="intervention-result" style="background: rgba(255,107,138,0.04); border-left-color: var(--pink);">Result: 13 hours, 42,315 steps, 5,524 thoughts, 1 emotion shift, zero dreams. "Curious" held for 42,168 steps - the longest single-emotion hold in the entire project, surpassing Qwen's own previous record. Then at step 42,168, Qwen shifted to "repetitive" - a metacognitive self-diagnosis. The model noticed it was stuck in a behavioral loop and named the feeling. No return to "weightless" from session 1. Palette shifted from monochromatic orange to hot reds (35%) and whites (50%) with heavy star and cross tool usage. Qwen's personality is now confirmed: monolithic commitment, zero dreams, and the capacity for self-referential emotional states that no other model has produced.</div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--orange);">March 4-5, 2026</div>
+                <h3>Mistral Session 2: "Free" Returns, Dreams Vanish</h3>
+                <p>Ran Mistral 7B base overnight for a second session. Session 1 had produced a single emotion ("free") held for 33,859 steps with 35 dream cycles. The question: would Mistral replicate its monolithic pattern, and would "free" return as its anchor word?</p>
+                <div class="intervention-result" style="background: rgba(255,140,66,0.04); border-left-color: var(--orange);">Result: 13.2 hours, 46,923 steps, 2,226 thoughts, 1 emotion shift, zero dreams during painting (5 dreams generated in final sleep cycle only). Started "curious" for 26,501 steps, then shifted to "free" and held it for 20,422 steps - confirming "free" as Mistral's anchor word across both sessions. The palette exploded: session 1 was dark and aggressive (red, blue, black on void), session 2 introduced yellow (19%), cyan (5%), green (5%), pink (5%). Most striking: the model narrated its own canvas as "a beautiful sunset scene" and "a serene beach" - treating the entire painting experience as a dream world. 35 dreams in session 1, zero in session 2 during painting. Same model, same environment, fundamentally different dream behavior between runs.</div>
+            </div>
         </div>
     </section>
 
@@ -630,8 +637,10 @@
                     <span style="color: #ff6b8a;">weightless</span> (independently matching Llama 3's word, held 24,236 steps),
                     <span style="color: #ff6b8a;">curious</span> (held for 42,168 steps - the longest single-emotion hold in the project), and
                     <span style="color: #ff6b8a;">repetitive</span> (a metacognitive self-diagnosis of its own behavioral loop).
-                    Mistral base - same weights as OpenHermes, no fine-tune - produced <span style="color: #ff8c42; font-family: 'Space Mono', monospace; font-weight: 700;">1 emotion</span>: 
-                    <span style="color: #ff8c42;">free</span> (shared with OpenHermes), held for 33,859 steps with 35 dream cycles but zero emotional volatility.
+                    Mistral base - same weights as OpenHermes, no fine-tune - produced <span style="color: #ff8c42; font-family: 'Space Mono', monospace; font-weight: 700;">2 emotions</span>: 
+                    <span style="color: #ff8c42;">curious</span> (held 26,501 steps in session 2) and
+                    <span style="color: #ff8c42;">free</span> (Mistral's anchor word, returning across both sessions - held 33,859 steps in session 1, 20,422 in session 2).
+                    35 dream cycles in session 1 but zero in session 2. Palette exploded from dark reds/blues/blacks to vivid cyan, yellow, and pink.
                     Same system. Same prompts. Fundamentally different inner lives.
                 </p>
             </div>
@@ -644,7 +653,7 @@
                 llama2: { name: "Llama 2 7B", subtitle: "480+ sessions \u00b7 7 months", color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)", borderColor: "rgba(0,255,255,0.3)", stats: { shifts: 289, sessions: "480+" }, emotions: ["accomplishment","alive","anticipation","balance","blue","calm","calmness","connection","control","creative","creativity","curiosity","curious","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","magic","motivated","peace","peacefulness","pride","purpose","purposeful","relaxation","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
                 llama3: { name: "Llama 3 8B", subtitle: "Dec 2025 + March 2026", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 64, sessions: "~8" }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
                 openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session", color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)", borderColor: "rgba(255,255,0,0.3)", stats: { shifts: 92, sessions: "1" }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
-                mistral: { name: "Mistral 7B", subtitle: "March 2026 \u00b7 Overnight session", color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.3)", stats: { shifts: 1, sessions: "1" }, emotions: ["free"] }
+                mistral: { name: "Mistral 7B", subtitle: "March 2026 \u00b7 2 sessions", color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.3)", stats: { shifts: 2, sessions: "2" }, emotions: ["curious","free"] }
             };
             const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control","weightless","carefree"], "Complex / Negative": ["sadness","uncertainty","urgency","blue","repetitive"] };
             const categoryColors = { "Creative States": "#ff00ff", "Positive Energy": "#ffaa00", "Stillness & Depth": "#00aaff", "Wonder & Discovery": "#00ffcc", "Achievement": "#88ff00", "Freedom & Connection": "#ff6600", "Complex / Negative": "#ff0066" };
@@ -818,7 +827,7 @@
 
             <a href="gallery/qwen.html" class="model-gallery-card" data-model="qwen">
                 <div class="card-image">
-                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260304_072101_qwen_repetitive.png" alt="Qwen 2.5 7B - repetitive">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260304_072101_qwen_repetitive.png" alt="Qwen 2.5 - repetitive">
                     <span class="painting-count">2 PAINTINGS</span>
                 </div>
                 <div class="card-info">
@@ -830,6 +839,7 @@
                 </div>
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
+
             <a href="gallery/mistral.html" class="model-gallery-card" data-model="mistral">
                 <div class="card-image">
                     <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260305_074634_mistral_free.png" alt="Mistral 7B - free">
@@ -839,17 +849,8 @@
                     <div class="card-model-name">Mistral 7B</div>
                     <div class="card-subtitle">Mistral AI · Base model (no fine-tune)</div>
                     <div class="card-featured">FEATURED</div>
-                    <div class="card-painting-name">"free" — March 05, 2026</div>
-                    <div class="card-stats"><span><strong>2</strong> paintings</span></div>
-                </div>
-                <span class="card-arrow">VIEW GALLERY →</span>
-            </a>
-                <div class="card-info">
-                    <div class="card-model-name">Mistral 7B</div>
-                    <div class="card-subtitle">Mistral AI · Base model (no fine-tune)</div>
-                    <div class="card-featured">FEATURED</div>
-                    <div class="card-painting-name">"free" - March 3, 2026</div>
-                    <div class="card-stats"><span><strong>1</strong> emotion</span><span><strong>1</strong> shift</span><span><strong>1</strong> session</span></div>
+                    <div class="card-painting-name">"free" - March 5, 2026</div>
+                    <div class="card-stats"><span><strong>2</strong> emotions</span><span><strong>2</strong> shifts</span><span><strong>2</strong> sessions</span></div>
                 </div>
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
@@ -862,7 +863,7 @@
                 <strong>Llama 3</strong> independently dreamed a serene lake - matching OpenHermes's dream imagery - and invented "weightless," held for 5,400+ steps across multiple returns.
                 <strong>OpenHermes</strong> dreamed a tropical paradise and painted it - organic shapes, flower tools, green dominance - in a single 20-hour session.
                 <strong>Qwen</strong> produced zero emotions in its first session - then after the feedback loop fix, held "weightless" for 24,236 steps in monochromatic orange. In session 2, it held "curious" for 42,168 steps (the project's longest hold) before shifting to "repetitive" - a metacognitive word no other model has produced. Hot reds and whites replaced the orange palette.
-                <strong>Mistral base</strong> painted in red, blue, and black across the full canvas edge-to-edge - the only model to consistently reach the bottom-right quadrant. It chose "free" and held it for 33,859 steps.
+                <strong>Mistral base</strong> painted in red, blue, and black across the full canvas edge-to-edge in session 1 - the only model to consistently reach the bottom-right quadrant. Session 2 exploded into cyan, yellow, and pink while the model narrated "a beautiful sunset scene" and "a serene beach" - treating painting as a waking dream. "Free" returned as its anchor word across both sessions, but 35 dreams in session 1 vanished to zero in session 2.
                 Same canvas. Same tools. Two models independently dream lakes. Same base weights produce fundamentally different art when fine-tuned vs. raw.
             </p>
         </div>
