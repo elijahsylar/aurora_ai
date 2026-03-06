@@ -355,5 +355,12 @@
     "date": "March 05, 2026",
     "time": "07:46 AM",
     "date_sort": "20260305074634"
+  },
+  "aurora_20260306_073713_deepseek-r1-8b_free.png": {
+    "model": "deepseek",
+    "emotion": "free",
+    "date": "March 06, 2026",
+    "time": "07:37 AM",
+    "date_sort": "20260306073713"
   }
 }
