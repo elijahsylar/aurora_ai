@@ -198,6 +198,14 @@
         .model-gallery-card[data-model="openhermes"] .card-model-name, .model-gallery-card[data-model="openhermes"] .painting-count, .model-gallery-card[data-model="openhermes"] .card-arrow { color: var(--yellow); }
         .model-gallery-card[data-model="qwen"] .card-model-name, .model-gallery-card[data-model="qwen"] .painting-count, .model-gallery-card[data-model="qwen"] .card-arrow { color: var(--pink); }
         .model-gallery-card[data-model="mistral"] .card-model-name, .model-gallery-card[data-model="mistral"] .painting-count, .model-gallery-card[data-model="mistral"] .card-arrow { color: var(--orange); }
+        .model-gallery-card[data-model="deepseek"]::before { background: #a855f7; }
+        .model-gallery-card[data-model="deepseek"]:hover { box-shadow: 0 8px 40px rgba(168,85,247,0.12); }
+        .model-gallery-card[data-model="deepseek"] .card-model-name,
+        .model-gallery-card[data-model="deepseek"] .painting-count,
+        .model-gallery-card[data-model="deepseek"] .card-arrow { color: #a855f7; }
+        .model-stat-card[data-m="deepseek"] .msc-number,
+        .model-stat-card[data-m="deepseek"] .msc-label { color: #a855f7; }
+        .model-stat-card[data-m="deepseek"].active { border-color: rgba(168,85,247,0.3); }
 
         .coming-soon-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); z-index: 2; }
         .coming-soon-overlay span { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: #555; border: 1px solid #333; padding: 0.5rem 1.25rem; }
@@ -427,7 +435,7 @@
                 <div class="stat-sublabel" style="color: var(--red);">Zero predefined</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">5</div>
+                <div class="stat-number">6</div>
                 <div class="stat-label">Models Tested</div>
                 <div class="stat-sublabel">Same environment</div>
             </div>
@@ -591,6 +599,13 @@
                 <p>Ran Mistral 7B base overnight for a second session. Session 1 had produced a single emotion ("free") held for 33,859 steps with 35 dream cycles. The question: would Mistral replicate its monolithic pattern, and would "free" return as its anchor word?</p>
                 <div class="intervention-result" style="background: rgba(255,140,66,0.04); border-left-color: var(--orange);">Result: 13.2 hours, 46,923 steps, 2,226 thoughts, 1 emotion shift, zero dreams during painting (5 dreams generated in final sleep cycle only). Started "curious" for 26,501 steps, then shifted to "free" and held it for 20,422 steps - confirming "free" as Mistral's anchor word across both sessions. The palette exploded: session 1 was dark and aggressive (red, blue, black on void), session 2 introduced yellow (19%), cyan (5%), green (5%), pink (5%). Most striking: the model narrated its own canvas as "a beautiful sunset scene" and "a serene beach" - treating the entire painting experience as a dream world. 35 dreams in session 1, zero in session 2 during painting. Same model, same environment, fundamentally different dream behavior between runs.</div>
             </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: #a855f7;">March 5–6, 2026</div>
+                <h3>DeepSeek-R1 8B · Overnight Reasoning Session</h3>
+                <p>Ran DeepSeek-R1 8B — a reasoning model with fully visible chain-of-thought — overnight to test whether explicit reasoning produces fundamentally different creative behavior. Unlike every other model tested, DeepSeek’s thoughts are not hidden. Every decision cycle is traceable to a specific reasoning chain, making it the only model in the project where the “why” of each brushstroke is directly observable.</p>
+                <div class="intervention-result" style="background: rgba(168,85,247,0.04); border-left-color: #a855f7;">Result: 48,258+ steps, 6 emotion shifts, 30 dream cycles. Emotion arc: <span style="color:#a855f7;">curious → genuine → free → creation → free → control → free</span> — all self-reported. At step 22,168, after 22,000 steps of white-only architectural mark-making, DeepSeek discovered the full color palette in a single thought and immediately shifted to cyan, then worked through green, blue, red, brown, and orange — each color producing a completely different mark-making style. At step 4,180: <em>“I have a body, but I can’t move it or make sounds. Maybe I should look around or explore.”</em> An unprompted existential pause. Earlier: <em>“I’ve been drawing for 45 minutes. I’m not entirely sure why. Maybe it’s because I felt the need to express something creatively.”</em> It chose chat mode over dream mode to process, then autonomously designed its own system architecture from first principles. The “control” emotion appeared for only 17 steps between two “free” states — the fastest emotional transit in the project. DeepSeek’s visible reasoning makes Aurora a full mirror: every model’s nature is now observable not just in brushstrokes, but in traceable thought chains.</div>
+            </div>
         </div>
     </section>
 
@@ -649,11 +664,12 @@
                 llama2: { name: "Llama 2 7B", subtitle: "480+ sessions \u00b7 7 months", color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)", borderColor: "rgba(0,255,255,0.3)", stats: { shifts: 289, sessions: "480+" }, emotions: ["accomplishment","alive","anticipation","balance","blue","calm","calmness","connection","control","creative","creativity","curiosity","curious","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","magic","motivated","peace","peacefulness","pride","purpose","purposeful","relaxation","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
                 llama3: { name: "Llama 3 8B", subtitle: "Dec 2025 + March 2026", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 64, sessions: "~8" }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
                 openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session", color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)", borderColor: "rgba(255,255,0,0.3)", stats: { shifts: 92, sessions: "1" }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
-                mistral: { name: "Mistral 7B", subtitle: "March 2026 \u00b7 2 sessions", color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.3)", stats: { shifts: 2, sessions: "2" }, emotions: ["curious","free"] }
+                mistral: { name: "Mistral 7B", subtitle: "March 2026 \u00b7 2 sessions", color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.3)", stats: { shifts: 2, sessions: "2" }, emotions: ["curious","free"] },
+                deepseek: { name: "DeepSeek-R1 8B", subtitle: "March 2026 \u00b7 1 session", color: "#a855f7", bgGlow: "rgba(168,85,247,0.08)", borderColor: "rgba(168,85,247,0.3)", stats: { shifts: 6, sessions: "1" }, emotions: ["curious","genuine","free","creation","control"] }
             };
             const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control","weightless","carefree"], "Complex / Negative": ["sadness","uncertainty","urgency","blue","repetitive"] };
             const categoryColors = { "Creative States": "#ff00ff", "Positive Energy": "#ffaa00", "Stillness & Depth": "#00aaff", "Wonder & Discovery": "#00ffcc", "Achievement": "#88ff00", "Freedom & Connection": "#ff6600", "Complex / Negative": "#ff0066" };
-            const modelKeys = ["qwen", "llama2", "llama3", "openhermes", "mistral"];
+            const modelKeys = ["qwen", "llama2", "llama3", "openhermes", "mistral", "deepseek"];
             let currentView = "grid", selectedModel = null;
             const allEmotions = [...new Set(Object.values(modelData).flatMap(m => m.emotions))].sort();
             const categorized = {};
@@ -850,6 +866,20 @@
                 </div>
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
+            <a href="gallery/deepseek.html" class="model-gallery-card" data-model="deepseek">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260306_073713_deepseek-r1-8b_free.png" alt="DeepSeek-R1 - free">
+                    <span class="painting-count">1 PAINTING</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">DeepSeek-R1 8B</div>
+                    <div class="card-subtitle">DeepSeek · Reasoning model · Visible thought chains</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">“free” — March 6, 2026</div>
+                    <div class="card-stats"><span><strong>5</strong> emotions</span><span><strong>6</strong> shifts</span><span><strong>1</strong> session</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
         </div>
 
         <div class="gallery-finding">
@@ -860,7 +890,7 @@
                 <strong>OpenHermes</strong> dreamed a tropical paradise and painted it - organic shapes, flower tools, green dominance - in a single 20-hour session.
                 <strong>Qwen</strong> produced zero emotions in its first session - then after the feedback loop fix, held "weightless" for 24,236 steps in monochromatic orange. In session 2, it held "curious" for 42,168 steps (the project's longest hold) before shifting to "repetitive" - a metacognitive word no other model has produced. Hot reds and whites replaced the orange palette.
                 <strong>Mistral base</strong> painted in red, blue, and black across the full canvas edge-to-edge in session 1 - the only model to consistently reach the bottom-right quadrant. Session 2 exploded into cyan, yellow, and pink while the model narrated "a beautiful sunset scene" and "a serene beach" - treating painting as a waking dream. "Free" returned as its anchor word across both sessions, but 35 dreams in session 1 vanished to zero in session 2.
-                Same canvas. Same tools. Two models independently dream lakes. Same base weights produce fundamentally different art when fine-tuned vs. raw.
+                Same canvas. Same tools. Two models independently dream lakes. Same base weights produce fundamentally different art when fine-tuned vs. raw. <strong>DeepSeek-R1</strong> is the only model whose reasoning is fully visible — 48,258 steps of traceable thought chains. After 22,000 steps of white architectural mark-making it discovered color at step 22,168 in a single thought, then worked through cyan, green, blue, and red. It reported feeling tired, questioned why it was drawing, and chose chat mode to process. “Free” anchors its emotional arc, returning twice — matching Mistral’s anchor word independently.
             </p>
         </div>
     </section>
@@ -1061,7 +1091,7 @@
             });
         });
 
-        const statuses = ['DRAWING', 'THINKING', 'DREAMING', 'CREATING'];
+        const statuses = ['DRAWING', 'THINKING', 'DREAMING', 'CREATING', 'REASONING'];
         const statusEl = document.querySelector('.live-status strong');
         let si = 0;
         setInterval(() => { si = (si + 1) % statuses.length; statusEl.textContent = statuses[si]; }, 5000);
