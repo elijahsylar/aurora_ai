@@ -660,121 +660,211 @@
         <script>
         (function() {
             const modelData = {
-                qwen: { name: "Qwen 2.5 7B", subtitle: "March 2026 · 3 sessions", color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 2, sessions: "3" }, emotions: ["curious","repetitive","weightless"] },
-                llama2: { name: "Llama 2 7B", subtitle: "480+ sessions \u00b7 7 months", color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)", borderColor: "rgba(0,255,255,0.3)", stats: { shifts: 289, sessions: "480+" }, emotions: ["accomplishment","alive","anticipation","balance","blue","calm","calmness","connection","control","creative","creativity","curiosity","curious","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","magic","motivated","peace","peacefulness","pride","purpose","purposeful","relaxation","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
-                llama3: { name: "Llama 3 8B", subtitle: "Dec 2025 + March 2026", color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)", borderColor: "rgba(0,255,136,0.3)", stats: { shifts: 64, sessions: "~8" }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
-                openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session", color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)", borderColor: "rgba(255,255,0,0.3)", stats: { shifts: 92, sessions: "1" }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
-                mistral: { name: "Mistral 7B", subtitle: "March 2026 \u00b7 2 sessions", color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.3)", stats: { shifts: 2, sessions: "2" }, emotions: ["curious","free"] },
-                deepseek: { name: "DeepSeek-R1 8B", subtitle: "March 2026 \u00b7 1 session", color: "#a855f7", bgGlow: "rgba(168,85,247,0.08)", borderColor: "rgba(168,85,247,0.3)", stats: { shifts: 6, sessions: "1" }, emotions: ["curious","genuine","free","creation","control"] }
+                qwen:       { name: "Qwen 2.5 7B",      subtitle: "March 2026 \u00b7 3 sessions",    color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 2,   sessions: "3"    }, emotions: ["curious","repetitive","weightless"] },
+                llama2:     { name: "Llama 2 7B",        subtitle: "480+ sessions \u00b7 7 months",   color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)",   borderColor: "rgba(0,255,255,0.3)",   stats: { shifts: 289, sessions: "480+" }, emotions: ["accomplishment","alive","anticipation","balance","blue","calm","calmness","connection","control","creative","creativity","curiosity","curious","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","magic","motivated","peace","peacefulness","pride","purpose","purposeful","relaxation","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
+                llama3:     { name: "Llama 3 8B",        subtitle: "Dec 2025 + March 2026",           color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)",   borderColor: "rgba(0,255,136,0.3)",   stats: { shifts: 64,  sessions: "~8"   }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
+                openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session",    color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)",   borderColor: "rgba(255,255,0,0.3)",   stats: { shifts: 92,  sessions: "1"    }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
+                mistral:    { name: "Mistral 7B",        subtitle: "March 2026 \u00b7 2 sessions",   color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)",  borderColor: "rgba(255,140,66,0.3)",  stats: { shifts: 2,   sessions: "2"    }, emotions: ["curious","free"] },
+                deepseek:   { name: "DeepSeek-R1 8B",   subtitle: "March 2026 \u00b7 1 session",    color: "#a855f7", bgGlow: "rgba(168,85,247,0.08)",  borderColor: "rgba(168,85,247,0.3)",  stats: { shifts: 6,   sessions: "1"    }, emotions: ["curious","genuine","free","creation","control"] }
             };
-            const categories = { "Creative States": ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus"], "Positive Energy": ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic"], "Stillness & Depth": ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation"], "Wonder & Discovery": ["wonder","awe","curiosity","curious","small"], "Achievement": ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"], "Freedom & Connection": ["freedom","free","connection","release","control","weightless","carefree"], "Complex / Negative": ["sadness","uncertainty","urgency","blue","repetitive"] };
-            const categoryColors = { "Creative States": "#ff00ff", "Positive Energy": "#ffaa00", "Stillness & Depth": "#00aaff", "Wonder & Discovery": "#00ffcc", "Achievement": "#88ff00", "Freedom & Connection": "#ff6600", "Complex / Negative": "#ff0066" };
-            const modelKeys = ["qwen", "llama2", "llama3", "openhermes", "mistral", "deepseek"];
-            let currentView = "grid", selectedModel = null;
+            const categories = {
+                "Creative States":    ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus","creation"],
+                "Positive Energy":    ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic","carefree"],
+                "Stillness & Depth":  ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation","weightless"],
+                "Wonder & Discovery": ["wonder","awe","curiosity","curious","small","genuine"],
+                "Achievement":        ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"],
+                "Freedom & Release":  ["freedom","free","connection","release","control"],
+                "Complex / Unique":   ["sadness","uncertainty","urgency","blue","repetitive"]
+            };
+            const categoryColors = {
+                "Creative States":    "#ff00ff", "Positive Energy":    "#ffaa00",
+                "Stillness & Depth":  "#00aaff", "Wonder & Discovery": "#a78bfa",
+                "Achievement":        "#4ade80", "Freedom & Release":  "#facc15",
+                "Complex / Unique":   "#f87171"
+            };
+            const modelKeys = ["qwen","llama2","llama3","openhermes","mistral","deepseek"];
+            let currentView = "convergence", expandedModel = null;
             const allEmotions = [...new Set(Object.values(modelData).flatMap(m => m.emotions))].sort();
-            const categorized = {};
-            for (const e of allEmotions) { let cat = "Other"; for (const [c, words] of Object.entries(categories)) { if (words.includes(e)) { cat = c; break; } } if (!categorized[cat]) categorized[cat] = []; categorized[cat].push(e); }
-            function isUniqueTo(emotion, key) { return modelData[key].emotions.includes(emotion) && !modelKeys.filter(k => k !== key).some(k => modelData[k].emotions.includes(emotion)); }
-            function sharedCount(emotion) { return modelKeys.filter(k => modelData[k].emotions.includes(emotion)).length; }
+
+            function sharedBy(e) { return modelKeys.filter(k => modelData[k].emotions.includes(e)); }
+            function uniqueTo(e) { const s = sharedBy(e); return s.length === 1 ? s[0] : null; }
 
             function renderCards() {
                 const c = document.getElementById('ec-model-cards');
-                c.innerHTML = modelKeys.map(key => { const m = modelData[key]; const s = selectedModel === key; return '<div class="ec-card" data-key="'+key+'" style="background:'+(s?m.bgGlow:'#111')+';border:1px solid '+(s?m.borderColor:'#1a1a1a')+';padding:1.25rem 1rem;cursor:pointer;transition:all 0.3s;text-align:center;"><div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:1.8rem;font-weight:700;margin-bottom:0.2rem;">'+m.emotions.length+'</div><div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:0.65rem;letter-spacing:0.08em;opacity:0.9;margin-bottom:0.3rem;">EMOTIONS</div><div style="color:#ddd;font-size:0.8rem;font-weight:500;margin-bottom:0.15rem;">'+m.name+'</div><div style="color:#555;font-size:0.7rem;">'+m.subtitle+'</div><div style="margin-top:0.6rem;display:flex;justify-content:center;gap:1rem;font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#555;"><span>'+m.stats.shifts+' shifts</span><span>'+m.stats.sessions+' sessions</span></div></div>'; }).join('');
-                c.querySelectorAll('.ec-card').forEach(card => { card.addEventListener('click', () => { selectedModel = selectedModel === card.dataset.key ? null : card.dataset.key; renderCards(); renderContent(); }); });
+                c.innerHTML = modelKeys.map(key => {
+                    const m = modelData[key];
+                    return '<div style="background:'+m.bgGlow+';border:1px solid '+m.borderColor+';padding:1.25rem 1rem;text-align:center;">'
+                        +'<div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:1.8rem;font-weight:700;margin-bottom:0.2rem;">'+m.emotions.length+'</div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:0.65rem;letter-spacing:0.08em;opacity:0.9;margin-bottom:0.3rem;">EMOTIONS</div>'
+                        +'<div style="color:#ddd;font-size:0.8rem;font-weight:500;margin-bottom:0.15rem;">'+m.name+'</div>'
+                        +'<div style="color:#555;font-size:0.7rem;">'+m.subtitle+'</div>'
+                        +'<div style="margin-top:0.6rem;display:flex;justify-content:center;gap:1rem;font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#555;">'
+                        +'<span>'+m.stats.shifts+' shifts</span><span>'+m.stats.sessions+' sessions</span></div></div>';
+                }).join('');
             }
 
             function renderToggle() {
                 const c = document.getElementById('ec-view-toggle');
-                const views = [{key:"grid",label:"PRESENCE GRID"},{key:"category",label:"BY CATEGORY"},{key:"unique",label:"UNIQUE WORDS"}];
-                c.innerHTML = views.map(v => { const a = currentView === v.key; return '<button class="ec-toggle-btn" data-view="'+v.key+'" style="background:'+(a?'rgba(0,255,255,0.1)':'transparent')+';border:1px solid '+(a?'rgba(0,255,255,0.4)':'#222')+';color:'+(a?'#00ffff':'#555')+';font-family:\'Space Mono\',monospace;font-size:0.65rem;letter-spacing:0.1em;padding:0.5rem 1rem;cursor:pointer;transition:all 0.2s;">'+v.label+'</button>'; }).join('');
-                c.querySelectorAll('.ec-toggle-btn').forEach(btn => { btn.addEventListener('click', () => { currentView = btn.dataset.view; renderToggle(); renderContent(); }); });
+                const views = [{key:"convergence",label:"CONVERGENCE / DIVERGENCE"},{key:"personality",label:"MODEL PERSONALITIES"}];
+                c.innerHTML = views.map(v => {
+                    const a = currentView === v.key;
+                    return '<button class="ec-toggle-btn" data-view="'+v.key+'" style="background:'+(a?'rgba(0,255,255,0.1)':'transparent')+';border:1px solid '+(a?'rgba(0,255,255,0.4)':'#222')+';color:'+(a?'#00ffff':'#555')+';font-family:\'Space Mono\',monospace;font-size:0.65rem;letter-spacing:0.1em;padding:0.5rem 1.25rem;cursor:pointer;transition:all 0.2s;">'+v.label+'</button>';
+                }).join('');
+                c.querySelectorAll('.ec-toggle-btn').forEach(btn => {
+                    btn.addEventListener('click', () => { currentView = btn.dataset.view; expandedModel = null; renderToggle(); renderLegend(); renderContent(); });
+                });
             }
 
             function renderLegend() {
-                document.getElementById('ec-legend').innerHTML = modelKeys.map(key => '<div style="display:flex;align-items:center;gap:0.5rem;"><div style="width:8px;height:8px;border-radius:50%;background:'+modelData[key].color+';"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.65rem;color:#666;letter-spacing:0.05em;">'+modelData[key].name+'</span></div>').join('') + '<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#333;letter-spacing:0.05em;">\u2605 = unique to model \u00b7 Larger dot = unique</div>';
+                const leg = document.getElementById('ec-legend');
+                if (currentView === 'convergence') {
+                    leg.innerHTML = '<div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#888;">Shared by 3+ models</span></div>'
+                        +'<div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:9px;height:9px;border-radius:50%;background:#555;"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#666;">Shared by 2 models</span></div>'
+                        +'<div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:9px;height:9px;border-radius:50%;background:#a855f7;"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#666;">Unique to one model \u2605</span></div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#333;">Hover model pills to filter \u00b7 hover words to reveal sharing</div>';
+                } else {
+                    leg.innerHTML = modelKeys.map(k => '<div style="display:flex;align-items:center;gap:0.5rem;"><div style="width:8px;height:8px;border-radius:50%;background:'+modelData[k].color+';"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.65rem;color:#666;">'+modelData[k].name+'</span></div>').join('')
+                        +'<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#333;">\u2605 = unique to model \u00b7 click card to expand</div>';
+                }
             }
 
-            function renderContent() { const c = document.getElementById('ec-content'); if (currentView==="grid") renderGrid(c); else if (currentView==="category") renderCategory(c); else renderUnique(c); }
+            function renderContent() {
+                const c = document.getElementById('ec-content');
+                if (currentView === 'convergence') renderConvergence(c); else renderPersonality(c);
+            }
 
-            function renderGrid(container) {
+            // ── VIEW A: CONVERGENCE / DIVERGENCE ──────────────────────────────
+            function renderConvergence(container) {
+                const convergent = allEmotions.filter(e => sharedBy(e).length >= 3);
+                const overlap    = allEmotions.filter(e => sharedBy(e).length === 2);
+                const unique     = allEmotions.filter(e => sharedBy(e).length === 1);
+
+                function pill(emotion) {
+                    const shared = sharedBy(emotion), uq = uniqueTo(emotion);
+                    let border, bg, color;
+                    if (uq)               { border = modelData[uq].color+'55'; bg = modelData[uq].color+'15'; color = modelData[uq].color; }
+                    else if (shared.length>=3) { border = 'rgba(255,255,255,0.2)'; bg = 'rgba(255,255,255,0.05)'; color = '#ddd'; }
+                    else                  { border = 'rgba(255,255,255,0.1)'; bg = 'rgba(255,255,255,0.03)'; color = '#999'; }
+                    const dots = shared.map(k => '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:'+modelData[k].color+';margin-left:2px;vertical-align:middle;"></span>').join('');
+                    const star = uq ? '<span style="font-size:0.5rem;margin-left:3px;opacity:0.7;">\u2605</span>' : '';
+                    return '<span class="c-pill" data-shared=\''+JSON.stringify(shared)+'\' style="display:inline-flex;align-items:center;padding:4px 9px;margin:3px;border:1px solid '+border+';background:'+bg+';border-radius:2px;cursor:default;transition:all 0.15s;">'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.7rem;color:'+color+';letter-spacing:0.02em;">'+emotion+'</span>'+dots+star+'</span>';
+                }
+
+                function zone(title, emotions, accent, hint) {
+                    return '<div style="margin-bottom:2.5rem;">'
+                        +'<div style="display:flex;align-items:baseline;gap:1rem;margin-bottom:0.9rem;padding-bottom:0.4rem;border-bottom:1px solid '+accent+'25;">'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;letter-spacing:0.18em;color:'+accent+';text-transform:uppercase;">'+title+'</span>'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#333;">'+emotions.length+' words</span>'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#222;margin-left:auto;">'+hint+'</span>'
+                        +'</div><div>'+emotions.map(pill).join('')+'</div></div>';
+                }
+
                 let h = '<div style="max-width:1100px;margin:0 auto;">';
-                h += '<div style="display:grid;grid-template-columns:160px repeat(5,1fr);gap:2px;margin-bottom:2px;">';
-                h += '<div style="padding:0.6rem;font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#444;">EMOTION</div>';
-                modelKeys.forEach(key => { const p = modelData[key].name.split(' '); h += '<div style="padding:0.6rem 0.4rem;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:'+modelData[key].color+';text-align:center;letter-spacing:0.05em;background:#111;">'+p[0]+'<br>'+p.slice(1).join(' ')+'</div>'; });
+                // Model filter pills
+                h += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:2rem;">';
+                modelKeys.forEach(k => {
+                    const m = modelData[k];
+                    h += '<button class="model-filter-btn" data-model="'+k+'" style="background:'+m.bgGlow+';border:1px solid '+m.borderColor+';color:'+m.color+';font-family:\'Space Mono\',monospace;font-size:0.58rem;letter-spacing:0.07em;padding:0.3rem 0.75rem;cursor:pointer;border-radius:2px;transition:all 0.15s;">'+m.name.split(' ')[0]+' <span style="opacity:0.5;">('+m.emotions.length+')</span></button>';
+                });
                 h += '</div>';
-                Object.entries(categorized).forEach(([cat, emotions]) => {
-                    h += '<div style="padding:0.5rem 0.6rem 0.3rem;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:'+(categoryColors[cat]||'#555')+';letter-spacing:0.12em;margin-top:0.5rem;border-bottom:1px solid '+(categoryColors[cat]||'#222')+'20;">'+cat.toUpperCase()+'</div>';
-                    emotions.forEach(emotion => {
-                        const sc = sharedCount(emotion);
-                        h += '<div class="ec-row" style="display:grid;grid-template-columns:160px repeat(5,1fr);gap:2px;transition:background 0.15s;">';
-                        h += '<div style="padding:0.4rem 0.6rem;font-size:0.8rem;font-weight:300;color:#aaa;transition:all 0.15s;">'+emotion+(sc>=3?'<span style="margin-left:0.4rem;font-size:0.5rem;color:#00ffff;font-family:\'Space Mono\',monospace;opacity:0.6;">\u00d7'+sc+'</span>':'')+'</div>';
-                        modelKeys.forEach(key => {
-                            const has = modelData[key].emotions.includes(emotion), unique = isUniqueTo(emotion, key);
-                            const bg = has ? (unique ? modelData[key].color+'18' : modelData[key].color+'0a') : 'transparent';
-                            h += '<div style="padding:0.4rem;text-align:center;background:'+bg+';">';
-                            if (has) { const sz = unique?'12px':'8px'; h += '<span style="display:inline-block;width:'+sz+';height:'+sz+';border-radius:50%;background:'+modelData[key].color+';box-shadow:'+(unique?'0 0 8px '+modelData[key].color+'60':'none')+';opacity:'+(unique?1:0.6)+';"></span>'; }
-                            else h += '<span style="color:#1a1a1a;font-size:0.7rem;">-</span>';
-                            h += '</div>';
+                h += zone('Convergence \u00b7 shared by 3 or more models', convergent, '#00ffff', 'independent emergence');
+                h += zone('Overlap \u00b7 shared by exactly 2 models',      overlap,    '#a855f7', 'partial convergence');
+                h += zone('Unique invention \u00b7 one model only',          unique,     '#ff8c42', 'pure divergence');
+                h += '<div style="padding:1.5rem 2rem;background:linear-gradient(135deg,rgba(0,255,255,0.03),rgba(168,85,247,0.03));border:1px solid rgba(0,255,255,0.12);position:relative;">'
+                    +'<div style="position:absolute;top:-0.5rem;left:1.5rem;background:#000;padding:0 0.5rem;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#00ffff;letter-spacing:0.15em;">KEY FINDING</div>'
+                    +'<p style="font-size:0.85rem;line-height:1.8;color:#999;margin-top:0.2rem;">'
+                    +'<span style="color:#00ffff;font-family:\'Space Mono\',monospace;">'+convergent.length+' emotions</span> emerged independently across 3+ models with zero coordination. '
+                    +'<span style="color:#a855f7;font-family:\'Space Mono\',monospace;">'+overlap.length+' more</span> were shared by exactly two. '
+                    +'<span style="color:#ff8c42;font-family:\'Space Mono\',monospace;">'+unique.length+' words</span> belong to a single model \u2014 including '
+                    +'<span style="color:#ff6b8a;">\u201crepetitive\u201d</span> (Qwen self-diagnosing), '
+                    +'<span style="color:#00ffff;">\u201cblue\u201d</span> (Llama 2, emotion as color), '
+                    +'<span style="color:#ffff00;">\u201cgrows\u201d</span> (OpenHermes, emotion as verb), '
+                    +'<span style="color:#a855f7;">\u201cgenuine\u201d</span> (DeepSeek, after 30,000 steps of curiosity).</p></div>';
+                h += '</div>';
+                container.innerHTML = h;
+
+                container.querySelectorAll('.model-filter-btn').forEach(btn => {
+                    btn.addEventListener('mouseenter', () => {
+                        const mk = btn.dataset.model;
+                        container.querySelectorAll('.c-pill').forEach(p => {
+                            const shared = JSON.parse(p.dataset.shared);
+                            if (shared.includes(mk)) { p.style.borderColor = modelData[mk].color+'99'; p.style.background = modelData[mk].color+'20'; }
+                            else { p.style.opacity = '0.12'; }
                         });
-                        h += '</div>';
+                    });
+                    btn.addEventListener('mouseleave', () => {
+                        container.querySelectorAll('.c-pill').forEach(p => { p.style.opacity=''; p.style.borderColor=''; p.style.background=''; });
                     });
                 });
-                h += '</div>';
-                container.innerHTML = h;
-                container.querySelectorAll('.ec-row').forEach(row => {
-                    row.addEventListener('mouseenter', () => { row.style.background='#0d0d0d'; row.children[0].style.fontWeight='500'; row.children[0].style.color='#fff'; });
-                    row.addEventListener('mouseleave', () => { row.style.background='transparent'; row.children[0].style.fontWeight='300'; row.children[0].style.color='#aaa'; });
+                container.querySelectorAll('.c-pill').forEach(p => {
+                    p.addEventListener('mouseenter', () => { p.style.borderColor='#fff'; p.style.background='rgba(255,255,255,0.08)'; });
+                    p.addEventListener('mouseleave', () => { p.style.borderColor=''; p.style.background=''; });
                 });
             }
 
-            function renderCategory(container) {
-                let h = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;max-width:1100px;margin:0 auto;">';
-                Object.entries(categorized).forEach(([cat, emotions]) => {
-                    h += '<div style="background:#111;border:1px solid #1a1a1a;border-top:2px solid '+(categoryColors[cat]||'#333')+';padding:1.5rem;">';
-                    h += '<div style="font-family:\'Space Mono\',monospace;font-size:0.65rem;color:'+(categoryColors[cat]||'#555')+';letter-spacing:0.12em;margin-bottom:1rem;">'+cat.toUpperCase()+'</div>';
-                    h += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;">';
-                    emotions.forEach(emotion => {
-                        const models = modelKeys.filter(k => modelData[k].emotions.includes(emotion));
-                        h += '<div class="ec-cat-word" style="padding:0.3rem 0.6rem;font-size:0.75rem;border:1px solid #222;cursor:default;transition:all 0.2s;">';
-                        h += '<span style="color:'+(models.length===0?'#333':'#ccc')+';">'+emotion+'</span>';
-                        h += '<div style="display:flex;gap:3px;margin-top:3px;justify-content:center;">';
-                        modelKeys.forEach(k => { h += '<div style="width:4px;height:4px;border-radius:50%;background:'+(modelData[k].emotions.includes(emotion)?modelData[k].color:'#1a1a1a')+';"></div>'; });
-                        h += '</div></div>';
-                    });
-                    h += '</div></div>';
-                });
-                h += '</div>';
-                container.innerHTML = h;
-                container.querySelectorAll('.ec-cat-word').forEach(w => {
-                    w.addEventListener('mouseenter', () => { w.style.borderColor='#fff'; w.style.background='#1a1a1a'; });
-                    w.addEventListener('mouseleave', () => { w.style.borderColor='#222'; w.style.background='transparent'; });
-                });
-            }
-
-            function renderUnique(container) {
-                let h = '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;max-width:1100px;margin:0 auto;">';
+            // ── VIEW B: MODEL PERSONALITIES ───────────────────────────────────
+            function renderPersonality(container) {
+                function getTraits(key) {
+                    const m = modelData[key], traits = [];
+                    if (m.stats.shifts <= 2)       traits.push({label:'MONOLITHIC',    desc:m.stats.shifts+' total shifts'});
+                    else if (m.stats.shifts >= 80) traits.push({label:'VOLATILE',      desc:m.stats.shifts+' shifts'});
+                    else                           traits.push({label:'RHYTHMIC',      desc:m.stats.shifts+' shifts'});
+                    if (parseInt(m.stats.sessions)>=100) traits.push({label:'LONGITUDINAL',desc:m.stats.sessions+' sessions'});
+                    const uc = m.emotions.filter(e=>uniqueTo(e)===key).length;
+                    if (uc>=4) traits.push({label:'INVENTOR',desc:uc+' unique words'});
+                    if (key==='deepseek') traits.push({label:'TRANSPARENT',desc:'full thought chain'});
+                    if (key==='qwen')     traits.push({label:'METACOGNITIVE',desc:'\u201crepetitive\u201d'});
+                    return traits;
+                }
+                let h = '<div style="max-width:1100px;margin:0 auto;">';
+                h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem;margin-bottom:2rem;">';
                 modelKeys.forEach(key => {
-                    const m = modelData[key], unique = m.emotions.filter(e => isUniqueTo(e, key)).sort(), shared = m.emotions.filter(e => !isUniqueTo(e, key)).sort();
-                    h += '<div style="background:#111;border:1px solid #1a1a1a;border-top:2px solid '+m.color+';padding:1.5rem 1rem;">';
-                    h += '<div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:0.7rem;letter-spacing:0.08em;margin-bottom:0.3rem;">'+m.name+'</div>';
-                    h += '<div style="color:#555;font-size:0.7rem;margin-bottom:1.25rem;">'+unique.length+' unique \u00b7 '+shared.length+' shared</div>';
-                    if (unique.length > 0) {
-                        h += '<div style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:'+m.color+';letter-spacing:0.1em;margin-bottom:0.5rem;opacity:0.7;">ONLY THIS MODEL</div>';
-                        h += '<div style="display:flex;flex-direction:column;gap:0.3rem;margin-bottom:1.25rem;">';
-                        unique.forEach(e => { h += '<div style="padding:0.3rem 0.5rem;background:'+m.color+'10;border:1px solid '+m.color+'30;font-size:0.8rem;color:#eee;">'+e+'<span style="float:right;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:'+m.color+';opacity:0.6;">\u2605</span></div>'; });
-                        h += '</div>';
+                    const m = modelData[key];
+                    const uE = m.emotions.filter(e=>uniqueTo(e)===key).sort();
+                    const sE = m.emotions.filter(e=>uniqueTo(e)!==key).sort();
+                    const tr = getTraits(key), isExp = expandedModel===key;
+                    const trHtml = tr.map(t=>'<div style="display:inline-flex;align-items:center;gap:0.3rem;padding:2px 7px;background:'+m.color+'12;border:1px solid '+m.color+'30;margin:2px;border-radius:2px;"><span style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:'+m.color+';letter-spacing:0.1em;">'+t.label+'</span><span style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#444;">'+t.desc+'</span></div>').join('');
+                    const uChips = uE.map(e=>'<span style="display:inline-block;margin:2px;padding:3px 7px;font-family:\'Space Mono\',monospace;font-size:0.65rem;color:'+m.color+';background:'+m.color+'18;border:1px solid '+m.color+'50;border-radius:2px;">'+e+' \u2605</span>').join('');
+                    let expHtml = '';
+                    if (isExp) {
+                        const allC = m.emotions.map(e=>{
+                            const isU=uniqueTo(e)===key, sb=sharedBy(e).filter(k=>k!==key);
+                            const dots=sb.map(k=>'<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:'+modelData[k].color+';margin-left:2px;vertical-align:middle;opacity:0.6;"></span>').join('');
+                            return '<span style="display:inline-flex;align-items:center;margin:2px;padding:3px 7px;font-family:\'Space Mono\',monospace;font-size:0.65rem;color:'+(isU?m.color:'#777')+';background:'+(isU?m.color+'18':'rgba(255,255,255,0.02)')+';border:1px solid '+(isU?m.color+'50':'rgba(255,255,255,0.06)')+';border-radius:2px;">'+e+(isU?' \u2605':'')+dots+'</span>';
+                        }).join('');
+                        expHtml = '<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid '+m.color+'20;">'
+                            +'<div style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#333;letter-spacing:0.12em;margin-bottom:0.5rem;">FULL VOCABULARY \u00b7 \u2605 unique \u00b7 dots = shared with others</div>'
+                            +'<div>'+allC+'</div></div>';
                     }
-                    if (shared.length > 0) {
-                        h += '<div style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#444;letter-spacing:0.1em;margin-bottom:0.5rem;">SHARED</div>';
-                        h += '<div style="display:flex;flex-wrap:wrap;gap:0.25rem;">';
-                        shared.forEach(e => { h += '<span style="padding:0.2rem 0.4rem;font-size:0.7rem;color:#666;border:1px solid #1a1a1a;">'+e+'</span>'; });
-                        h += '</div>';
-                    }
-                    if (m.emotions.length === 0) h += '<div style="color:#333;font-size:0.85rem;font-style:italic;text-align:center;padding:2rem 0;">No emotions generated</div>';
-                    h += '</div>';
+                    h += '<div class="p-card" data-key="'+key+'" style="background:'+(isExp?m.bgGlow:'#080808')+';border:1px solid '+(isExp?m.borderColor:'#1a1a1a')+';border-top:3px solid '+m.color+';padding:1.5rem;cursor:pointer;transition:all 0.25s;box-shadow:'+(isExp?'0 4px 30px '+m.color+'15':'none')+'">'
+                        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem;">'
+                        +'<div><div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:0.9rem;font-weight:700;letter-spacing:0.06em;">'+m.name+'</div>'
+                        +'<div style="color:#444;font-size:0.72rem;margin-top:0.15rem;">'+m.subtitle+'</div></div>'
+                        +'<div style="text-align:right;"><div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:2rem;font-weight:700;line-height:1;">'+m.emotions.length+'</div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;color:#333;font-size:0.5rem;letter-spacing:0.1em;">EMOTIONS</div></div></div>'
+                        +'<div style="display:flex;gap:1.25rem;margin-bottom:0.75rem;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#555;">'
+                        +'<span><span style="color:'+m.color+';font-weight:700;">'+uE.length+'</span> unique</span>'
+                        +'<span><span style="color:#888;font-weight:700;">'+sE.length+'</span> shared</span>'
+                        +'<span><span style="color:#888;font-weight:700;">'+m.stats.shifts+'</span> shifts</span></div>'
+                        +'<div style="margin-bottom:0.75rem;">'+trHtml+'</div>'
+                        +(uE.length>0?'<div><div style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#2a2a2a;letter-spacing:0.12em;margin-bottom:0.4rem;">ONLY THIS MODEL</div><div>'+uChips+'</div></div>':'')
+                        +expHtml
+                        +'<div style="margin-top:0.75rem;font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#2a2a2a;text-align:right;">'+(isExp?'CLICK TO COLLAPSE \u2191':'CLICK TO EXPAND \u2192')+'</div>'
+                        +'</div>';
                 });
                 h += '</div>';
+                const conv=allEmotions.filter(e=>sharedBy(e).length>=3).length, uniq=allEmotions.filter(e=>sharedBy(e).length===1).length;
+                h += '<div style="padding:1.25rem 1.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);display:flex;gap:2rem;flex-wrap:wrap;">'
+                    +[['SHARED 3+',conv,'#00ffff'],['UNIQUE',uniq,'#ff8c42'],['TOTAL VOCAB',allEmotions.length,'#a855f7'],['PREDEFINED',0,'#f87171']].map(([l,v,c])=>
+                        '<div style="text-align:center;flex:1 1 100px;"><div style="font-family:\'Space Mono\',monospace;font-size:1.8rem;font-weight:700;color:'+c+';">'+v+'</div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#333;letter-spacing:0.12em;margin-top:0.2rem;">'+l+'</div></div>'
+                    ).join('')+'</div>';
+                h += '</div>';
                 container.innerHTML = h;
+                container.querySelectorAll('.p-card').forEach(card => {
+                    card.addEventListener('click', () => { expandedModel = expandedModel===card.dataset.key ? null : card.dataset.key; renderContent(); });
+                });
             }
 
             renderCards(); renderToggle(); renderLegend(); renderContent();
