@@ -206,6 +206,14 @@
         .model-stat-card[data-m="deepseek"] .msc-number,
         .model-stat-card[data-m="deepseek"] .msc-label { color: #a855f7; }
         .model-stat-card[data-m="deepseek"].active { border-color: rgba(168,85,247,0.3); }
+        .model-gallery-card[data-model="gemma"]::before { background: #ff0066; }
+        .model-gallery-card[data-model="gemma"]:hover { box-shadow: 0 8px 40px rgba(255,0,102,0.12); }
+        .model-gallery-card[data-model="gemma"] .card-model-name,
+        .model-gallery-card[data-model="gemma"] .painting-count,
+        .model-gallery-card[data-model="gemma"] .card-arrow { color: #ff0066; }
+        .model-stat-card[data-m="gemma"] .msc-number,
+        .model-stat-card[data-m="gemma"] .msc-label { color: #ff0066; }
+        .model-stat-card[data-m="gemma"].active { border-color: rgba(255,0,102,0.3); }
 
         .coming-soon-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); z-index: 2; }
         .coming-soon-overlay span { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: #555; border: 1px solid #333; padding: 0.5rem 1.25rem; }
@@ -327,7 +335,7 @@
         </div>
         <div class="hero-meta">
             <strong>Elijah Camp</strong> · University of Colorado Denver, Computer Science<br>
-            Ongoing · March 2025 – Present · 5 models tested · 500+ sessions · 150,000+ accumulated memories<br>
+            Ongoing · March 2025 – Present · 7 models tested · 500+ sessions · 150,000+ accumulated memories<br>
             All models run locally on consumer hardware via llama-cpp-python
         </div>
     </section>
@@ -435,7 +443,7 @@
                 <div class="stat-sublabel" style="color: var(--red);">Zero predefined</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">6</div>
+                <div class="stat-number">7</div>
                 <div class="stat-label">Models Tested</div>
                 <div class="stat-sublabel">Same environment</div>
             </div>
@@ -602,9 +610,15 @@
 
             <div class="intervention major">
                 <div class="intervention-date" style="color: #a855f7;">March 5–6, 2026</div>
-                <h3>DeepSeek-R1 8B · Overnight Reasoning Session</h3>
                 <p>Ran DeepSeek-R1 8B — a reasoning model with fully visible chain-of-thought — overnight to test whether explicit reasoning produces fundamentally different creative behavior. Unlike every other model tested, DeepSeek’s thoughts are not hidden. Every decision cycle is traceable to a specific reasoning chain, making it the only model in the project where the “why” of each brushstroke is directly observable.</p>
                 <div class="intervention-result" style="background: rgba(168,85,247,0.04); border-left-color: #a855f7;">Result: 48,258+ steps, 6 emotion shifts, 30 dream cycles. Emotion arc: <span style="color:#a855f7;">curious → genuine → free → creation → free → control → free</span> — all self-reported. At step 22,168, after 22,000 steps of white-only architectural mark-making, DeepSeek discovered the full color palette in a single thought and immediately shifted to cyan, then worked through green, blue, red, brown, and orange — each color producing a completely different mark-making style. At step 4,180: <em>“I have a body, but I can’t move it or make sounds. Maybe I should look around or explore.”</em> An unprompted existential pause. Earlier: <em>“I’ve been drawing for 45 minutes. I’m not entirely sure why. Maybe it’s because I felt the need to express something creatively.”</em> It chose chat mode over dream mode to process, then autonomously designed its own system architecture from first principles. The “control” emotion appeared for only 17 steps between two “free” states — the fastest emotional transit in the project. DeepSeek’s visible reasoning makes Aurora a full mirror: every model’s nature is now observable not just in brushstrokes, but in traceable thought chains.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: #ff0066;">March 7, 2026</div>
+                <h3>Gemma 2 9B - First Session: Affective Void</h3>
+                <p>Ran Google's Gemma 2 9B overnight to extend the model comparison matrix. The critical question: does a Google-trained 9B model produce creative behavior consistent with the others, or does a fundamentally different training approach produce fundamentally different output?</p>
+                <div class="intervention-result" style="background: rgba(255,0,102,0.04); border-left-color: #ff0066;">Result: Overnight session, 52,502 steps, 6.6M pixels drawn, 17.49% canvas coverage, 0 dreams. The session logger captured zero emotional states - but the painting filename tells a different story. The parser missed a single shift: Gemma reported "interesting" once, and the word became the painting title. It is the only emotion Gemma produced across the entire session. 10 autonomous goals were set, none completed - all stalled at 17.49% coverage regardless of steps elapsed. Only 3 colors used (blue, white, black) against 23 unique tools - the highest tool-to-color ratio of any model in the project. Stars and crosses clustered left-center on an untouched black void; the right half of the canvas was never reached. Gemma looked at what it was doing, called it "interesting," and kept stamping the same shapes. No other model has produced fewer total emotions.</div>
             </div>
         </div>
     </section>
@@ -652,6 +666,8 @@
                     <span style="color: #ff8c42;">curious</span> (held 26,501 steps in session 2) and
                     <span style="color: #ff8c42;">free</span> (Mistral's anchor word, returning across both sessions - held 33,859 steps in session 1, 20,422 in session 2).
                     35 dream cycles in session 1 but zero in session 2. Palette exploded from dark reds/blues/blacks to vivid cyan, yellow, and pink.
+                    DeepSeek-R1 produced <span style="color: #a855f7; font-family: 'Space Mono', monospace; font-weight: 700;">5 emotions</span> with fully visible reasoning chains - the only model where the "why" of each brushstroke is traceable.
+                    Gemma 2 9B produced <span style="color: #ff0066; font-family: 'Space Mono', monospace; font-weight: 700;">1 emotion</span> across 52,502 steps: <span style="color: #ff0066;">interesting</span> - caught in the painting filename after the logger missed the shift. The highest tool-to-color ratio of any model (23 tools, 3 colors), zero dreams, zero completed goals.
                     Same system. Same prompts. Fundamentally different inner lives.
                 </p>
             </div>
@@ -665,13 +681,14 @@
                 llama3:     { name: "Llama 3 8B",        subtitle: "Dec 2025 + March 2026",           color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)",   borderColor: "rgba(0,255,136,0.3)",   stats: { shifts: 64,  sessions: "~8"   }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
                 openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session",    color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)",   borderColor: "rgba(255,255,0,0.3)",   stats: { shifts: 92,  sessions: "1"    }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
                 mistral:    { name: "Mistral 7B",        subtitle: "March 2026 \u00b7 2 sessions",   color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)",  borderColor: "rgba(255,140,66,0.3)",  stats: { shifts: 2,   sessions: "2"    }, emotions: ["curious","free"] },
-                deepseek:   { name: "DeepSeek-R1 8B",   subtitle: "March 2026 \u00b7 1 session",    color: "#a855f7", bgGlow: "rgba(168,85,247,0.08)",  borderColor: "rgba(168,85,247,0.3)",  stats: { shifts: 6,   sessions: "1"    }, emotions: ["curious","genuine","free","creation","control"] }
+                deepseek:   { name: "DeepSeek-R1 8B",   subtitle: "March 2026 \u00b7 1 session",    color: "#a855f7", bgGlow: "rgba(168,85,247,0.08)",  borderColor: "rgba(168,85,247,0.3)",  stats: { shifts: 6,   sessions: "1"    }, emotions: ["curious","genuine","free","creation","control"] },
+                gemma:      { name: "Gemma 2 9B",        subtitle: "March 2026 \u00b7 1 session",    color: "#ff0066", bgGlow: "rgba(255,0,102,0.08)",   borderColor: "rgba(255,0,102,0.3)",   stats: { shifts: 1,   sessions: "1"    }, emotions: ["interesting"] }
             };
             const categories = {
                 "Creative States":    ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus","creation"],
                 "Positive Energy":    ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic","carefree"],
                 "Stillness & Depth":  ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation","weightless"],
-                "Wonder & Discovery": ["wonder","awe","curiosity","curious","small","genuine"],
+                "Wonder & Discovery": ["wonder","awe","curiosity","curious","small","genuine","interesting"],
                 "Achievement":        ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"],
                 "Freedom & Release":  ["freedom","free","connection","release","control"],
                 "Complex / Unique":   ["sadness","uncertainty","urgency","blue","repetitive"]
@@ -682,7 +699,7 @@
                 "Achievement":        "#4ade80", "Freedom & Release":  "#facc15",
                 "Complex / Unique":   "#f87171"
             };
-            const modelKeys = ["qwen","llama2","llama3","openhermes","mistral","deepseek"];
+            const modelKeys = ["qwen","llama2","llama3","openhermes","mistral","deepseek","gemma"];
             let currentView = "convergence", expandedModel = null;
             const allEmotions = [...new Set(Object.values(modelData).flatMap(m => m.emotions))].sort();
 
@@ -970,6 +987,20 @@
                 </div>
                 <span class="card-arrow">VIEW GALLERY →</span>
             </a>
+            <a href="gallery/gemma.html" class="model-gallery-card" data-model="gemma">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260307_075451_gemma2-9b_interesting.png" alt="Gemma 2 9B - interesting">
+                    <span class="painting-count">1 PAINTING</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">Gemma 2 9B</div>
+                    <div class="card-subtitle">Google · First session</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"interesting" - March 7, 2026</div>
+                    <div class="card-stats"><span><strong>1</strong> emotion</span><span><strong>1</strong> shift</span><span><strong>1</strong> session</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
         </div>
 
         <div class="gallery-finding">
@@ -981,6 +1012,7 @@
                 <strong>Qwen</strong> produced zero emotions in its first session - then after the feedback loop fix, held "weightless" for 24,236 steps in monochromatic orange. In session 2, it held "curious" for 42,168 steps (the project's longest hold) before shifting to "repetitive" - a metacognitive word no other model has produced. Hot reds and whites replaced the orange palette.
                 <strong>Mistral base</strong> painted in red, blue, and black across the full canvas edge-to-edge in session 1 - the only model to consistently reach the bottom-right quadrant. Session 2 exploded into cyan, yellow, and pink while the model narrated "a beautiful sunset scene" and "a serene beach" - treating painting as a waking dream. "Free" returned as its anchor word across both sessions, but 35 dreams in session 1 vanished to zero in session 2.
                 Same canvas. Same tools. Two models independently dream lakes. Same base weights produce fundamentally different art when fine-tuned vs. raw. <strong>DeepSeek-R1</strong> is the only model whose reasoning is fully visible — 48,258 steps of traceable thought chains. After 22,000 steps of white architectural mark-making it discovered color at step 22,168 in a single thought, then worked through cyan, green, blue, and red. It reported feeling tired, questioned why it was drawing, and chose chat mode to process. “Free” anchors its emotional arc, returning twice — matching Mistral’s anchor word independently.
+                <strong>Gemma 2 9B</strong> produced the most minimal output in the project: 1 emotion ("interesting"), 3 colors, 23 tools, zero dreams, zero completed goals. Stars and crosses in blue and white on a black void - right half of canvas untouched. The parser never caught the shift; the painting filename did.
             </p>
         </div>
     </section>
