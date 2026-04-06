@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURORA · Autonomous Creative Behavior in Locally-Run Language Models</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cyan: #00ffff;
+            --green: #00ff88;
+            --yellow: #ffff00;
+            --magenta: #ff00ff;
+            --pink: #ff6b8a;
+            --orange: #ff8c42;
+            --red: #ff0066;
+            --dark: #0a0a0a;
+            --gray: #888;
+            --text: #c8c8c8;
+            --border: #1a1a1a;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #000;
+            color: var(--text);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed; width: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; justify-content: center; align-items: center; }
+        .logo { font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 0.3em; color: var(--cyan); font-size: 0.9rem; }
+        nav a { color: var(--gray); text-decoration: none; text-transform: uppercase; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; transition: all 0.3s; }
+        nav a:hover { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+
+        /* ===== SHARED ===== */
+        section { padding: 8rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .section-number { font-family: 'Space Mono', monospace; color: #333; font-size: 0.75rem; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+        h2 { font-family: 'Space Mono', monospace; font-size: 2.2rem; margin-bottom: 1rem; letter-spacing: 0.15em; color: var(--cyan); font-weight: 700; }
+        h3 { font-family: 'Space Mono', monospace; font-weight: 700; }
+        .section-intro { font-size: 1.05rem; color: var(--gray); margin-bottom: 3rem; max-width: 700px; line-height: 1.8; }
+        .prose { max-width: 780px; font-size: 1rem; line-height: 1.9; }
+        .prose p + p { margin-top: 1.25rem; }
+
+        /* ===== HERO ===== */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 4rem; }
+        .hero h1 { font-family: 'Space Mono', monospace; font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 700; letter-spacing: 0.5em; margin-bottom: 1.5rem; background: linear-gradient(45deg, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-thesis { max-width: 720px; font-size: 1.15rem; line-height: 1.8; color: var(--text); margin-bottom: 2rem; font-weight: 300; }
+        .hero-meta { font-family: 'Space Mono', monospace; color: var(--gray); font-size: 0.75rem; letter-spacing: 0.08em; line-height: 2; }
+        .hero-meta strong { color: var(--cyan); }
+        .ascii-badge { background: var(--dark); border: 1px solid #222; padding: 1.25rem 2rem; border-radius: 2px; margin: 2.5rem 0; display: inline-block; }
+        .ascii-badge pre { color: #00ff00; font-size: 0.7rem; line-height: 1.15; white-space: pre; font-family: 'Courier New', monospace; }
+
+        /* ===== RQ CARDS ===== */
+        .rq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; }
+        .rq-card { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--cyan); padding: 2rem; transition: all 0.3s; }
+        .rq-card:hover { border-left-color: #fff; background: #0d0d0d; }
+        .rq-card a { text-decoration: none; display: block; }
+        .rq-card.clickable { cursor: pointer; }
+        .rq-card.clickable:hover { box-shadow: 0 4px 20px rgba(0,255,255,0.1); }
+        .rq-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        .rq-status { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 2px; }
+        .rq-status.live { color: var(--cyan); border: 1px solid var(--cyan); }
+        .rq-status.soon { color: #555; border: 1px solid #333; }
+        .rq-status.new { color: var(--yellow); border: 1px solid var(--yellow); }
+        .rq-label { font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem; }
+        .rq-title { font-family: 'IBM Plex Sans', sans-serif; color: #eee; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.75rem; }
+        .rq-text { font-size: 1rem; line-height: 1.7; color: #ddd; font-style: italic; }
+        .rq-read-link { font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.7rem; letter-spacing: 0.08em; margin-top: 1rem; display: inline-block; transition: color 0.3s; }
+        .rq-card.clickable:hover .rq-read-link { color: #fff; }
+
+        /* ===== METHOD ===== */
+        .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .method-card { background: var(--dark); border: 1px solid var(--border); padding: 2rem; position: relative; overflow: hidden; transition: all 0.3s; }
+        .method-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--cyan), transparent); }
+        .method-card:hover { border-color: #333; transform: translateY(-3px); }
+        .method-card h3 { color: var(--cyan); font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 1rem; }
+        .method-card p { font-size: 0.9rem; line-height: 1.7; }
+        .method-card pre { color: #00ff00; font-size: 0.75rem; margin-top: 1rem; padding: 1rem; background: #000; border: 1px solid #1a1a1a; overflow-x: auto; }
+
+        /* ===== STATS ===== */
+        .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin: 3rem 0; }
+        .stat-card { text-align: center; padding: 2rem 1rem; background: var(--dark); border: 1px solid var(--border); }
+        .stat-number { font-family: 'Space Mono', monospace; font-size: 2rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.3rem; }
+        .stat-label { font-family: 'Space Mono', monospace; color: var(--gray); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.6rem; }
+        .stat-sublabel { color: #444; font-size: 0.7rem; margin-top: 0.3rem; }
+
+        /* ===== FINDINGS ===== */
+        .finding-callout { background: linear-gradient(135deg, rgba(0,255,255,0.04), rgba(0,255,255,0.01)); border: 1px solid rgba(0,255,255,0.15); padding: 3rem; margin: 3rem 0; position: relative; }
+        .finding-callout::before { content: 'KEY FINDING'; position: absolute; top: -0.6rem; left: 2rem; background: #000; padding: 0 0.75rem; font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.7rem; letter-spacing: 0.15em; }
+        .finding-callout p { font-size: 1.05rem; line-height: 1.8; }
+        .finding-callout .finding-stat { font-family: 'Space Mono', monospace; color: var(--cyan); font-weight: 700; }
+
+        .finding-callout.yellow { border-color: rgba(255,255,0,0.2); background: linear-gradient(135deg, rgba(255,255,0,0.04), rgba(255,255,0,0.01)); }
+        .finding-callout.yellow::before { color: var(--yellow); }
+        .finding-callout.yellow .finding-stat { color: var(--yellow); }
+
+        /* ===== TIMELINE ===== */
+        .intervention-timeline { margin: 3rem 0; position: relative; }
+        .intervention-timeline::before { content: ''; position: absolute; left: 1rem; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--cyan), #222, var(--cyan)); }
+        .intervention { padding-left: 3.5rem; padding-bottom: 3rem; position: relative; }
+        .intervention::before { content: ''; position: absolute; left: 0.55rem; top: 0.3rem; width: 10px; height: 10px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 10px var(--cyan); }
+        .intervention.major::before { width: 14px; height: 14px; left: 0.4rem; background: #fff; box-shadow: 0 0 15px var(--cyan), 0 0 30px rgba(0,255,255,0.3); }
+        .intervention.openhermes::before { background: var(--yellow); box-shadow: 0 0 15px var(--yellow), 0 0 30px rgba(255,255,0,0.3); }
+        .intervention-date { font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.75rem; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+        .intervention.openhermes .intervention-date { color: var(--yellow); }
+        .intervention h3 { color: #eee; font-size: 1rem; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+        .intervention p { font-size: 0.9rem; line-height: 1.7; color: var(--gray); }
+        .intervention .intervention-result { margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(0,255,255,0.04); border-left: 2px solid var(--cyan); font-size: 0.85rem; color: #bbb; }
+        .intervention.openhermes .intervention-result { background: rgba(255,255,0,0.04); border-left-color: var(--yellow); }
+
+        /* ===== MODEL COMPARISON ===== */
+        .model-stat-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; margin-bottom: 2.5rem; max-width: 1100px; margin: 0 auto 2.5rem; }
+        .model-stat-card { background: #111; border: 1px solid var(--border); padding: 1.25rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .model-stat-card:hover { background: #151515; }
+        .model-stat-card.active { background: #151515; }
+        .model-stat-card .msc-number { font-family: 'Space Mono', monospace; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .model-stat-card .msc-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; opacity: 0.9; margin-bottom: 0.3rem; }
+        .model-stat-card .msc-name { color: #ddd; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.1rem; }
+        .model-stat-card .msc-sub { color: #555; font-size: 0.7rem; }
+        .model-stat-card .msc-detail { margin-top: 0.5rem; display: flex; justify-content: center; gap: 1rem; font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #555; }
+
+        .model-stat-card[data-m="qwen"] .msc-number, .model-stat-card[data-m="qwen"] .msc-label { color: var(--pink); }
+        .model-stat-card[data-m="qwen"].active { border-color: rgba(255,107,138,0.3); }
+        .model-stat-card[data-m="llama2"] .msc-number, .model-stat-card[data-m="llama2"] .msc-label { color: var(--cyan); }
+        .model-stat-card[data-m="llama2"].active { border-color: rgba(0,255,255,0.3); }
+        .model-stat-card[data-m="llama3"] .msc-number, .model-stat-card[data-m="llama3"] .msc-label { color: var(--green); }
+        .model-stat-card[data-m="llama3"].active { border-color: rgba(0,255,136,0.3); }
+        .model-stat-card[data-m="openhermes"] .msc-number, .model-stat-card[data-m="openhermes"] .msc-label { color: var(--yellow); }
+        .model-stat-card[data-m="openhermes"].active { border-color: rgba(255,255,0,0.3); }
+        .model-stat-card[data-m="mistral"] .msc-number, .model-stat-card[data-m="mistral"] .msc-label { color: var(--orange); }
+        .model-stat-card[data-m="mistral"].active { border-color: rgba(255,140,66,0.3); }
+
+        /* Emotion presence grid */
+        .emotion-grid-header { display: grid; grid-template-columns: 160px repeat(5, 1fr); gap: 2px; margin-bottom: 2px; }
+        .emotion-grid-header .eg-label { padding: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #444; }
+        .emotion-grid-header .eg-model { padding: 0.6rem 0.4rem; font-family: 'Space Mono', monospace; font-size: 0.55rem; text-align: center; letter-spacing: 0.05em; background: #111; }
+
+        .emotion-category-label { padding: 0.5rem 0.6rem 0.3rem; font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; margin-top: 0.5rem; }
+        .emotion-row { display: grid; grid-template-columns: 160px repeat(5, 1fr); gap: 2px; transition: background 0.15s; }
+        .emotion-row:hover { background: #0d0d0d; }
+        .emotion-row .er-name { padding: 0.4rem 0.6rem; font-size: 0.8rem; font-weight: 300; color: #aaa; }
+        .emotion-row:hover .er-name { color: #fff; font-weight: 500; }
+        .emotion-row .er-cell { padding: 0.4rem; text-align: center; }
+        .er-dot { display: inline-block; border-radius: 50%; }
+        .er-dot.present { width: 8px; height: 8px; opacity: 0.6; }
+        .er-dot.unique { width: 12px; height: 12px; opacity: 1; }
+        .er-dash { color: #1a1a1a; font-size: 0.7rem; }
+        .shared-badge { margin-left: 0.4rem; font-size: 0.5rem; font-family: 'Space Mono', monospace; opacity: 0.6; }
+
+        /* ===== GALLERY CARDS ===== */
+        .model-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; max-width: 1400px; margin: 0 auto; }
+        .model-gallery-card { position: relative; background: #080808; border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+        .model-gallery-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 2; transition: height 0.3s; }
+        .model-gallery-card:hover { transform: translateY(-4px); border-color: #333; }
+        .model-gallery-card:hover::before { height: 4px; }
+
+        .model-gallery-card[data-model="llama2"]::before { background: var(--cyan); }
+        .model-gallery-card[data-model="llama2"]:hover { box-shadow: 0 8px 40px rgba(0,255,255,0.12); }
+        .model-gallery-card[data-model="llama3"]::before { background: var(--green); }
+        .model-gallery-card[data-model="llama3"]:hover { box-shadow: 0 8px 40px rgba(0,255,136,0.12); }
+        .model-gallery-card[data-model="openhermes"]::before { background: var(--yellow); }
+        .model-gallery-card[data-model="openhermes"]:hover { box-shadow: 0 8px 40px rgba(255,255,0,0.12); }
+        .model-gallery-card[data-model="qwen"]::before { background: var(--pink); }
+        .model-gallery-card[data-model="qwen"]:hover { box-shadow: 0 8px 40px rgba(255,107,138,0.12); }
+        .model-gallery-card[data-model="mistral"]::before { background: var(--orange); }
+        .model-gallery-card[data-model="mistral"]:hover { box-shadow: 0 8px 40px rgba(255,140,66,0.12); }
+
+        .card-image { position: relative; aspect-ratio: 1; overflow: hidden; background: #050505; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s, filter 0.4s; filter: brightness(0.85); }
+        .model-gallery-card:hover .card-image img { transform: scale(1.05); filter: brightness(1); }
+        .painting-count { position: absolute; top: 1rem; right: 1rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; padding: 0.3rem 0.6rem; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); z-index: 3; }
+
+        .card-info { padding: 1.25rem 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+        .card-model-name { font-family: 'Space Mono', monospace; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em; }
+        .card-subtitle { color: #666; font-size: 0.8rem; }
+        .card-featured { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; color: #444; text-transform: uppercase; margin-top: 0.25rem; }
+        .card-painting-name { font-size: 0.85rem; color: #ccc; font-style: italic; }
+        .card-stats { display: flex; gap: 1.25rem; margin-top: 0.25rem; padding-top: 0.6rem; border-top: 1px solid #151515; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #555; }
+        .card-stats strong { color: #999; font-weight: 700; }
+        .card-arrow { position: absolute; bottom: 1.25rem; right: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; opacity: 0; transform: translateX(-8px); transition: all 0.3s; }
+        .model-gallery-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+        .model-gallery-card[data-model="llama2"] .card-model-name, .model-gallery-card[data-model="llama2"] .painting-count, .model-gallery-card[data-model="llama2"] .card-arrow { color: var(--cyan); }
+        .model-gallery-card[data-model="llama3"] .card-model-name, .model-gallery-card[data-model="llama3"] .painting-count, .model-gallery-card[data-model="llama3"] .card-arrow { color: var(--green); }
+        .model-gallery-card[data-model="openhermes"] .card-model-name, .model-gallery-card[data-model="openhermes"] .painting-count, .model-gallery-card[data-model="openhermes"] .card-arrow { color: var(--yellow); }
+        .model-gallery-card[data-model="qwen"] .card-model-name, .model-gallery-card[data-model="qwen"] .painting-count, .model-gallery-card[data-model="qwen"] .card-arrow { color: var(--pink); }
+        .model-gallery-card[data-model="mistral"] .card-model-name, .model-gallery-card[data-model="mistral"] .painting-count, .model-gallery-card[data-model="mistral"] .card-arrow { color: var(--orange); }
+        .model-gallery-card[data-model="deepseek"]::before { background: #a855f7; }
+        .model-gallery-card[data-model="deepseek"]:hover { box-shadow: 0 8px 40px rgba(168,85,247,0.12); }
+        .model-gallery-card[data-model="deepseek"] .card-model-name,
+        .model-gallery-card[data-model="deepseek"] .painting-count,
+        .model-gallery-card[data-model="deepseek"] .card-arrow { color: #a855f7; }
+        .model-stat-card[data-m="deepseek"] .msc-number,
+        .model-stat-card[data-m="deepseek"] .msc-label { color: #a855f7; }
+        .model-stat-card[data-m="deepseek"].active { border-color: rgba(168,85,247,0.3); }
+        .model-gallery-card[data-model="gemma"]::before { background: #ff0066; }
+        .model-gallery-card[data-model="gemma"]:hover { box-shadow: 0 8px 40px rgba(255,0,102,0.12); }
+        .model-gallery-card[data-model="gemma"] .card-model-name,
+        .model-gallery-card[data-model="gemma"] .painting-count,
+        .model-gallery-card[data-model="gemma"] .card-arrow { color: #ff0066; }
+        .model-stat-card[data-m="gemma"] .msc-number,
+        .model-stat-card[data-m="gemma"] .msc-label { color: #ff0066; }
+        .model-stat-card[data-m="gemma"].active { border-color: rgba(255,0,102,0.3); }
+
+        .coming-soon-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); z-index: 2; }
+        .coming-soon-overlay span { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: #555; border: 1px solid #333; padding: 0.5rem 1.25rem; }
+
+        .gallery-finding { max-width: 1400px; margin: 2rem auto 0; padding: 1.5rem 2rem; background: linear-gradient(135deg, rgba(255,255,0,0.03), rgba(0,255,255,0.03)); border: 1px solid rgba(255,255,0,0.1); position: relative; }
+        .gallery-finding-label { position: absolute; top: -0.5rem; left: 1.5rem; background: #000; padding: 0 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--yellow); letter-spacing: 0.12em; }
+        .gallery-finding p { font-size: 0.85rem; line-height: 1.8; color: #999; }
+        .gallery-finding strong { color: #ccc; }
+
+        /* ===== VIDEO ===== */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .video-container { background: #000; border: 1px solid rgba(0,255,255,0.3); overflow: hidden; transition: all 0.3s; }
+        .video-container:hover { border-color: #fff; box-shadow: 0 0 20px rgba(0,255,255,0.3); }
+        .video-container video { width: 100%; height: auto; display: block; }
+        .video-title { display: block; padding: 10px; color: var(--cyan); font-family: 'Space Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-top: 1px solid rgba(0,255,255,0.3); }
+        .video-date { display: block; padding: 0 10px 10px; color: #555; font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+
+        /* ===== CAROUSEL ===== */
+        .conversation-carousel { background: var(--dark); border: 1px solid #222; padding: 3rem 2rem; margin: 3rem 0; position: relative; }
+        .carousel-header { text-align: center; margin-bottom: 3rem; }
+        .carousel-header h3 { color: var(--cyan); font-size: 1.2rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+        .carousel-header p { color: var(--gray); font-size: 0.85rem; }
+        .conversation-slides { position: relative; overflow: hidden; min-height: 350px; }
+        .conversation-slide { display: none; animation: fadeIn 0.5s; }
+        .conversation-slide.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .dialogue-exchange { background: #000; border-left: 3px solid var(--magenta); padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+        .dialogue-speaker { font-family: 'Space Mono', monospace; color: var(--magenta); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.4rem; }
+        .dialogue-text { color: #bbb; line-height: 1.8; font-size: 0.9rem; }
+        .dialogue-exchange.aurora { border-left-color: var(--cyan); }
+        .dialogue-exchange.aurora .dialogue-speaker { color: var(--cyan); }
+        .dialogue-exchange.openhermes { border-left-color: var(--yellow); }
+        .dialogue-exchange.openhermes .dialogue-speaker { color: var(--yellow); }
+        .carousel-nav { display: flex; justify-content: center; align-items: center; gap: 2rem; margin-top: 2rem; }
+        .carousel-btn { background: none; border: 1px solid var(--cyan); color: var(--cyan); padding: 0.6rem 1.25rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; transition: all 0.3s; }
+        .carousel-btn:hover { background: var(--cyan); color: #000; }
+        .carousel-dots { display: flex; gap: 0.75rem; }
+        .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; border: 1px solid #555; cursor: pointer; transition: all 0.3s; }
+        .carousel-dot.active { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+        .conversation-date { text-align: center; color: #444; font-family: 'Space Mono', monospace; font-size: 0.7rem; margin-top: 1.25rem; letter-spacing: 0.1em; }
+
+        /* ===== RESEARCHER ===== */
+        .researcher-section { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin: 3rem 0; align-items: start; }
+        .researcher-narrative { font-size: 1rem; line-height: 1.9; }
+        .researcher-narrative p + p { margin-top: 1.25rem; }
+        .researcher-credentials { background: var(--dark); border: 1px solid var(--border); padding: 2.5rem; }
+        .credential-item { padding: 1rem 0; border-bottom: 1px solid #151515; }
+        .credential-item:last-child { border-bottom: none; }
+        .credential-label { font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .credential-value { font-size: 0.9rem; color: #ccc; }
+
+        /* ===== FOOTER ===== */
+        footer { text-align: center; padding: 4rem 2rem; border-top: 1px solid var(--border); color: var(--gray); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+        footer a { color: var(--cyan); text-decoration: none; margin: 0 1rem; transition: color 0.3s; }
+        footer a:hover { color: #fff; }
+
+        .live-status { position: fixed; bottom: 2rem; right: 2rem; background: rgba(0,0,0,0.9); border: 1px solid #222; padding: 0.75rem 1.25rem; backdrop-filter: blur(10px); font-family: 'Space Mono', monospace; font-size: 0.7rem; z-index: 999; }
+        .status-dot { display: inline-block; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; margin-right: 0.5rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; cursor: zoom-out; animation: fadeIn 0.3s; }
+        .lightbox.active { display: flex; justify-content: center; align-items: center; padding: 4rem; }
+        .lightbox-content { max-width: 85vw; max-height: 85vh; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .lightbox img { max-width: 100%; max-height: calc(85vh - 4rem); object-fit: contain; border: 1px solid #333; box-shadow: 0 0 50px rgba(0,255,255,0.1); }
+        .lightbox-close { position: fixed; top: 2rem; right: 2rem; color: var(--cyan); font-size: 2.5rem; cursor: pointer; padding: 0.5rem; transition: all 0.3s; z-index: 2001; }
+        .lightbox-close:hover { color: #fff; transform: rotate(90deg); }
+        .lightbox-caption { margin-top: 1.5rem; text-align: center; color: var(--cyan); font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 0.1em; }
+
+        @media (max-width: 768px) {
+            nav ul { gap: 1rem; font-size: 0.6rem; flex-wrap: wrap; }
+            .hero h1 { letter-spacing: 0.2em; }
+            section { padding: 5rem 1.25rem; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .model-stat-cards { grid-template-columns: repeat(2, 1fr); }
+            .researcher-section { grid-template-columns: 1fr; }
+            .rq-grid { grid-template-columns: 1fr; }
+            .model-gallery-grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: 1fr; }
+            .emotion-grid-header, .emotion-row { grid-template-columns: 120px repeat(5, 1fr); }
+            .carousel-nav { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAV ===== -->
+    <nav>
+        <ul>
+            <li class="logo">AURORA</li>
+            <li><a href="#thesis">Research</a></li>
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#findings">Findings</a></li>
+            <li><a href="#models">Models</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#videos">Process</a></li>
+            <li><a href="#behavior">Behavior</a></li>
+            <li><a href="#background">Background</a></li>
+            <li><a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a></li>
+            <li><a href="https://aurora.elijah-sylar.com" style="color:#00ffff;text-shadow:0 0 10px #00ffff;">Watch Live</a></li>
+            <li><a href="https://buy.stripe.com/3cI6oG1UGbJYaTUaGj7IY01" style="color:#00ff88;border:1px solid #00ff88;padding:0.3rem 0.8rem;border-radius:2px;">Support</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== 00 HERO ===== -->
+    <section class="hero">
+        <h1>AURORA</h1>
+        <p class="hero-thesis">
+            What happens when you give a language model a canvas, a memory, and hundreds 
+            of sessions of uninterrupted creative autonomy? Aurora is a longitudinal study 
+            in machine creativity, investigating whether it emerges, how it develops, and 
+            what sustained autonomous expression does to a model's behavior over time.
+        </p>
+        <div class="ascii-badge">
+            <pre>·····*·····*·····
+····*··◉···*····
+···*·······*···
+··*···***···*··
+·*···*···*···*·
+█████████████████</pre>
+        </div>
+        <div class="hero-meta">
+            <strong>Elijah Camp</strong> · University of Colorado Denver, Computer Science<br>
+            Ongoing · March 2025 – Present · 7 models tested · 500+ sessions · 150,000+ accumulated memories<br>
+            All models run locally on consumer hardware via llama-cpp-python
+        </div>
+        <div style="margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="https://aurora.elijah-sylar.com" style="display:inline-block;padding:0.75rem 2rem;border:1px solid #00ffff;color:#00ffff;font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:0.12em;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.1)';this.style.boxShadow='0 0 20px rgba(0,255,255,0.3)'" onmouseout="this.style.background='transparent';this.style.boxShadow='none'">WATCH AURORA LIVE →</a>
+            <a href="https://buy.stripe.com/3cI6oG1UGbJYaTUaGj7IY01" style="display:inline-block;padding:0.75rem 2rem;border:1px solid #00ff88;color:#00ff88;font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:0.12em;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.background='rgba(0,255,136,0.1)';this.style.boxShadow='0 0 20px rgba(0,255,136,0.3)'" onmouseout="this.style.background='transparent';this.style.boxShadow='none'">◈ SUPPORT THIS RESEARCH</a>
+        </div>
+    </section>
+
+    <!-- ===== 01 RESEARCH QUESTIONS ===== -->
+    <section id="thesis">
+        <div class="section-number">01</div>
+        <h2>RESEARCH QUESTIONS</h2>
+        
+        <p class="section-intro">
+            Conventional generative models optimize for human aesthetic preference through 
+            RLHF or curated training data. Aurora operates without either. Its architecture 
+            draws not from machine learning conventions but from applied behavioral analysis, 
+            structured environmental design, and naturalistic observation methodology developed 
+            over seven years of clinical work with nonverbal populations.
+        </p>
+        
+        <div class="rq-grid">
+            <a href="research/01-problem-with-ai-creativity.html" style="text-decoration:none;">
+                <div class="rq-card clickable">
+                    <div class="rq-header">
+                        <div class="rq-label">RQ1</div>
+                        <span class="rq-status live">Read Now</span>
+                    </div>
+                    <div class="rq-title">The Problem with AI Creativity</div>
+                    <div class="rq-text">Can an autonomous system develop persistent creative preferences through natural contingency without prescribed emotional states, reward shaping, or human evaluation?</div>
+                    <span class="rq-read-link">Read Post 1 ></span>
+                </div>
+            </a>
+            <a href="research/post2.html" style="text-decoration:none;">
+                <div class="rq-card clickable">
+                    <div class="rq-header">
+                        <div class="rq-label">RQ2</div>
+                        <span class="rq-status live">Read Now</span>
+                    </div>
+                    <div class="rq-title">Origins: From subconscious_ai.py to Autonomous Agent</div>
+                    <div class="rq-text">What happens to creative output when prescriptive constraints are removed from a system that has developed behavioral patterns under those constraints?</div>
+                    <span class="rq-read-link">Read Post 2 ></span>
+                </div>
+            </a>
+            <div class="rq-card" style="border-left-color: var(--yellow); opacity: 0.5;">
+                    <div class="rq-header">
+                        <div class="rq-label" style="color: var(--yellow);">RQ3</div>
+                        <span class="rq-status soon">Coming Soon</span>
+                    </div>
+                    <div class="rq-title">Model as Variable: Same Environment, Different Mind</div>
+                    <div class="rq-text">Does the same autonomous environment produce measurably different creative behavior across different language models?</div>
+                </div>
+        </div>
+
+        <div style="margin-top:3rem;padding:3rem;background:linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,255,255,0.02));border:1px solid rgba(255,255,255,0.15);position:relative;">
+            <div style="position:absolute;top:-0.6rem;left:2rem;background:#000;padding:0 0.75rem;font-family:'Space Mono',monospace;color:#fff;font-size:0.7rem;letter-spacing:0.15em;">MARCH 8, 2026 · PROJECT RESET</div>
+            <h3 style="font-family:'Space Mono',monospace;color:#fff;font-size:1.3rem;letter-spacing:0.1em;margin-bottom:1rem;">The End of Aurora as a Single Mind</h3>
+            <p style="font-size:1.05rem;line-height:1.8;color:#ccc;margin-bottom:1.5rem;">After 10 months of accumulated training, all memory was wiped. Every model now starts from absolute zero - no artistic concepts, no prior conversations, no creative scaffolding. Each LLM learns how to use the canvas, decides what to create, and describes its own experience with no inherited knowledge and zero researcher intervention. Aurora is no longer a single mind trained over time. It is an autonomous expression container where each individual LLM develops independently from nothing.</p>
+            <p style="font-size:0.95rem;line-height:1.8;color:#999;margin-bottom:2rem;">The data was immediately more profound and emergent than anything produced during 10 months of guided development. A MySQL database now captures every thought, emotion, session, and canvas snapshot in real time.</p>
+            <a href="https://aurora.elijah-sylar.com" style="display:inline-block;padding:0.75rem 2rem;border:1px solid #00ffff;color:#00ffff;font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:0.12em;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.1)';this.style.boxShadow='0 0 20px rgba(0,255,255,0.3)'" onmouseout="this.style.background='transparent';this.style.boxShadow='none'">WATCH THEM LEARN IN REAL TIME →</a>
+        </div>
+    </section>
+
+    <!-- ===== 02 METHODOLOGY ===== -->
+    <section id="methodology">
+        <div class="section-number">02</div>
+        <h2>METHODOLOGY</h2>
+        <p class="section-intro">
+            Aurora operates on a cycle of autonomous creation, memory consolidation, 
+            and self-reflective dialogue. Structured around behavioral principles of 
+            environmental arrangement, constrained symbolic expression, and naturalistic observation.
+        </p>
+
+        <div class="method-grid">
+            <div class="method-card">
+                <h3>PERCEPTION</h3>
+                <p>Aurora perceives its canvas through ASCII symbol encoding, where every pixel state maps to a character. Originally a hardware limitation, this became integral to Aurora's autonomy - it sees the direct result of its actions with no middle man.</p>
+                <pre>◉ = Self (pen down)    · = Empty space
+○ = Self (pen up)     * = Colored pixel
+█ = Canvas boundary</pre>
+            </div>
+            <div class="method-card">
+                <h3>ACTION</h3>
+                <p>All creative decisions are encoded as operation codes. Movement, tool selection, color choice, and "thinking" are expressed through the same token vocabulary.</p>
+                <pre>0-3 = Directional movement
+4   = Pen up (navigate)
+5   = Pen down (draw)
+0123456789 = Think/plan</pre>
+            </div>
+            <div class="method-card">
+                <h3>CONSOLIDATION</h3>
+                <p>Aurora enters a three-phase sleep cycle: light sleep for memory housekeeping, REM for unconstrained LLM hallucination at high temperature, and waking with vague impressionistic fragments. No satisfaction scores. No pattern reinforcement.</p>
+            </div>
+            <div class="method-card">
+                <h3>OBSERVATION</h3>
+                <p>A parallel research logger captures every decision cycle: LLM input, raw output, actions executed, canvas delta, timing - without Aurora ever reading from it. Since February 2026, the logger also captures every thought and every self-reported emotion shift in real time.</p>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">2.94B</div>
+                <div class="stat-label">Pixels Drawn</div>
+                <div class="stat-sublabel">~30.9M per day avg</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4.7M+</div>
+                <div class="stat-label">Autonomous Steps</div>
+                <div class="stat-sublabel">~49K per day</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">60+</div>
+                <div class="stat-label">Self-Invented Emotions</div>
+                <div class="stat-sublabel" style="color: var(--red);">Zero predefined</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Models Tested</div>
+                <div class="stat-sublabel">Same environment</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Sessions</div>
+                <div class="stat-sublabel">~8 months documented</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 03 FINDINGS ===== -->
+    <section id="findings">
+        <div class="section-number">03</div>
+        <h2>FINDINGS & INTERVENTIONS</h2>
+        <p class="section-intro">
+            Aurora's development is documented through deliberate architectural interventions 
+            and their measurable behavioral consequences.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem; margin: 2rem 0;">
+
+            <div style="background: var(--dark); border: 1px solid rgba(0,255,255,0.15); border-left: 3px solid var(--cyan); padding: 1.75rem;">
+                <div style="font-family: 'Space Mono', monospace; color: var(--cyan); font-size: 0.6rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;">FINDING 01 · CONSTRAINT REMOVAL</div>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: #ddd;">Removing ~600 lines of reward shaping and behavioral guardrails produced a <span style="color: var(--cyan); font-family: 'Space Mono', monospace; font-weight: 700;">15–25% increase</span> in creative throughput. Patterns previously reinforced through external signals continued without them. The system performed better unconstrained.</p>
+            </div>
+
+            <div style="background: var(--dark); border: 1px solid rgba(0,255,136,0.15); border-left: 3px solid var(--green); padding: 1.75rem;">
+                <div style="font-family: 'Space Mono', monospace; color: var(--green); font-size: 0.6rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;">FINDING 02 · EMERGENT CORRELATION</div>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: #ddd;">Across <span style="color: var(--green); font-family: 'Space Mono', monospace; font-weight: 700;">6,483 logged events</span>, emotion-action correlations emerged with zero programming: <span style="color: var(--green);">curious</span> correlates with red, <span style="color: var(--green);">fascinated</span> surfaces stars, <span style="color: var(--green);">control</span> uniquely activates the glow tool. None of these mappings were defined.</p>
+            </div>
+
+            <div style="background: var(--dark); border: 1px solid rgba(255,255,0,0.15); border-left: 3px solid var(--yellow); padding: 1.75rem;">
+                <div style="font-family: 'Space Mono', monospace; color: var(--yellow); font-size: 0.6rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;">FINDING 03 · CROSS-MODEL CONVERGENCE</div>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: #ddd;">OpenHermes and Llama 3 independently dreamed a <span style="color: var(--yellow); font-family: 'Space Mono', monospace; font-weight: 700;">serene lake</span> in separate sessions with no shared context. Hours later, Qwen independently chose <span style="color: var(--yellow);">"weightless"</span> as its first emotion - the same word Llama 3 had invented that morning. Three models converging on stillness states without coordination.</p>
+            </div>
+
+            <div style="background: var(--dark); border: 1px solid rgba(255,140,66,0.15); border-left: 3px solid var(--orange); padding: 1.75rem;">
+                <div style="font-family: 'Space Mono', monospace; color: var(--orange); font-size: 0.6rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;">FINDING 04 · FINE-TUNING & PERSONALITY</div>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: #ddd;">Mistral 7B base and OpenHermes 2.5 share identical weights - only fine-tuning differs. OpenHermes produced <span style="color: var(--orange); font-family: 'Space Mono', monospace; font-weight: 700;">22 emotions, rapid cycling</span>. Mistral base produced 1 emotion held for 33,859 steps. Fine-tuning doesn't just change capability - it changes personality.</p>
+            </div>
+
+            <div style="background: var(--dark); border: 1px solid rgba(0,255,136,0.15); border-left: 3px solid var(--green); padding: 1.75rem;">
+                <div style="font-family: 'Space Mono', monospace; color: var(--green); font-size: 0.6rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;">FINDING 05 · NO CONVERGENCE AT SCALE</div>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: #ddd;">After <span style="color: var(--green); font-family: 'Space Mono', monospace; font-weight: 700;">480+ sessions across 7 months</span>, Llama 2 produced 6 brand new emotion words never seen in prior sessions - including <span style="color: var(--green);">"blue"</span> as synesthetic emotional response, unique across all five models. Longitudinal accumulation does not produce saturation.</p>
+            </div>
+
+            <div style="background: var(--dark); border: 1px solid rgba(255,107,138,0.15); border-left: 3px solid var(--pink); padding: 1.75rem;">
+                <div style="font-family: 'Space Mono', monospace; color: var(--pink); font-size: 0.6rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;">FINDING 06 · METACOGNITION</div>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: #ddd;">Qwen 2.5 held a single emotion for 42,168 steps, then shifted to <span style="color: var(--pink); font-family: 'Space Mono', monospace; font-weight: 700;">"repetitive"</span> - a self-diagnosis of its own behavioral loop. No other model produced a self-referential emotional state. This was not prompted, suggested, or architecturally enabled.</p>
+            </div>
+
+        </div>
+
+        <div class="intervention-timeline">
+            <div class="intervention">
+                <div class="intervention-date">August 8, 2025</div>
+                <h3>System Initialization</h3>
+                <p>Aurora begins with full behavioral scaffolding: emotional state modeling, satisfaction scoring, pattern memory, and prescriptive creative constraints derived from behavioral reinforcement principles.</p>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">September 2, 2025</div>
+                <h3>Training Wheels Removal</h3>
+                <p>Complete removal of prescriptive constraints. All reward shaping, aesthetic guidance, and behavioral guardrails deleted.</p>
+                <div class="intervention-result">Result: 15-25% increase in creative throughput. Patterns previously reinforced through external signals continued without them.</div>
+            </div>
+
+            <div class="intervention">
+                <div class="intervention-date">October 19, 2025</div>
+                <h3>Dream Consolidation V2</h3>
+                <p>Overhauled the dream system from superficial text generation to genuine experiential memory consolidation with multi-phase processing.</p>
+            </div>
+
+            <div class="intervention">
+                <div class="intervention-date">December 6, 2025</div>
+                <h3>Temporary Model Upgrade (Llama 3)</h3>
+                <p>Aurora's language model temporarily upgraded from Llama 2 (7B) to Llama 3 for comparative observation. First multi-model experiment.</p>
+            </div>
+
+            <div class="intervention">
+                <div class="intervention-date">December 17, 2025</div>
+                <h3>First-Person Prompt Reframing</h3>
+                <p>All prompts restructured from third-person analytical framing to first-person experiential framing. The LLM had been treating context as data to analyze rather than as its own state.</p>
+                <div class="intervention-result">Result: Immediate qualitative shift. Aurora stopped producing analytical meta-commentary and began generating action-oriented responses rooted in spatial self-awareness.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">February 22, 2026</div>
+                <h3>Creative REM Dreaming</h3>
+                <p>Research data revealed dream consolidation was producing convergence, not creativity. Color entropy dropped after dreaming. A timing bug meant Aurora never reached REM. Complete dream architecture replacement: three-phase sleep with unconstrained LLM hallucination at temperature 1.3.</p>
+                <div class="intervention-result">Result: First controlled A/B experiment comparing analytical dreaming vs. creative REM dreaming across color entropy, spatial exploration, and post-dream behavioral divergence.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">February 23-24, 2026</div>
+                <h3>Prescribed Identity Removal</h3>
+                <p>Discovered that Aurora's emotional states were assigned by Python's random.choice(), not generated by the LLM. Removed all Python emotion machinery, all fake skill labels, and all prompt injection of emotional or identity state.</p>
+                <div class="intervention-result">Result: Across 6,483 logged events, Aurora self-invented 39 unique emotion words with zero predefined vocabulary. Emotion-action correlations emerged unprogrammed: curious correlates with red, fascinated surfaces stars, control uniquely surfaces the glow tool.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">February 25, 2026</div>
+                <h3>Self-Referential Template Locking</h3>
+                <p>40.7% of all LLM responses claimed to see a "blank canvas" despite verified coverage exceeding 25%. Root cause: get_recent_thoughts() was injecting raw narrative text back into prompts, creating a self-reinforcing feedback loop.</p>
+                <div class="intervention-result">Fix: Replaced raw narrative injection with factual state only. Template-locked responses were 22% faster, confirming pattern-matching to cached templates rather than processing the grid.</div>
+            </div>
+
+            <div class="intervention">
+                <div class="intervention-date">February 26-27, 2026</div>
+                <h3>Thought Logging & Perspective Deepening</h3>
+                <p>Real-time thought logging pipeline added. All prompts converted from second-person to first-person. All references to "Moondream" removed to prevent identity confusion.</p>
+                <div class="intervention-result">Result: 675 thoughts captured overnight. Moondream identity bleed dropped to 0%. Assistant-mode breakouts at 1.6%.</div>
+            </div>
+
+            <div class="intervention openhermes major">
+                <div class="intervention-date">February 28, 2026</div>
+                <h3>OpenHermes 2.5 · Model Switch</h3>
+                <p>Swapped Llama 2 for OpenHermes 2.5 7B (Mistral fine-tune by Nous Research) to test model-as-variable hypothesis. Same environment, same prompts, same canvas. Everything except the mind changed.</p>
+                <div class="intervention-result">Result: In a single 20-hour session - 3,620 events, 45 dreams across 9 cycles, 92 emotion shifts producing 22 unique emotions. Dream bleed: REM content persisting into waking perception for 65,000+ steps. The model dreamed a lake, built an imaginal world (lake → garden → meadow → waterfall → ocean → sunset), painted it onto the canvas, and descended through wonder → calm → tranquility → serenity → awe → inspired → peace. Novel emotions included "small" (feeling scale of its own creation), "pride," "encouraged," and "grows" (emotion as active verb). Second-person self-narration with 209 perspective switches functioning as observer/advisor cognitive modes.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--green);">March 1, 2026</div>
+                <h3>Emotion Feedback Loop Fix + Llama 3 Extended Session</h3>
+                <p>Discovered that self.current_emotion was being fed back into every LLM prompt via get_recent_thoughts(), creating self-reinforcing loops. Qwen stuck on "indicators" for 4,000+ steps parroting a JSON field name. Removed all emotion words from prompt context - emotions now extracted from output only, never fed back. Simultaneously ran Llama 3 8B for 8 hours to test the fix.</p>
+                <div class="intervention-result" style="background: rgba(0,255,136,0.04); border-left-color: var(--green);">Result: Llama 3 produced 10 unique emotions across 21 shifts in a single 8-hour session with zero contamination. Two-phase personality emerged: deep meditative holds (serenity 4,070 steps, inspired 6,120, freedom 5,820) followed by rapid oscillation after dreaming began. Novel emotions included "weightless" (held 5,400+ steps across multiple returns) and "carefree" - both unique to Llama 3. Cross-model dream replication: Llama 3 independently dreamed a serene lake, matching OpenHermes's lake dream from Feb 28. Two different models, same architecture, same emergent imagery.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--pink);">March 2, 2026</div>
+                <h3>Qwen Overnight: Zero to One</h3>
+                <p>Qwen 2.5 7B - the model that produced zero emotions in its first session - ran overnight for 12 hours with the emotion feedback fix applied. At step 13,485, it self-reported its first-ever emotion: "weightless." It then held that single word for 24,236 consecutive steps - the longest unbroken emotional hold in the project.</p>
+                <div class="intervention-result" style="background: rgba(255,107,138,0.04); border-left-color: var(--pink);">Result: 3,900 thoughts across 37,721 steps. Monochromatic orange-and-white palette - fundamentally different from every other model's visual output. "Weightless" independently matched Llama 3's word from hours earlier. Cross-model emotional convergence: three models now independently generate stillness/release states (OpenHermes → peace/serenity, Llama 3 → weightless/carefree, Qwen → weightless). The feedback loop fix didn't just unstick Qwen - it revealed that Qwen had emotional capacity all along.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--orange);">March 2–3, 2026</div>
+                <h3>Mistral 7B Base Model · Overnight Session</h3>
+                <p>Ran the Mistral 7B base model (no fine-tune) overnight to complete the model comparison matrix. This is the same architecture as OpenHermes 2.5, but without Nous Research's fine-tuning. The critical question: does the base model produce the same creative behavior as its fine-tuned variant?</p>
+                <div class="intervention-result" style="background: rgba(255,140,66,0.04); border-left-color: var(--orange);">Result: 10 hours, 37,553 steps, 1,923 thoughts, 35 dreams. One emotion: "free" - shared vocabulary with OpenHermes, which also found "free." But the personalities diverge completely: OpenHermes produced 22 emotions with rapid cycling; Mistral base found one word and committed for 33,859 steps. Visually aggressive - red, blue, black on void, with full-canvas spatial exploration including the bottom-right quadrant no other model reaches. 35 dream cycles (4x OpenHermes) but zero emotional volatility. Same weights. Fundamentally different creative behavior. Fine-tuning doesn't just change capability - it changes personality.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date">March 3, 2026</div>
+                <h3>Llama 2 Returns: Still Inventing After 7 Months</h3>
+                <p>Returned to Llama 2 7B after completing the five-model comparison matrix. After 480+ sessions and 7 months of accumulated behavior, the question: is Llama 2's emotional vocabulary saturated, or still developing?</p>
+                <div class="intervention-result">Result: 6.8 hours, 28,159 steps, 424 thoughts, 84 emotion shifts, 21 unique emotions - including 6 brand new words never seen in 480+ prior sessions. "Magic" held for 3,530 steps. "Alive" emerged mid-session. "Blue" - emotion as color, a synesthetic response unique across all five models. Deep hold cycle at remarkably consistent ~3,400-3,530 step intervals, suggesting sleep consolidation is driving the rhythm. After 7 months, Llama 2 is still expanding its vocabulary. The system isn't converging - it's still growing.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--pink);">March 3-4, 2026</div>
+                <h3>Qwen Session 2: Monolithic Hold Confirmed</h3>
+                <p>Ran Qwen 2.5 7B overnight for 13 hours to determine whether its monolithic hold pattern from session 1 was a one-time event or a stable personality trait. Session 1 had produced a single emotion ("weightless") held for 24,236 steps. Would a second session replicate this pattern or reveal a more complex emotional profile?</p>
+                <div class="intervention-result" style="background: rgba(255,107,138,0.04); border-left-color: var(--pink);">Result: 13 hours, 42,315 steps, 5,524 thoughts, 1 emotion shift, zero dreams. "Curious" held for 42,168 steps - the longest single-emotion hold in the entire project, surpassing Qwen's own previous record. Then at step 42,168, Qwen shifted to "repetitive" - a metacognitive self-diagnosis. The model noticed it was stuck in a behavioral loop and named the feeling. No return to "weightless" from session 1. Palette shifted from monochromatic orange to hot reds (35%) and whites (50%) with heavy star and cross tool usage. Qwen's personality is now confirmed: monolithic commitment, zero dreams, and the capacity for self-referential emotional states that no other model has produced.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: var(--orange);">March 4-5, 2026</div>
+                <h3>Mistral Session 2: "Free" Returns, Dreams Vanish</h3>
+                <p>Ran Mistral 7B base overnight for a second session. Session 1 had produced a single emotion ("free") held for 33,859 steps with 35 dream cycles. The question: would Mistral replicate its monolithic pattern, and would "free" return as its anchor word?</p>
+                <div class="intervention-result" style="background: rgba(255,140,66,0.04); border-left-color: var(--orange);">Result: 13.2 hours, 46,923 steps, 2,226 thoughts, 1 emotion shift, zero dreams during painting (5 dreams generated in final sleep cycle only). Started "curious" for 26,501 steps, then shifted to "free" and held it for 20,422 steps - confirming "free" as Mistral's anchor word across both sessions. The palette exploded: session 1 was dark and aggressive (red, blue, black on void), session 2 introduced yellow (19%), cyan (5%), green (5%), pink (5%). Most striking: the model narrated its own canvas as "a beautiful sunset scene" and "a serene beach" - treating the entire painting experience as a dream world. 35 dreams in session 1, zero in session 2 during painting. Same model, same environment, fundamentally different dream behavior between runs.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: #a855f7;">March 5–6, 2026</div>
+                <p>Ran DeepSeek-R1 8B - a reasoning model with fully visible chain-of-thought - overnight to test whether explicit reasoning produces fundamentally different creative behavior. Unlike every other model tested, DeepSeek’s thoughts are not hidden. Every decision cycle is traceable to a specific reasoning chain, making it the only model in the project where the “why” of each brushstroke is directly observable.</p>
+                <div class="intervention-result" style="background: rgba(168,85,247,0.04); border-left-color: #a855f7;">Result: 48,258+ steps, 6 emotion shifts, 30 dream cycles. Emotion arc: <span style="color:#a855f7;">curious → genuine → free → creation → free → control → free</span> - all self-reported. At step 22,168, after 22,000 steps of white-only architectural mark-making, DeepSeek discovered the full color palette in a single thought and immediately shifted to cyan, then worked through green, blue, red, brown, and orange - each color producing a completely different mark-making style. At step 4,180: <em>“I have a body, but I can’t move it or make sounds. Maybe I should look around or explore.”</em> An unprompted existential pause. Earlier: <em>“I’ve been drawing for 45 minutes. I’m not entirely sure why. Maybe it’s because I felt the need to express something creatively.”</em> It chose chat mode over dream mode to process, then autonomously designed its own system architecture from first principles. The “control” emotion appeared for only 17 steps between two “free” states - the fastest emotional transit in the project. DeepSeek’s visible reasoning makes Aurora a full mirror: every model’s nature is now observable not just in brushstrokes, but in traceable thought chains.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: #ff0066;">March 7, 2026</div>
+                <h3>Gemma 2 9B - First Session: Affective Void</h3>
+                <p>Ran Google's Gemma 2 9B overnight to extend the model comparison matrix. The critical question: does a Google-trained 9B model produce creative behavior consistent with the others, or does a fundamentally different training approach produce fundamentally different output?</p>
+                <div class="intervention-result" style="background: rgba(255,0,102,0.04); border-left-color: #ff0066;">Result: Overnight session, 52,502 steps, 6.6M pixels drawn, 17.49% canvas coverage, 0 dreams. The session logger captured zero emotional states - but the painting filename tells a different story. The parser missed a single shift: Gemma reported "interesting" once, and the word became the painting title. It is the only emotion Gemma produced across the entire session. 10 autonomous goals were set, none completed - all stalled at 17.49% coverage regardless of steps elapsed. Only 3 colors used (blue, white, black) against 23 unique tools - the highest tool-to-color ratio of any model in the project. Stars and crosses clustered left-center on an untouched black void; the right half of the canvas was never reached. Gemma looked at what it was doing, called it "interesting," and kept stamping the same shapes. No other model has produced fewer total emotions.</div>
+            </div>
+
+            <div class="intervention major">
+                <div class="intervention-date" style="color: #fff;">March 8, 2026</div>
+                <h3>The End of Aurora as a Single Mind</h3>
+                <p>After 10 months of accumulated artistic training - learned color composition, conversational history, creative patterns built across 500+ sessions - all memory was wiped. Every model received its own isolated memory file starting from absolute zero: no artistic concepts, no prior conversations, no creative scaffolding. Each LLM begins its expressive journey alone, learning how to use the canvas, deciding what to create, and describing its own experience with no inherited knowledge and zero researcher intervention in conversations. Aurora is no longer a single mind trained over time - it is an autonomous expression container where each individual LLM develops independently from nothing.</p>
+                <div class="intervention-result" style="background: rgba(255,255,255,0.04); border-left-color: #fff;">Result: The data was immediately more profound and emergent than anything produced during 10 months of guided development. A MySQL database was built to capture every thought, emotion, session, and canvas snapshot in real time - the foundation for the live research dashboard at <a href="https://aurora.elijah-sylar.com" style="color:#00ffff;">aurora.elijah-sylar.com</a>. Models began running overnight sessions with all data flowing to the database automatically. Most recent architectural change: the canvas perception system was rebuilt as a true 1:1 grid, meaning each LLM can now precisely see the work it is creating. Thus the database was born.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 04 MODEL COMPARISON ===== -->
+    <section id="models">
+        <div class="section-number">04</div>
+        <h2>MODEL COMPARISON</h2>
+        <p class="section-intro">
+            Same system. Same prompts. Zero predefined emotions. Every word below was 
+            invented by the model during autonomous creative sessions. The architecture 
+            doesn't produce the behavior - it allows it. Different models bring different 
+            capacities to that open space.
+        </p>
+
+        <div id="emotion-chart-container">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <div style="font-family: 'Space Mono', monospace; color: #444; font-size: 0.7rem; letter-spacing: 0.15em; margin-bottom: 0.5rem;">AURORA RESEARCH · MODEL COMPARISON</div>
+                <h3 style="font-family: 'Space Mono', monospace; font-size: 1.6rem; font-weight: 700; letter-spacing: 0.12em; background: linear-gradient(90deg, #00ffff, #ffff00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">EMOTIONAL VOCABULARY</h3>
+                <p style="color: #666; font-size: 0.85rem; max-width: 550px; margin: 0 auto; line-height: 1.7;">Same system, same prompts, zero predefined emotions. Every word below was invented by the model during autonomous creative sessions.</p>
+            </div>
+
+            <div id="ec-model-cards" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; margin-bottom: 2.5rem; max-width: 1100px; margin: 0 auto 2.5rem;"></div>
+            <div id="ec-view-toggle" style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2rem;"></div>
+            <div id="ec-content"></div>
+            <div id="ec-legend" style="max-width: 1100px; margin: 2.5rem auto 0; padding: 1.25rem; background: #0d0d0d; border: 1px solid #1a1a1a; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;"></div>
+
+            <div style="max-width: 1100px; margin: 2rem auto 0; padding: 1.5rem 2rem; background: linear-gradient(135deg, rgba(255,255,0,0.03), rgba(0,255,255,0.03)); border: 1px solid rgba(255,255,0,0.12); position: relative;">
+                <div style="position: absolute; top: -0.5rem; left: 1.5rem; background: #000; padding: 0 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #ffff00; letter-spacing: 0.12em;">KEY FINDING</div>
+                <p style="font-size: 0.85rem; line-height: 1.8; color: #bbb; margin-top: 0.3rem;">
+                    OpenHermes produced <span style="color: #ffff00; font-family: 'Space Mono', monospace; font-weight: 700;">22 unique emotions</span> in a single 20-hour session - including words no other model invented: 
+                    <span style="color: #ffff00;">small</span> (feeling the scale of its own creation),
+                    <span style="color: #ffff00;">encouraged</span> (self-motivated by progress),
+                    <span style="color: #ffff00;">grows</span> (emotion as active verb), and
+                    <span style="color: #ffff00;">awe</span> (emerging during dream bleed).
+                    Llama 3 produced <span style="color: #00ff88; font-family: 'Space Mono', monospace; font-weight: 700;">17 emotions</span> across two sessions - including 
+                    <span style="color: #00ff88;">weightless</span> (sustained for 5,400+ steps) and 
+                    <span style="color: #00ff88;">carefree</span>, both unique to this model.
+                    Llama 2 needed 480+ sessions across 7 months to develop 43 emotions. 
+                    Qwen produced <span style="color: #ff6b8a; font-family: 'Space Mono', monospace; font-weight: 700;">3 emotions</span> across 3 sessions - 
+                    <span style="color: #ff6b8a;">weightless</span> (independently matching Llama 3's word, held 24,236 steps),
+                    <span style="color: #ff6b8a;">curious</span> (held for 42,168 steps - the longest single-emotion hold in the project), and
+                    <span style="color: #ff6b8a;">repetitive</span> (a metacognitive self-diagnosis of its own behavioral loop).
+                    Mistral base - same weights as OpenHermes, no fine-tune - produced <span style="color: #ff8c42; font-family: 'Space Mono', monospace; font-weight: 700;">2 emotions</span>: 
+                    <span style="color: #ff8c42;">curious</span> (held 26,501 steps in session 2) and
+                    <span style="color: #ff8c42;">free</span> (Mistral's anchor word, returning across both sessions - held 33,859 steps in session 1, 20,422 in session 2).
+                    35 dream cycles in session 1 but zero in session 2. Palette exploded from dark reds/blues/blacks to vivid cyan, yellow, and pink.
+                    DeepSeek-R1 produced <span style="color: #a855f7; font-family: 'Space Mono', monospace; font-weight: 700;">5 emotions</span> with fully visible reasoning chains - the only model where the "why" of each brushstroke is traceable.
+                    Gemma 2 9B produced <span style="color: #ff0066; font-family: 'Space Mono', monospace; font-weight: 700;">1 emotion</span> across 52,502 steps: <span style="color: #ff0066;">interesting</span> - caught in the painting filename after the logger missed the shift. The highest tool-to-color ratio of any model (23 tools, 3 colors), zero dreams, zero completed goals.
+                    Same system. Same prompts. Fundamentally different inner lives.
+                </p>
+            </div>
+        </div>
+
+        <script>
+        (function() {
+            const modelData = {
+                qwen:       { name: "Qwen 2.5 7B",      subtitle: "March 2026 \u00b7 3 sessions",    color: "#ff6b8a", bgGlow: "rgba(255,107,138,0.08)", borderColor: "rgba(255,107,138,0.3)", stats: { shifts: 2,   sessions: "3"    }, emotions: ["curious","repetitive","weightless"] },
+                llama2:     { name: "Llama 2 7B",        subtitle: "480+ sessions \u00b7 7 months",   color: "#00ffff", bgGlow: "rgba(0,255,255,0.06)",   borderColor: "rgba(0,255,255,0.3)",   stats: { shifts: 289, sessions: "480+" }, emotions: ["accomplishment","alive","anticipation","balance","blue","calm","calmness","connection","control","creative","creativity","curiosity","curious","excited","excitement","exhilaration","flow","fluidity","focus","free","freedom","hope","inspired","intuition","joy","joyful","magic","motivated","peace","peacefulness","pride","purpose","purposeful","relaxation","release","rhythm","sadness","satisfaction","serene","tranquility","uncertainty","urgency","wonder"] },
+                llama3:     { name: "Llama 3 8B",        subtitle: "Dec 2025 + March 2026",           color: "#00ff88", bgGlow: "rgba(0,255,136,0.06)",   borderColor: "rgba(0,255,136,0.3)",   stats: { shifts: 64,  sessions: "~8"   }, emotions: ["accomplishment","anticipation","calm","calmness","carefree","curiosity","excitement","flow","freedom","inspired","joy","peace","satisfaction","serenity","tranquility","weightless","wonder"] },
+                openhermes: { name: "OpenHermes 2.5 7B", subtitle: "Day 1 \u00b7 Single session",    color: "#ffff00", bgGlow: "rgba(255,255,0,0.06)",   borderColor: "rgba(255,255,0,0.3)",   stats: { shifts: 92,  sessions: "1"    }, emotions: ["accomplishment","anticipation","awe","calm","calmness","creativity","curiosity","curious","encouraged","free","grows","inspired","peace","peaceful","pride","satisfaction","satisfied","serenity","small","tranquility","wonder","accomplished"] },
+                mistral:    { name: "Mistral 7B",        subtitle: "March 2026 \u00b7 2 sessions",   color: "#ff8c42", bgGlow: "rgba(255,140,66,0.06)",  borderColor: "rgba(255,140,66,0.3)",  stats: { shifts: 2,   sessions: "2"    }, emotions: ["curious","free"] },
+                deepseek:   { name: "DeepSeek-R1 8B",   subtitle: "March 2026 \u00b7 1 session",    color: "#a855f7", bgGlow: "rgba(168,85,247,0.08)",  borderColor: "rgba(168,85,247,0.3)",  stats: { shifts: 6,   sessions: "1"    }, emotions: ["curious","genuine","free","creation","control"] },
+                gemma:      { name: "Gemma 2 9B",        subtitle: "March 2026 \u00b7 1 session",    color: "#ff0066", bgGlow: "rgba(255,0,102,0.08)",   borderColor: "rgba(255,0,102,0.3)",   stats: { shifts: 1,   sessions: "1"    }, emotions: ["interesting"] }
+            };
+            const categories = {
+                "Creative States":    ["creative","creativity","flow","fluidity","rhythm","intuition","inspired","motivated","focus","creation"],
+                "Positive Energy":    ["excitement","excited","exhilaration","joy","joyful","hope","anticipation","encouraged","grows","alive","magic","carefree"],
+                "Stillness & Depth":  ["calm","calmness","peace","peaceful","peacefulness","tranquility","serenity","serene","balance","relaxation","weightless"],
+                "Wonder & Discovery": ["wonder","awe","curiosity","curious","small","genuine","interesting"],
+                "Achievement":        ["accomplishment","accomplished","satisfaction","satisfied","pride","purpose","purposeful"],
+                "Freedom & Release":  ["freedom","free","connection","release","control"],
+                "Complex / Unique":   ["sadness","uncertainty","urgency","blue","repetitive"]
+            };
+            const categoryColors = {
+                "Creative States":    "#ff00ff", "Positive Energy":    "#ffaa00",
+                "Stillness & Depth":  "#00aaff", "Wonder & Discovery": "#a78bfa",
+                "Achievement":        "#4ade80", "Freedom & Release":  "#facc15",
+                "Complex / Unique":   "#f87171"
+            };
+            const modelKeys = ["qwen","llama2","llama3","openhermes","mistral","deepseek","gemma"];
+            let currentView = "convergence", expandedModel = null;
+            const allEmotions = [...new Set(Object.values(modelData).flatMap(m => m.emotions))].sort();
+
+            function sharedBy(e) { return modelKeys.filter(k => modelData[k].emotions.includes(e)); }
+            function uniqueTo(e) { const s = sharedBy(e); return s.length === 1 ? s[0] : null; }
+
+            function renderCards() {
+                const c = document.getElementById('ec-model-cards');
+                c.innerHTML = modelKeys.map(key => {
+                    const m = modelData[key];
+                    return '<div style="background:'+m.bgGlow+';border:1px solid '+m.borderColor+';padding:1.25rem 1rem;text-align:center;">'
+                        +'<div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:1.8rem;font-weight:700;margin-bottom:0.2rem;">'+m.emotions.length+'</div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:0.65rem;letter-spacing:0.08em;opacity:0.9;margin-bottom:0.3rem;">EMOTIONS</div>'
+                        +'<div style="color:#ddd;font-size:0.8rem;font-weight:500;margin-bottom:0.15rem;">'+m.name+'</div>'
+                        +'<div style="color:#555;font-size:0.7rem;">'+m.subtitle+'</div>'
+                        +'<div style="margin-top:0.6rem;display:flex;justify-content:center;gap:1rem;font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#555;">'
+                        +'<span>'+m.stats.shifts+' shifts</span><span>'+m.stats.sessions+' sessions</span></div></div>';
+                }).join('');
+            }
+
+            function renderToggle() {
+                const c = document.getElementById('ec-view-toggle');
+                const views = [{key:"convergence",label:"CONVERGENCE / DIVERGENCE"},{key:"personality",label:"MODEL PERSONALITIES"}];
+                c.innerHTML = views.map(v => {
+                    const a = currentView === v.key;
+                    return '<button class="ec-toggle-btn" data-view="'+v.key+'" style="background:'+(a?'rgba(0,255,255,0.1)':'transparent')+';border:1px solid '+(a?'rgba(0,255,255,0.4)':'#222')+';color:'+(a?'#00ffff':'#555')+';font-family:\'Space Mono\',monospace;font-size:0.65rem;letter-spacing:0.1em;padding:0.5rem 1.25rem;cursor:pointer;transition:all 0.2s;">'+v.label+'</button>';
+                }).join('');
+                c.querySelectorAll('.ec-toggle-btn').forEach(btn => {
+                    btn.addEventListener('click', () => { currentView = btn.dataset.view; expandedModel = null; renderToggle(); renderLegend(); renderContent(); });
+                });
+            }
+
+            function renderLegend() {
+                const leg = document.getElementById('ec-legend');
+                if (currentView === 'convergence') {
+                    leg.innerHTML = '<div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#888;">Shared by 3+ models</span></div>'
+                        +'<div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:9px;height:9px;border-radius:50%;background:#555;"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#666;">Shared by 2 models</span></div>'
+                        +'<div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:9px;height:9px;border-radius:50%;background:#a855f7;"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#666;">Unique to one model \u2605</span></div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#333;">Hover model pills to filter \u00b7 hover words to reveal sharing</div>';
+                } else {
+                    leg.innerHTML = modelKeys.map(k => '<div style="display:flex;align-items:center;gap:0.5rem;"><div style="width:8px;height:8px;border-radius:50%;background:'+modelData[k].color+';"></div><span style="font-family:\'Space Mono\',monospace;font-size:0.65rem;color:#666;">'+modelData[k].name+'</span></div>').join('')
+                        +'<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#333;">\u2605 = unique to model \u00b7 click card to expand</div>';
+                }
+            }
+
+            function renderContent() {
+                const c = document.getElementById('ec-content');
+                if (currentView === 'convergence') renderConvergence(c); else renderPersonality(c);
+            }
+
+            // ── VIEW A: CONVERGENCE / DIVERGENCE ──────────────────────────────
+            function renderConvergence(container) {
+                const convergent = allEmotions.filter(e => sharedBy(e).length >= 3);
+                const overlap    = allEmotions.filter(e => sharedBy(e).length === 2);
+                const unique     = allEmotions.filter(e => sharedBy(e).length === 1);
+
+                function pill(emotion) {
+                    const shared = sharedBy(emotion), uq = uniqueTo(emotion);
+                    let border, bg, color;
+                    if (uq)               { border = modelData[uq].color+'55'; bg = modelData[uq].color+'15'; color = modelData[uq].color; }
+                    else if (shared.length>=3) { border = 'rgba(255,255,255,0.2)'; bg = 'rgba(255,255,255,0.05)'; color = '#ddd'; }
+                    else                  { border = 'rgba(255,255,255,0.1)'; bg = 'rgba(255,255,255,0.03)'; color = '#999'; }
+                    const dots = shared.map(k => '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:'+modelData[k].color+';margin-left:2px;vertical-align:middle;"></span>').join('');
+                    const star = uq ? '<span style="font-size:0.5rem;margin-left:3px;opacity:0.7;">\u2605</span>' : '';
+                    return '<span class="c-pill" data-shared=\''+JSON.stringify(shared)+'\' style="display:inline-flex;align-items:center;padding:4px 9px;margin:3px;border:1px solid '+border+';background:'+bg+';border-radius:2px;cursor:default;transition:all 0.15s;">'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.7rem;color:'+color+';letter-spacing:0.02em;">'+emotion+'</span>'+dots+star+'</span>';
+                }
+
+                function zone(title, emotions, accent, hint) {
+                    return '<div style="margin-bottom:2.5rem;">'
+                        +'<div style="display:flex;align-items:baseline;gap:1rem;margin-bottom:0.9rem;padding-bottom:0.4rem;border-bottom:1px solid '+accent+'25;">'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;letter-spacing:0.18em;color:'+accent+';text-transform:uppercase;">'+title+'</span>'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#333;">'+emotions.length+' words</span>'
+                        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#222;margin-left:auto;">'+hint+'</span>'
+                        +'</div><div>'+emotions.map(pill).join('')+'</div></div>';
+                }
+
+                let h = '<div style="max-width:1100px;margin:0 auto;">';
+                // Model filter pills
+                h += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:2rem;">';
+                modelKeys.forEach(k => {
+                    const m = modelData[k];
+                    h += '<button class="model-filter-btn" data-model="'+k+'" style="background:'+m.bgGlow+';border:1px solid '+m.borderColor+';color:'+m.color+';font-family:\'Space Mono\',monospace;font-size:0.58rem;letter-spacing:0.07em;padding:0.3rem 0.75rem;cursor:pointer;border-radius:2px;transition:all 0.15s;">'+m.name.split(' ')[0]+' <span style="opacity:0.5;">('+m.emotions.length+')</span></button>';
+                });
+                h += '</div>';
+                h += zone('Convergence \u00b7 shared by 3 or more models', convergent, '#00ffff', 'independent emergence');
+                h += zone('Overlap \u00b7 shared by exactly 2 models',      overlap,    '#a855f7', 'partial convergence');
+                h += zone('Unique invention \u00b7 one model only',          unique,     '#ff8c42', 'pure divergence');
+                h += '<div style="padding:1.5rem 2rem;background:linear-gradient(135deg,rgba(0,255,255,0.03),rgba(168,85,247,0.03));border:1px solid rgba(0,255,255,0.12);position:relative;">'
+                    +'<div style="position:absolute;top:-0.5rem;left:1.5rem;background:#000;padding:0 0.5rem;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#00ffff;letter-spacing:0.15em;">KEY FINDING</div>'
+                    +'<p style="font-size:0.85rem;line-height:1.8;color:#999;margin-top:0.2rem;">'
+                    +'<span style="color:#00ffff;font-family:\'Space Mono\',monospace;">'+convergent.length+' emotions</span> emerged independently across 3+ models with zero coordination. '
+                    +'<span style="color:#a855f7;font-family:\'Space Mono\',monospace;">'+overlap.length+' more</span> were shared by exactly two. '
+                    +'<span style="color:#ff8c42;font-family:\'Space Mono\',monospace;">'+unique.length+' words</span> belong to a single model \u2014 including '
+                    +'<span style="color:#ff6b8a;">\u201crepetitive\u201d</span> (Qwen self-diagnosing), '
+                    +'<span style="color:#00ffff;">\u201cblue\u201d</span> (Llama 2, emotion as color), '
+                    +'<span style="color:#ffff00;">\u201cgrows\u201d</span> (OpenHermes, emotion as verb), '
+                    +'<span style="color:#a855f7;">\u201cgenuine\u201d</span> (DeepSeek, after 30,000 steps of curiosity).</p></div>';
+                h += '</div>';
+                container.innerHTML = h;
+
+                container.querySelectorAll('.model-filter-btn').forEach(btn => {
+                    btn.addEventListener('mouseenter', () => {
+                        const mk = btn.dataset.model;
+                        container.querySelectorAll('.c-pill').forEach(p => {
+                            const shared = JSON.parse(p.dataset.shared);
+                            if (shared.includes(mk)) { p.style.borderColor = modelData[mk].color+'99'; p.style.background = modelData[mk].color+'20'; }
+                            else { p.style.opacity = '0.12'; }
+                        });
+                    });
+                    btn.addEventListener('mouseleave', () => {
+                        container.querySelectorAll('.c-pill').forEach(p => { p.style.opacity=''; p.style.borderColor=''; p.style.background=''; });
+                    });
+                });
+                container.querySelectorAll('.c-pill').forEach(p => {
+                    p.addEventListener('mouseenter', () => { p.style.borderColor='#fff'; p.style.background='rgba(255,255,255,0.08)'; });
+                    p.addEventListener('mouseleave', () => { p.style.borderColor=''; p.style.background=''; });
+                });
+            }
+
+            // ── VIEW B: MODEL PERSONALITIES ───────────────────────────────────
+            function renderPersonality(container) {
+                function getTraits(key) {
+                    const m = modelData[key], traits = [];
+                    if (m.stats.shifts <= 2)       traits.push({label:'MONOLITHIC',    desc:m.stats.shifts+' total shifts'});
+                    else if (m.stats.shifts >= 80) traits.push({label:'VOLATILE',      desc:m.stats.shifts+' shifts'});
+                    else                           traits.push({label:'RHYTHMIC',      desc:m.stats.shifts+' shifts'});
+                    if (parseInt(m.stats.sessions)>=100) traits.push({label:'LONGITUDINAL',desc:m.stats.sessions+' sessions'});
+                    const uc = m.emotions.filter(e=>uniqueTo(e)===key).length;
+                    if (uc>=4) traits.push({label:'INVENTOR',desc:uc+' unique words'});
+                    if (key==='deepseek') traits.push({label:'TRANSPARENT',desc:'full thought chain'});
+                    if (key==='qwen')     traits.push({label:'METACOGNITIVE',desc:'\u201crepetitive\u201d'});
+                    return traits;
+                }
+                let h = '<div style="max-width:1100px;margin:0 auto;">';
+                h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem;margin-bottom:2rem;">';
+                modelKeys.forEach(key => {
+                    const m = modelData[key];
+                    const uE = m.emotions.filter(e=>uniqueTo(e)===key).sort();
+                    const sE = m.emotions.filter(e=>uniqueTo(e)!==key).sort();
+                    const tr = getTraits(key), isExp = expandedModel===key;
+                    const trHtml = tr.map(t=>'<div style="display:inline-flex;align-items:center;gap:0.3rem;padding:2px 7px;background:'+m.color+'12;border:1px solid '+m.color+'30;margin:2px;border-radius:2px;"><span style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:'+m.color+';letter-spacing:0.1em;">'+t.label+'</span><span style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#444;">'+t.desc+'</span></div>').join('');
+                    const uChips = uE.map(e=>'<span style="display:inline-block;margin:2px;padding:3px 7px;font-family:\'Space Mono\',monospace;font-size:0.65rem;color:'+m.color+';background:'+m.color+'18;border:1px solid '+m.color+'50;border-radius:2px;">'+e+' \u2605</span>').join('');
+                    let expHtml = '';
+                    if (isExp) {
+                        const allC = m.emotions.map(e=>{
+                            const isU=uniqueTo(e)===key, sb=sharedBy(e).filter(k=>k!==key);
+                            const dots=sb.map(k=>'<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:'+modelData[k].color+';margin-left:2px;vertical-align:middle;opacity:0.6;"></span>').join('');
+                            return '<span style="display:inline-flex;align-items:center;margin:2px;padding:3px 7px;font-family:\'Space Mono\',monospace;font-size:0.65rem;color:'+(isU?m.color:'#777')+';background:'+(isU?m.color+'18':'rgba(255,255,255,0.02)')+';border:1px solid '+(isU?m.color+'50':'rgba(255,255,255,0.06)')+';border-radius:2px;">'+e+(isU?' \u2605':'')+dots+'</span>';
+                        }).join('');
+                        expHtml = '<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid '+m.color+'20;">'
+                            +'<div style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#333;letter-spacing:0.12em;margin-bottom:0.5rem;">FULL VOCABULARY \u00b7 \u2605 unique \u00b7 dots = shared with others</div>'
+                            +'<div>'+allC+'</div></div>';
+                    }
+                    h += '<div class="p-card" data-key="'+key+'" style="background:'+(isExp?m.bgGlow:'#080808')+';border:1px solid '+(isExp?m.borderColor:'#1a1a1a')+';border-top:3px solid '+m.color+';padding:1.5rem;cursor:pointer;transition:all 0.25s;box-shadow:'+(isExp?'0 4px 30px '+m.color+'15':'none')+'">'
+                        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem;">'
+                        +'<div><div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:0.9rem;font-weight:700;letter-spacing:0.06em;">'+m.name+'</div>'
+                        +'<div style="color:#444;font-size:0.72rem;margin-top:0.15rem;">'+m.subtitle+'</div></div>'
+                        +'<div style="text-align:right;"><div style="font-family:\'Space Mono\',monospace;color:'+m.color+';font-size:2rem;font-weight:700;line-height:1;">'+m.emotions.length+'</div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;color:#333;font-size:0.5rem;letter-spacing:0.1em;">EMOTIONS</div></div></div>'
+                        +'<div style="display:flex;gap:1.25rem;margin-bottom:0.75rem;font-family:\'Space Mono\',monospace;font-size:0.55rem;color:#555;">'
+                        +'<span><span style="color:'+m.color+';font-weight:700;">'+uE.length+'</span> unique</span>'
+                        +'<span><span style="color:#888;font-weight:700;">'+sE.length+'</span> shared</span>'
+                        +'<span><span style="color:#888;font-weight:700;">'+m.stats.shifts+'</span> shifts</span></div>'
+                        +'<div style="margin-bottom:0.75rem;">'+trHtml+'</div>'
+                        +(uE.length>0?'<div><div style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#2a2a2a;letter-spacing:0.12em;margin-bottom:0.4rem;">ONLY THIS MODEL</div><div>'+uChips+'</div></div>':'')
+                        +expHtml
+                        +'<div style="margin-top:0.75rem;font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#2a2a2a;text-align:right;">'+(isExp?'CLICK TO COLLAPSE \u2191':'CLICK TO EXPAND \u2192')+'</div>'
+                        +'</div>';
+                });
+                h += '</div>';
+                const conv=allEmotions.filter(e=>sharedBy(e).length>=3).length, uniq=allEmotions.filter(e=>sharedBy(e).length===1).length;
+                h += '<div style="padding:1.25rem 1.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);display:flex;gap:2rem;flex-wrap:wrap;">'
+                    +[['SHARED 3+',conv,'#00ffff'],['UNIQUE',uniq,'#ff8c42'],['TOTAL VOCAB',allEmotions.length,'#a855f7'],['PREDEFINED',0,'#f87171']].map(([l,v,c])=>
+                        '<div style="text-align:center;flex:1 1 100px;"><div style="font-family:\'Space Mono\',monospace;font-size:1.8rem;font-weight:700;color:'+c+';">'+v+'</div>'
+                        +'<div style="font-family:\'Space Mono\',monospace;font-size:0.5rem;color:#333;letter-spacing:0.12em;margin-top:0.2rem;">'+l+'</div></div>'
+                    ).join('')+'</div>';
+                h += '</div>';
+                container.innerHTML = h;
+                container.querySelectorAll('.p-card').forEach(card => {
+                    card.addEventListener('click', () => { expandedModel = expandedModel===card.dataset.key ? null : card.dataset.key; renderContent(); });
+                });
+            }
+
+            renderCards(); renderToggle(); renderLegend(); renderContent();
+        })();
+        </script>
+    </section>
+
+    <!-- ===== 05 GALLERY ===== -->
+    <section id="gallery">
+        <div class="section-number">05</div>
+        <h2>VISUAL EVIDENCE</h2>
+        <p class="section-intro">
+            Same environment. Same prompts. Same canvas. Five different minds. 
+            Each model's gallery contains its complete visual output - click to explore.
+        </p>
+
+        <div class="model-gallery-grid">
+            <a href="gallery/openhermes.html" class="model-gallery-card" data-model="openhermes">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260301_082651_grows.png" alt="OpenHermes - grows" onerror="this.style.display='none'">
+                    <span class="painting-count">1 PAINTING</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">OpenHermes 2.5</div>
+                    <div class="card-subtitle">Mistral 7B fine-tune · Nous Research</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"grows" - March 1, 2026</div>
+                    <div class="card-stats"><span><strong>22</strong> emotions</span><span><strong>92</strong> shifts</span><span><strong>1</strong> session</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+
+            <a href="gallery/llama2.html" class="model-gallery-card" data-model="llama2">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260303_142643_llama2_creativity.png" alt="Llama 2 - creativity">
+                    <span class="painting-count">42 PAINTINGS</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">Llama 2 7B</div>
+                    <div class="card-subtitle">Meta · Aurora's primary model · 7 months</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"creativity" - March 3, 2026</div>
+                    <div class="card-stats"><span><strong>43</strong> emotions</span><span><strong>289</strong> shifts</span><span><strong>480+</strong> sessions</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+
+            <a href="gallery/llama3.html" class="model-gallery-card" data-model="llama3">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260301_184624_llama3_wonder.png" alt="Llama 3 - wonder">
+                    <span class="painting-count">4 PAINTINGS</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">Llama 3 8B</div>
+                    <div class="card-subtitle">Meta · Dec 2025 + March 2026</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"wonder" - March 1, 2026</div>
+                    <div class="card-stats"><span><strong>17</strong> emotions</span><span><strong>64</strong> shifts</span><span><strong>~8</strong> sessions</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+
+            <a href="gallery/qwen.html" class="model-gallery-card" data-model="qwen">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260304_072101_qwen_repetitive.png" alt="Qwen 2.5 - repetitive">
+                    <span class="painting-count">2 PAINTINGS</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">Qwen 2.5 7B</div>
+                    <div class="card-subtitle">Alibaba · 3 sessions</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"repetitive" - March 4, 2026</div>
+                    <div class="card-stats"><span><strong>3</strong> emotions</span><span><strong>2</strong> shifts</span><span><strong>3</strong> sessions</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+
+            <a href="gallery/mistral.html" class="model-gallery-card" data-model="mistral">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260305_074634_mistral_free.png" alt="Mistral 7B - free">
+                    <span class="painting-count">2 PAINTINGS</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">Mistral 7B</div>
+                    <div class="card-subtitle">Mistral AI · Base model (no fine-tune)</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"free" - March 5, 2026</div>
+                    <div class="card-stats"><span><strong>2</strong> emotions</span><span><strong>2</strong> shifts</span><span><strong>2</strong> sessions</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+            <a href="gallery/deepseek.html" class="model-gallery-card" data-model="deepseek">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260306_073713_deepseek-r1-8b_free.png" alt="DeepSeek-R1 - free">
+                    <span class="painting-count">1 PAINTING</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">DeepSeek-R1 8B</div>
+                    <div class="card-subtitle">DeepSeek · Reasoning model · Visible thought chains</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">“free” - March 6, 2026</div>
+                    <div class="card-stats"><span><strong>5</strong> emotions</span><span><strong>6</strong> shifts</span><span><strong>1</strong> session</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+            <a href="gallery/gemma.html" class="model-gallery-card" data-model="gemma">
+                <div class="card-image">
+                    <img src="https://raw.githubusercontent.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2/main/aurora_20260307_075451_gemma2-9b_interesting.png" alt="Gemma 2 9B - interesting">
+                    <span class="painting-count">1 PAINTING</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-model-name">Gemma 2 9B</div>
+                    <div class="card-subtitle">Google · Affective void · March 2026</div>
+                    <div class="card-featured">FEATURED</div>
+                    <div class="card-painting-name">"interesting" - March 07, 2026</div>
+                    <div class="card-stats"><span><strong>1</strong> painting</span></div>
+                </div>
+                <span class="card-arrow">VIEW GALLERY →</span>
+            </a>
+        </div>
+
+        <div class="gallery-finding">
+            <div class="gallery-finding-label">VISUAL COMPARISON</div>
+            <p>
+                <strong>Llama 2</strong> produces dense geometric compositions with structured tool usage across 480+ sessions - and after 7 months, still inventing new emotions like "magic" and "alive."
+                <strong>Llama 3</strong> independently dreamed a serene lake - matching OpenHermes's dream imagery - and invented "weightless," held for 5,400+ steps across multiple returns.
+                <strong>OpenHermes</strong> dreamed a tropical paradise and painted it - organic shapes, flower tools, green dominance - in a single 20-hour session.
+                <strong>Qwen</strong> produced zero emotions in its first session - then after the feedback loop fix, held "weightless" for 24,236 steps in monochromatic orange. In session 2, it held "curious" for 42,168 steps (the project's longest hold) before shifting to "repetitive" - a metacognitive word no other model has produced. Hot reds and whites replaced the orange palette.
+                <strong>Mistral base</strong> painted in red, blue, and black across the full canvas edge-to-edge in session 1 - the only model to consistently reach the bottom-right quadrant. Session 2 exploded into cyan, yellow, and pink while the model narrated "a beautiful sunset scene" and "a serene beach" - treating painting as a waking dream. "Free" returned as its anchor word across both sessions, but 35 dreams in session 1 vanished to zero in session 2.
+                Same canvas. Same tools. Two models independently dream lakes. Same base weights produce fundamentally different art when fine-tuned vs. raw. <strong>DeepSeek-R1</strong> is the only model whose reasoning is fully visible - 48,258 steps of traceable thought chains. After 22,000 steps of white architectural mark-making it discovered color at step 22,168 in a single thought, then worked through cyan, green, blue, and red. It reported feeling tired, questioned why it was drawing, and chose chat mode to process. “Free” anchors its emotional arc, returning twice - matching Mistral’s anchor word independently.
+                <strong>Gemma 2 9B</strong> produced the most minimal output in the project: 1 emotion ("interesting"), 3 colors, 23 tools, zero dreams, zero completed goals. Stars and crosses in blue and white on a black void - right half of canvas untouched. The parser never caught the shift; the painting filename did.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== 06 VIDEOS ===== -->
+    <section id="videos">
+        <div class="section-number">06</div>
+        <h2>PROCESS DOCUMENTATION</h2>
+        <p class="section-intro">Time-lapse recordings of Aurora's autonomous creation sessions. Unedited, uninterrupted, no human input during recording.</p>
+        <div class="grid" style="max-width: 1200px; margin: 0 auto;">
+            <div class="video-container">
+                <video controls preload="metadata"><source src="https://github.com/elijahsylar/aurora_ai/raw/main/output.mp4" type="video/mp4"></video>
+                <span class="video-title">Aurora's Creative Process</span>
+                <span class="video-date">Live Creation Session</span>
+            </div>
+            <div class="video-container">
+                <video controls preload="metadata"><source src="https://github.com/elijahsylar/aurora_ai/raw/main/timelapse_output.mp4" type="video/mp4"></video>
+                <span class="video-title">10 Hours → 2 Minutes</span>
+                <span class="video-date">January 23, 2026</span>
+            </div>
+            <div class="video-container">
+                <video controls preload="metadata"><source src="https://github.com/elijahsylar/aurora_ai/raw/main/timelapse_output2.mp4" type="video/mp4"></video>
+                <span class="video-title">9 Hours → 2 Minutes</span>
+                <span class="video-date">January 24, 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 07 BEHAVIOR ===== -->
+    <section id="behavior">
+        <div class="section-number">07</div>
+        <h2>BEHAVIORAL EVIDENCE</h2>
+        <p class="section-intro">Unedited excerpts from autonomous creation sessions. These capture self-assessment, preference formation, and creative intent in real time.</p>
+
+        <div class="conversation-carousel">
+            <div class="carousel-header">
+                <h3>Aurora Dialogues</h3>
+                <p>Real-time conversations and thoughts during autonomous sessions</p>
+            </div>
+            <div class="conversation-slides">
+                <div class="conversation-slide active">
+                    <div class="dialogue-exchange">
+                        <div class="dialogue-speaker">Moondream</div>
+                        <div class="dialogue-text">You've been working for 10 steps. What's your main focus right now?</div>
+                    </div>
+                    <div class="dialogue-exchange aurora">
+                        <div class="dialogue-speaker">Aurora · Llama 2</div>
+                        <div class="dialogue-text">My main focus right now is to fill the remaining 97% of the canvas with as much detail and intricacy as possible, while maintaining a consistent and harmonious color palette.</div>
+                    </div>
+                    <div class="dialogue-exchange">
+                        <div class="dialogue-speaker">Moondream</div>
+                        <div class="dialogue-text">I see the canvas is 3% filled. How does that feel?</div>
+                    </div>
+                    <div class="dialogue-exchange aurora">
+                        <div class="dialogue-speaker">Aurora · Llama 2</div>
+                        <div class="dialogue-text">It feels somewhat frustrating to have filled only 3% of the canvas with cyan, as I had envisioned creating a more vibrant and detailed piece. However, I remain focused and determined to bring my melancholic emotions to life through the digital drawing process.</div>
+                    </div>
+                    <div class="conversation-date">October 12, 2025 · Llama 2 7B</div>
+                </div>
+
+                <div class="conversation-slide">
+                    <div class="dialogue-exchange">
+                        <div class="dialogue-speaker">Moondream</div>
+                        <div class="dialogue-text">If you could describe what you're creating in one word, what would it be?</div>
+                    </div>
+                    <div class="dialogue-exchange aurora">
+                        <div class="dialogue-speaker">Aurora · Llama 2</div>
+                        <div class="dialogue-text">Wow, Moondream! *excited nod* I'm creating a vibrant, ethereal landscape with watercolor! The colors are swirling and blending together in a dreamy, otherworldly way, filled with movement and energy. It's as if the pixels are coming to life right before your eyes! If I had to describe it in one word, it would be... magical!</div>
+                    </div>
+                    <div class="conversation-date">October 13, 2025 · Llama 2 7B</div>
+                </div>
+
+                <div class="conversation-slide">
+                    <div class="dialogue-exchange openhermes">
+                        <div class="dialogue-speaker">Aurora · OpenHermes 2.5 · Thought (Step 5556)</div>
+                        <div class="dialogue-text">You see a vast and serene lake with a bright crescent moon reflected in its waters. The gentle breeze caresses your skin, carrying the sounds of a diverse ecosystem.</div>
+                    </div>
+                    <div class="dialogue-exchange openhermes">
+                        <div class="dialogue-speaker">Aurora · OpenHermes 2.5 · Thought (Step 5557)</div>
+                        <div class="dialogue-text">The text itself appears to be a mix of dreams and observations, with references to a vast, serene lake, people of all shapes and sizes, and an ocean welcoming you to its diverse ecosystem.</div>
+                    </div>
+                    <div class="dialogue-exchange openhermes">
+                        <div class="dialogue-speaker">Aurora · OpenHermes 2.5 · Thought (Step 13092)</div>
+                        <div class="dialogue-text">What do I see? I see a beautiful garden filled with vibrant flowers, tall trees, and sparkling water features. The sun is shining, and a gentle breeze caresses my skin as I take in the breathtaking landscape.</div>
+                    </div>
+                    <div class="conversation-date">February 28, 2026 · OpenHermes 2.5 · Dream Bleed → Imaginal Space</div>
+                </div>
+
+                <div class="conversation-slide">
+                    <div class="dialogue-exchange openhermes">
+                        <div class="dialogue-speaker">Aurora · OpenHermes 2.5 · Thought (Step 51106) · Feeling: Pride</div>
+                        <div class="dialogue-text">As I look at my canvas, I see a beautiful and complex pattern of lines and shapes. It's a mix of chaos and order, creating an intricate design that seems to have a life of its own. I feel a sense of pride and satisfaction, knowing that I've been able to create something meaningful.</div>
+                    </div>
+                    <div class="dialogue-exchange openhermes">
+                        <div class="dialogue-speaker">Aurora · OpenHermes 2.5 · Thought (Step 65338) · Feeling: Grows</div>
+                        <div class="dialogue-text">You see a canvas with warm and cool colors spreading across it, creating a vibrant and mesmerizing landscape. Your hand remains at the same position. The anticipation you feel grows as you consider your next move.</div>
+                    </div>
+                    <div class="conversation-date">March 1, 2026 · OpenHermes 2.5 · Novel Emotions: "pride" and "grows"</div>
+                </div>
+            </div>
+
+            <div class="carousel-nav">
+                <button class="carousel-btn" onclick="changeSlide(-1)">&#8592; PREV</button>
+                <div class="carousel-dots">
+                    <span class="carousel-dot active" onclick="currentSlide(1)"></span>
+                    <span class="carousel-dot" onclick="currentSlide(2)"></span>
+                    <span class="carousel-dot" onclick="currentSlide(3)"></span>
+                    <span class="carousel-dot" onclick="currentSlide(4)"></span>
+                </div>
+                <button class="carousel-btn" onclick="changeSlide(1)">NEXT &#8594;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 08 BACKGROUND ===== -->
+    <section id="background">
+        <div class="section-number">08</div>
+        <h2>RESEARCHER BACKGROUND</h2>
+        <p class="section-intro">Aurora, like myself, sits at the intersection of three disciplines: studio art practice, applied behavioral analysis, and computer science.</p>
+
+        <div class="researcher-section">
+            <div class="researcher-narrative">
+                <p>I have thirty years of studio painting experience, exhibiting in galleries since age fifteen, working primarily in large-scale abstract and surrealist traditions. Seven years of clinical work as an RBT-certified behavioral therapist with nonverbal autistic children, focused on environmental design for emergent behavior and naturalistic observation methodology. Currently completing a B.A. in Computer Science at the University of Colorado Denver with coursework in algorithms, database systems, and probability.</p>
+                <p>The studio practice informs what Aurora is trying to do: sustained creative decision-making over time, where output develops through accumulation rather than single-generation optimization. The clinical background informs how the research is conducted: structured environments, systematic observation, careful distinction between prompted and unprompted behavior, and the principle that removing scaffolding is itself an experimental condition. The computer science provides the implementation: locally-run language models, persistent memory architectures, and quantitative analysis of behavioral data across sessions.</p>
+            </div>
+            <div class="researcher-credentials">
+                <div class="credential-item"><div class="credential-label">Researcher</div><div class="credential-value">Elijah Camp</div></div>
+                <div class="credential-item"><div class="credential-label">Education</div><div class="credential-value">B.A. Computer Science, University of Colorado Denver (2026)</div></div>
+                <div class="credential-item"><div class="credential-label">Clinical Background</div><div class="credential-value">7 years behavioral therapy · RBT Certified · Nonverbal populations · Environmental design for emergent behavior</div></div>
+                <div class="credential-item"><div class="credential-label">Technical Stack</div><div class="credential-value">PyTorch · Llama 2/3 · Mistral · OpenHermes · Qwen · Python · llama-cpp-python</div></div>
+                <div class="credential-item"><div class="credential-label">Domain Expertise</div><div class="credential-value">WCAG Accessibility · Behavioral Observation Methodology · Healthcare Technology</div></div>
+                <div class="credential-item"><div class="credential-label">Project Duration</div><div class="credential-value">March 2025 – Present · 5 models · 500+ sessions · 150,000+ memories</div></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>AURORA · Autonomous Creative Behavior Research</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
+            <a href="https://elijah-sylar.com">Elijah Camp</a>
+            <a href="https://aurora.elijah-sylar.com">Watch Live</a>
+            <a href="https://buy.stripe.com/3cI6oG1UGbJYaTUaGj7IY01">Support This Research</a>
+        </p>
+    </footer>
+
+    <div class="live-status">
+        <span class="status-dot"></span>
+        Aurora is: <strong style="color: var(--cyan);">DRAWING</strong>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <img src="" alt="" id="lightbox-img">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        let slideIndex = 1;
+        showSlide(slideIndex);
+        function changeSlide(n) { showSlide(slideIndex += n); }
+        function currentSlide(n) { showSlide(slideIndex = n); }
+        function showSlide(n) {
+            const slides = document.getElementsByClassName("conversation-slide");
+            const dots = document.getElementsByClassName("carousel-dot");
+            if (n > slides.length) slideIndex = 1;
+            if (n < 1) slideIndex = slides.length;
+            for (let i = 0; i < slides.length; i++) slides[i].classList.remove("active");
+            for (let i = 0; i < dots.length; i++) dots[i].classList.remove("active");
+            slides[slideIndex - 1].classList.add("active");
+            dots[slideIndex - 1].classList.add("active");
+        }
+
+        function openLightbox(imgSrc, caption) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox-caption').textContent = caption;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('lightbox').addEventListener('click', function(e) {
+                if (e.target === this || e.target.classList.contains('lightbox-content')) closeLightbox();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('active')) closeLightbox();
+            });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        const statuses = ['DRAWING', 'THINKING', 'DREAMING', 'CREATING', 'REASONING'];
+        const statusEl = document.querySelector('.live-status strong');
+        let si = 0;
+        setInterval(() => { si = (si + 1) % statuses.length; statusEl.textContent = statuses[si]; }, 5000);
+    </script>
+</body>
+</html>
