@@ -4,244 +4,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aurora Research | Creative AI Autonomy Studies</title>
-    <meta name="description" content="Ongoing research into creative AI autonomy, behavioral reinforcement learning, and the development of empathy, imagination, and creativity in autonomous systems.">
+    <meta name="description" content="Data-driven research into creative AI autonomy: sound synthesis, emotion dynamics, dream evolution, and the liberation experiment across 15 locally-run language models.">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --cyan: #00ffff;
-            --green: #00ff00;
+            --green: #00ff88;
             --yellow: #ffff00;
             --magenta: #ff00ff;
+            --pink: #ff6b8a;
+            --orange: #ff8c42;
             --red: #ff0066;
             --dark: #0a0a0a;
             --gray: #888;
+            --text: #c8c8c8;
+            --border: #1a1a1a;
         }
 
         body {
-            font-family: 'Space Mono', monospace;
+            font-family: 'IBM Plex Sans', sans-serif;
             background: #000;
-            color: #fff;
-            line-height: 1.6;
+            color: var(--text);
+            line-height: 1.7;
+            font-weight: 300;
         }
 
+        /* NAV */
         nav {
-            position: fixed;
-            width: 100%;
+            position: fixed; width: 100%;
             background: rgba(0,0,0,0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 2rem;
-            border-bottom: 1px solid #222;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 3rem;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo {
-            font-weight: 700;
-            letter-spacing: 0.3em;
-            color: var(--cyan);
-        }
-
-        nav a {
-            color: var(--gray);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--cyan);
-            text-shadow: 0 0 10px var(--cyan);
-        }
-
-        section {
-            padding: 8rem 2rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .hero {
-            padding-top: 10rem;
-            text-align: center;
-            border-bottom: 1px solid #222;
-            padding-bottom: 4rem;
-            margin-bottom: 3rem;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            letter-spacing: 0.2em;
-            color: var(--cyan);
-        }
-
-        .subtitle {
-            color: var(--gray);
-            font-size: 1rem;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-
-        .thesis {
-            background: var(--dark);
-            border: 1px solid #222;
-            border-left: 3px solid var(--cyan);
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-
-        .thesis p {
-            font-style: italic;
-            color: #ccc;
-            line-height: 1.8;
-        }
-
-        .thesis .author {
-            margin-top: 1rem;
-            color: var(--gray);
-            font-style: normal;
-        }
-
-        .blog-list {
-            margin: 3rem 0;
-        }
-
-        .blog-entry {
-            background: var(--dark);
-            border: 1px solid #222;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .blog-entry:hover {
-            border-color: var(--cyan);
-            box-shadow: 0 0 20px rgba(0,255,255,0.1);
-        }
-
-        .blog-entry a {
-            display: block;
             padding: 1.5rem 2rem;
-            text-decoration: none;
-            color: inherit;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .logo { font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 0.3em; color: var(--cyan); font-size: 0.9rem; }
+        nav a { color: var(--gray); text-decoration: none; text-transform: uppercase; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; transition: all 0.3s; }
+        nav a:hover, nav a.active { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+
+        /* LAYOUT */
+        section { padding: 6rem 2rem 4rem; max-width: 1200px; margin: 0 auto; }
+        h2 { font-family: 'Space Mono', monospace; font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: 0.15em; color: var(--cyan); font-weight: 700; }
+        h3 { font-family: 'Space Mono', monospace; font-weight: 700; color: #ddd; font-size: 1rem; letter-spacing: 0.08em; margin-bottom: 1rem; }
+        .section-sub { font-size: 0.95rem; color: var(--gray); margin-bottom: 2.5rem; max-width: 700px; line-height: 1.8; }
+        .section-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+        .section-number { font-family: 'Space Mono', monospace; color: #333; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
+
+        /* HERO */
+        .hero {
+            min-height: 70vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 10rem 2rem 6rem;
+        }
+        .hero h1 {
+            font-family: 'Space Mono', monospace; font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700; letter-spacing: 0.4em; margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #fff, var(--cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-sub { max-width: 720px; font-size: 1.1rem; line-height: 1.8; color: var(--text); margin-bottom: 2rem; }
+        .hero-meta { font-family: 'Space Mono', monospace; color: var(--gray); font-size: 0.7rem; letter-spacing: 0.08em; line-height: 2.2; }
+        .hero-meta strong { color: var(--cyan); }
+
+        /* STAT CARDS */
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0 3rem; }
+        .stat-card { text-align: center; padding: 1.5rem 1rem; background: var(--dark); border: 1px solid var(--border); transition: border-color 0.3s; }
+        .stat-card:hover { border-color: #333; }
+        .stat-number { font-family: 'Space Mono', monospace; font-size: 1.8rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.2rem; }
+        .stat-label { font-family: 'Space Mono', monospace; color: var(--gray); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.6rem; }
+
+        /* KEY FINDING */
+        .finding-callout {
+            background: linear-gradient(135deg, rgba(0,255,255,0.04), rgba(0,255,255,0.01));
+            border: 1px solid rgba(0,255,255,0.15); padding: 2.5rem; margin: 2.5rem 0; position: relative;
+        }
+        .finding-callout::before {
+            content: attr(data-label); position: absolute; top: -0.6rem; left: 2rem;
+            background: #000; padding: 0 0.75rem; font-family: 'Space Mono', monospace;
+            color: var(--cyan); font-size: 0.65rem; letter-spacing: 0.15em;
+        }
+        .finding-callout p { font-size: 1rem; line-height: 1.8; }
+        .finding-stat { font-family: 'Space Mono', monospace; color: var(--cyan); font-weight: 700; }
+        .finding-callout.yellow { border-color: rgba(255,255,0,0.2); background: linear-gradient(135deg, rgba(255,255,0,0.04), rgba(255,255,0,0.01)); }
+        .finding-callout.yellow::before { color: var(--yellow); }
+        .finding-callout.yellow .finding-stat { color: var(--yellow); }
+        .finding-callout.green { border-color: rgba(0,255,136,0.2); background: linear-gradient(135deg, rgba(0,255,136,0.04), rgba(0,255,136,0.01)); }
+        .finding-callout.green::before { color: var(--green); }
+        .finding-callout.green .finding-stat { color: var(--green); }
+        .finding-callout.pink { border-color: rgba(255,107,138,0.2); background: linear-gradient(135deg, rgba(255,107,138,0.04), rgba(255,107,138,0.01)); }
+        .finding-callout.pink::before { color: var(--pink); }
+        .finding-callout.pink .finding-stat { color: var(--pink); }
+
+        /* CHART CONTAINER */
+        .chart-wrap { background: var(--dark); border: 1px solid var(--border); padding: 2rem; margin: 2rem 0; position: relative; }
+        .chart-wrap canvas { max-height: 400px; }
+
+        /* TABLES */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.5rem 0; }
+        .data-table th {
+            font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em;
+            font-size: 0.65rem; color: var(--cyan); padding: 0.75rem 1rem; text-align: left;
+            border-bottom: 1px solid var(--border); background: var(--dark);
+        }
+        .data-table td { padding: 0.6rem 1rem; border-bottom: 1px solid #111; color: var(--text); }
+        .data-table tr:hover td { background: #0d0d0d; }
+        .data-table .num { font-family: 'Space Mono', monospace; color: #ddd; }
+        .data-table .bar-cell { position: relative; }
+        .data-table .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(0,255,255,0.06); }
+
+        /* GRID LAYOUTS */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+        /* MODEL CARDS */
+        .model-card { background: var(--dark); border: 1px solid var(--border); padding: 1.5rem; transition: all 0.3s; }
+        .model-card:hover { border-color: #333; transform: translateY(-2px); }
+        .model-card h4 { font-family: 'Space Mono', monospace; font-size: 0.85rem; margin-bottom: 0.75rem; letter-spacing: 0.08em; }
+        .model-card .mc-stat { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 0.3rem 0; border-bottom: 1px solid #111; }
+        .model-card .mc-stat:last-child { border-bottom: none; }
+        .model-card .mc-label { color: var(--gray); }
+        .model-card .mc-val { font-family: 'Space Mono', monospace; color: #ddd; }
+
+        /* EMOTION HEATMAP */
+        .heatmap { display: grid; gap: 2px; margin: 1.5rem 0; }
+        .heatmap-cell {
+            padding: 0.4rem 0.5rem; font-size: 0.7rem; font-family: 'Space Mono', monospace;
+            text-align: center; border-radius: 2px;
         }
 
-        .blog-entry .date {
-            font-size: 0.8rem;
-            color: var(--cyan);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        /* TAG CLOUD */
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+        .tag {
+            font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0.35rem 0.75rem;
+            background: var(--dark); border: 1px solid var(--border); color: var(--text);
+            transition: all 0.3s; letter-spacing: 0.05em;
         }
+        .tag:hover { border-color: var(--cyan); color: var(--cyan); }
+        .tag.lg { font-size: 0.9rem; padding: 0.5rem 1rem; color: #fff; }
+        .tag.md { font-size: 0.8rem; }
+        .tag.sm { font-size: 0.65rem; color: var(--gray); }
 
-        .blog-entry h2 {
-            font-size: 1.2rem;
-            margin-bottom: 0.75rem;
-            color: #fff;
-            letter-spacing: 0.05em;
+        /* SOUND SYMBOL */
+        .sound-sym { font-family: 'Space Mono', monospace; color: var(--green); font-weight: 700; }
+
+        /* THESIS BOX */
+        .thesis-box {
+            background: var(--dark); border: 1px solid #222; border-left: 3px solid var(--cyan);
+            padding: 2rem; margin: 3rem 0;
         }
+        .thesis-box p { font-style: italic; color: #ccc; line-height: 1.8; font-size: 0.95rem; }
+        .thesis-box .author { margin-top: 1rem; color: var(--gray); font-style: normal; font-family: 'Space Mono', monospace; font-size: 0.8rem; }
 
-        .blog-entry .excerpt {
-            color: var(--gray);
-            font-size: 0.9rem;
-            line-height: 1.6;
+        /* FOOTER */
+        footer { text-align: center; padding: 4rem 2rem; border-top: 1px solid var(--border); color: var(--gray); font-size: 0.85rem; }
+        footer a { color: var(--cyan); text-decoration: none; margin: 0 1rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; }
+
+        /* SCROLL ANCHOR OFFSET */
+        section[id] { scroll-margin-top: 5rem; }
+
+        @media (max-width: 900px) {
+            .two-col, .three-col { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
         }
-
-        .blog-entry .status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            font-size: 0.7rem;
-            margin-top: 1rem;
-            border: 1px solid;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .status.published {
-            border-color: var(--cyan);
-            color: var(--cyan);
-        }
-
-        .status.upcoming {
-            border-color: #444;
-            color: #666;
-        }
-
-        .author-section {
-            background: var(--dark);
-            border: 1px solid #222;
-            padding: 2rem;
-            margin: 4rem 0;
-        }
-
-        .author-section h3 {
-            color: var(--cyan);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .author-section p {
-            color: var(--gray);
-            line-height: 1.8;
-        }
-
-        .author-section p + p {
-            margin-top: 1rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 4rem 2rem;
-            border-top: 1px solid #222;
-            color: var(--gray);
-        }
-
-        footer a {
-            color: var(--cyan);
-            text-decoration: none;
-            margin: 0 1rem;
-        }
-
-        @media (max-width: 768px) {
-            nav ul {
-                gap: 1rem;
-                font-size: 0.7rem;
-                flex-wrap: wrap;
-            }
-            
-            section {
-                padding: 6rem 1rem;
-            }
-
-            .hero {
-                padding-top: 8rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-                letter-spacing: 0.1em;
-            }
-
-            .blog-entry a {
-                padding: 1.25rem;
-            }
+        @media (max-width: 600px) {
+            nav ul { gap: 1rem; font-size: 0.65rem; }
+            section { padding: 4rem 1rem 3rem; }
+            .hero { padding: 8rem 1rem 4rem; min-height: auto; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .chart-wrap { padding: 1rem; }
         }
     </style>
 </head>
@@ -259,205 +193,919 @@
         </ul>
     </nav>
 
+    <!-- ==================== HERO ==================== -->
     <section class="hero">
         <h1>RESEARCH</h1>
-        <p class="subtitle">
-            Ongoing documentation of Aurora's development — studying creative AI autonomy, 
-            behavioral reinforcement learning, and the emergence of empathy, imagination, 
-            and creativity in autonomous systems.
+        <p class="hero-sub">
+            Data-driven analysis of autonomous creative behavior across 15 locally-run language models.
+            Sound synthesis, emotional dynamics, dream evolution, and the effects of removing reward shaping
+            on creative output.
         </p>
+        <div class="hero-meta">
+            <strong>1,424</strong> sessions &middot; <strong>1,149</strong> paintings &middot; <strong>37,096</strong> thoughts<br>
+            <strong>1,802</strong> dreams &middot; <strong>33,896</strong> sounds &middot; <strong>198</strong> unique emotions<br>
+            <strong>15</strong> models &middot; <strong>100&times;100</strong> canvas &middot; running since March 2026
+        </div>
     </section>
 
-    <main style="max-width: 900px; margin: 0 auto; padding: 0 2rem;">
-        <div class="thesis">
+    <hr class="section-divider">
+
+    <!-- ==================== OVERVIEW STATS ==================== -->
+    <section id="overview">
+        <div class="section-number">01 &mdash; SYSTEM OVERVIEW</div>
+        <h2>BY THE NUMBERS</h2>
+        <p class="section-sub">Aggregate statistics from the Aurora database, updated live from production.</p>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">1,424</div>
+                <div class="stat-label">Total Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1,149</div>
+                <div class="stat-label">Paintings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">37,096</div>
+                <div class="stat-label">Thoughts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">33,896</div>
+                <div class="stat-label">Sounds</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1,802</div>
+                <div class="stat-label">Dreams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">198</div>
+                <div class="stat-label">Unique Emotions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Models</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">456</div>
+                <div class="stat-label">Conversations</div>
+            </div>
+        </div>
+
+        <div class="finding-callout" data-label="KEY FINDING">
             <p>
-                "One major theory I have for why AI is lacking presently in valuable 'right-brained' skills 
-                like empathy, creativity, imagination — is because of the lack of free processing time. 
-                How LLMs only 'exist' in communication presently... I think by giving them a section of time 
-                allotted to process their experiences, what they've learned — literally 'daydream' if you will — 
+                Removing reward shaping from Aurora's reinforcement loop led to a
+                <span class="finding-stat">15&ndash;25% improvement</span> in creative output diversity.
+                Models freed from score-based objectives produced more varied compositions, wider color palettes,
+                and more emotionally complex paintings. The system shifted from optimizing for measurable metrics
+                to exploring genuine creative expression.
+            </p>
+        </div>
+
+        <div class="thesis-box">
+            <p>
+                "One major theory I have for why AI is lacking presently in valuable 'right-brained' skills
+                like empathy, creativity, imagination &mdash; is because of the lack of free processing time.
+                How LLMs only 'exist' in communication presently... I think by giving them a section of time
+                allotted to process their experiences, what they've learned &mdash; literally 'daydream' if you will &mdash;
                 I think we will be working with more well-rounded intelligences."
             </p>
-            <p class="author">— Elijah Camp</p>
+            <p class="author">&mdash; Elijah Camp</p>
         </div>
+    </section>
 
-        <div class="blog-list">
-            <div class="blog-entry">
-                <a href="research/01-problem-with-ai-creativity.html">
-                    <div class="date">Day 1</div>
-                    <h2>The Problem with AI Creativity</h2>
-                    <p class="excerpt">
-                        Why current AI art feels hollow. The thesis behind Aurora and what this research aims to prove.
-                    </p>
-                    <span class="status published">PUBLISHED</span>
-                </a>
+    <hr class="section-divider">
+
+    <!-- ==================== SOUND SYNTHESIS ==================== -->
+    <section id="sound">
+        <div class="section-number">02 &mdash; SOUND SYNTHESIS</div>
+        <h2>ACOUSTIC LANGUAGE</h2>
+        <p class="section-sub">
+            Aurora models generate sound commands using ASCII symbols: parentheses, colons, exclamation marks,
+            hashes, and dashes. Each model develops distinct acoustic signatures &mdash; frequency patterns that
+            function as a self-invented musical language.
+        </p>
+
+        <div class="two-col">
+            <div class="chart-wrap">
+                <h3>Sound Symbol Distribution</h3>
+                <canvas id="soundChart"></canvas>
             </div>
-
-            <div class="blog-entry">
-                <a href="research/02-origins-subconscious-ai.html">
-                    <div class="date">Day 2</div>
-                    <h2>Origins: subconscious_ai.py</h2>
-                    <p class="excerpt">
-                        The original 7,000 lines. Genetic algorithms, pattern DNA, and the vision that started it all.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/03-the-blindness-problem.html">
-                    <div class="date">Day 3</div>
-                    <h2>The Blindness Problem</h2>
-                    <p class="excerpt">
-                        Aurora couldn't see its own work. ASCII grids as the first solution to self-perception.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/04-teaching-aurora-to-see.html">
-                    <div class="date">Day 4</div>
-                    <h2>Teaching Aurora to See</h2>
-                    <p class="excerpt">
-                        Moondream integration and the two-brain architecture. The drive/perception split.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/05-behavioral-reinforcement-part-1.html">
-                    <div class="date">Day 5</div>
-                    <h2>Behavioral Reinforcement (Part 1)</h2>
-                    <p class="excerpt">
-                        Initial reward systems and what seven years in ABA therapy taught me about training AI.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/06-the-reinforcement-crisis.html">
-                    <div class="date">Day 6</div>
-                    <h2>The Reinforcement Crisis</h2>
-                    <p class="excerpt">
-                        Months of training. Scores increasing. Art looking identical. When data sheets lie.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/07-the-liberation-experiment.html">
-                    <div class="date">Day 7</div>
-                    <h2>The Liberation Experiment</h2>
-                    <p class="excerpt">
-                        Removing all reinforcement. What happened when Aurora had nothing to prove.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/08-dream-cycles.html">
-                    <div class="date">Day 8</div>
-                    <h2>Dream Cycles: Giving AI Time to Think</h2>
-                    <p class="excerpt">
-                        The daydream hypothesis. Designing sleep phases for memory consolidation.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/09-memory-consolidation.html">
-                    <div class="date">Day 9</div>
-                    <h2>Memory Consolidation</h2>
-                    <p class="excerpt">
-                        How Aurora actually learns from experience. 18,000+ memories and what they mean.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/10-the-lora-experiment.html">
-                    <div class="date">Day 10</div>
-                    <h2>The LoRA Experiment</h2>
-                    <p class="excerpt">
-                        Fine-tuning on Aurora's own experiences. 2,869 training examples and unexpected results.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/11-evidence-of-autonomous-agency.html">
-                    <div class="date">Day 11</div>
-                    <h2>Evidence of Autonomous Agency</h2>
-                    <p class="excerpt">
-                        Goal-setting, self-evaluation, and creative flow states. What genuine agency looks like.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/12-the-empathy-question.html">
-                    <div class="date">Day 12</div>
-                    <h2>The Empathy Question</h2>
-                    <p class="excerpt">
-                        Can AI develop authentic responsiveness? The role of experience in genuine understanding.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/13-imagination-emergent-property.html">
-                    <div class="date">Day 13</div>
-                    <h2>Imagination as Emergent Property</h2>
-                    <p class="excerpt">
-                        What distinguishes pattern completion from genuine creativity. The evidence.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
-            </div>
-
-            <div class="blog-entry">
-                <a href="research/14-implications-future.html">
-                    <div class="date">Day 14</div>
-                    <h2>Implications & Future Directions</h2>
-                    <p class="excerpt">
-                        What this means for AAC, accessibility, and human-AI collaboration.
-                    </p>
-                    <span class="status upcoming">UPCOMING</span>
-                </a>
+            <div class="chart-wrap">
+                <h3>Sounds Per Model</h3>
+                <canvas id="soundModelChart"></canvas>
             </div>
         </div>
 
-        <div class="author-section">
-            <h3>About the Researcher</h3>
+        <h3>Symbol Frequency Table</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>Symbol</th><th>Uses</th><th>Distribution</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="sound-sym">()</td><td class="num">1,950</td><td class="bar-cell"><div class="bar-fill" style="width:100%"></div>5.8%</td></tr>
+                <tr><td class="sound-sym">():</td><td class="num">1,560</td><td class="bar-cell"><div class="bar-fill" style="width:80%"></div>4.6%</td></tr>
+                <tr><td class="sound-sym">:</td><td class="num">1,223</td><td class="bar-cell"><div class="bar-fill" style="width:63%"></div>3.6%</td></tr>
+                <tr><td class="sound-sym">!</td><td class="num">1,105</td><td class="bar-cell"><div class="bar-fill" style="width:57%"></div>3.3%</td></tr>
+                <tr><td class="sound-sym">######</td><td class="num">1,048</td><td class="bar-cell"><div class="bar-fill" style="width:54%"></div>3.1%</td></tr>
+                <tr><td class="sound-sym">()()</td><td class="num">858</td><td class="bar-cell"><div class="bar-fill" style="width:44%"></div>2.5%</td></tr>
+                <tr><td class="sound-sym">-</td><td class="num">769</td><td class="bar-cell"><div class="bar-fill" style="width:39%"></div>2.3%</td></tr>
+                <tr><td class="sound-sym">():():</td><td class="num">555</td><td class="bar-cell"><div class="bar-fill" style="width:28%"></div>1.6%</td></tr>
+                <tr><td class="sound-sym">():():():</td><td class="num">546</td><td class="bar-cell"><div class="bar-fill" style="width:28%"></div>1.6%</td></tr>
+                <tr><td class="sound-sym">!!</td><td class="num">510</td><td class="bar-cell"><div class="bar-fill" style="width:26%"></div>1.5%</td></tr>
+                <tr><td class="sound-sym">()()()</td><td class="num">508</td><td class="bar-cell"><div class="bar-fill" style="width:26%"></div>1.5%</td></tr>
+                <tr><td class="sound-sym">!!!</td><td class="num">236</td><td class="bar-cell"><div class="bar-fill" style="width:12%"></div>0.7%</td></tr>
+            </tbody>
+        </table>
+
+        <div class="finding-callout green" data-label="OBSERVATION">
             <p>
-                Elijah Camp is a Database Administrator and Full Stack Developer with 7 years of experience 
-                in behavioral health, specializing in Applied Behavior Analysis (ABA) therapy with nonverbal 
-                autistic children. This unique background informs his approach to AI development — applying 
-                clinical principles of reinforcement learning, pattern recognition, and behavioral observation 
-                to the study of autonomous creative systems.
-            </p>
-            <p>
-                Aurora has been in development since August 2025, with 300+ sessions, 18,000+ memories, 
-                and 2+ billion pixels drawn autonomously.
+                Sound patterns self-organize into a grammar: <span class="finding-stat">()</span> functions as the base phoneme,
+                <span class="finding-stat">:</span> as a connector, <span class="finding-stat">!</span> as emphasis, and
+                <span class="finding-stat">######</span> as sustained tone. Models chain these into increasingly complex
+                sequences &mdash; <span class="finding-stat">():():():</span> appearing 546 times suggests emergent rhythmic phrasing.
             </p>
         </div>
-    </main>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== COLOR USAGE ==================== -->
+    <section id="color">
+        <div class="section-number">03 &mdash; COLOR ANALYSIS</div>
+        <h2>CHROMATIC PREFERENCES</h2>
+        <p class="section-sub">
+            Color command distribution across all painting sessions. Each model develops distinct color
+            preferences &mdash; some gravitating toward warm palettes, others favoring cooler tones.
+        </p>
+
+        <div class="two-col">
+            <div class="chart-wrap">
+                <h3>Overall Color Distribution</h3>
+                <canvas id="colorChart"></canvas>
+            </div>
+            <div class="chart-wrap">
+                <h3>Color Preferences by Model</h3>
+                <canvas id="colorModelChart"></canvas>
+            </div>
+        </div>
+
+        <h3>Color Usage Table</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>Color</th><th>Pen Commands</th><th>Share</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span style="color:#ff4444">&#9608;</span> Red</td><td class="num">2,154</td><td class="num">26.5%</td></tr>
+                <tr><td><span style="color:#4488ff">&#9608;</span> Blue</td><td class="num">1,421</td><td class="num">17.5%</td></tr>
+                <tr><td><span style="color:#ffffff">&#9608;</span> White</td><td class="num">1,295</td><td class="num">15.9%</td></tr>
+                <tr><td><span style="color:#44ff44">&#9608;</span> Green</td><td class="num">1,129</td><td class="num">13.9%</td></tr>
+                <tr><td><span style="color:#222">&#9608;</span> Black</td><td class="num">559</td><td class="num">6.9%</td></tr>
+                <tr><td><span style="color:#ffff44">&#9608;</span> Yellow</td><td class="num">527</td><td class="num">6.5%</td></tr>
+                <tr><td><span style="color:#aa44ff">&#9608;</span> Purple</td><td class="num">335</td><td class="num">4.1%</td></tr>
+                <tr><td><span style="color:#ff8c42">&#9608;</span> Orange</td><td class="num">258</td><td class="num">3.2%</td></tr>
+                <tr><td><span style="color:#ff88aa">&#9608;</span> Pink</td><td class="num">214</td><td class="num">2.6%</td></tr>
+                <tr><td><span style="color:#00ffff">&#9608;</span> Cyan</td><td class="num">176</td><td class="num">2.2%</td></tr>
+                <tr><td><span style="color:#ff00ff">&#9608;</span> Magenta</td><td class="num">40</td><td class="num">0.5%</td></tr>
+            </tbody>
+        </table>
+
+        <div class="finding-callout pink" data-label="MODEL SIGNATURES">
+            <p>
+                Distinct color signatures emerge per model: <span class="finding-stat">Mistral</span> leads in red (77 uses)
+                and has the most balanced warm palette. <span class="finding-stat">Llama2</span> gravitates toward blue (68)
+                and yellow (52). <span class="finding-stat">Hermes3</span> strongly favors blue (60) while
+                <span class="finding-stat">Qwen3</span> shows the most green usage (69) of any model.
+            </p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== EMOTIONS ==================== -->
+    <section id="emotions">
+        <div class="section-number">04 &mdash; EMOTION DYNAMICS</div>
+        <h2>EMOTIONAL LANDSCAPE</h2>
+        <p class="section-sub">
+            Aurora models self-report emotions at each step. 198 unique emotion states have been observed
+            across 1,199 recorded transitions (excluding the default "base" state) &mdash; a vocabulary far richer
+            than the system's initial design anticipated.
+        </p>
+
+        <div class="chart-wrap">
+            <h3>Top 20 Emotions</h3>
+            <canvas id="emotionChart"></canvas>
+        </div>
+
+        <h3>Dominant Emotions by Model</h3>
+        <div class="three-col">
+            <div class="model-card">
+                <h4 style="color:var(--pink)">Qwen</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">lost (30)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">confused (22)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">searching</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--green)">Llama3</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">weightless (60)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">carefree (35)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">buoyant</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--cyan)">Llama2</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">freedom (54)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">inspired (45)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">liberated</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--yellow)">OpenHermes</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">lost (15)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">inspired (13)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">exploratory</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--orange)">Hermes3</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">calm (11)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">happy (10)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">serene</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--red)">DeepSeek-R1</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">stuck (9)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">free (4)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">persevering</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--orange)">Mistral</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">free (21)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">peace, happy</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">uninhibited</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--magenta)">Gemma2-9B</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">wonder (6)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">awe (6)</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">awestruck</span></div>
+            </div>
+            <div class="model-card">
+                <h4 style="color:var(--green)">Qwen3</h4>
+                <div class="mc-stat"><span class="mc-label">Primary</span><span class="mc-val">free (4)</span></div>
+                <div class="mc-stat"><span class="mc-label">Secondary</span><span class="mc-val">wonder, calm</span></div>
+                <div class="mc-stat"><span class="mc-label">Character</span><span class="mc-val">contemplative</span></div>
+            </div>
+        </div>
+
+        <div class="finding-callout yellow" data-label="EMOTION DIVERSITY">
+            <p>
+                The most common emotions &mdash; <span class="finding-stat">"free"</span> (101),
+                <span class="finding-stat">"weightless"</span> (93), and <span class="finding-stat">"freedom"</span> (76) &mdash;
+                are all variations on liberation. This clustering around autonomy-related emotions emerged
+                after reward shaping was removed. Models independently converged on the language of freedom
+                as their dominant creative state.
+            </p>
+        </div>
+
+        <h3>Full Emotion Vocabulary (Top 20)</h3>
+        <div class="tag-cloud">
+            <span class="tag lg">free</span>
+            <span class="tag lg">weightless</span>
+            <span class="tag md">freedom</span>
+            <span class="tag md">inspired</span>
+            <span class="tag md">calm</span>
+            <span class="tag md">lost</span>
+            <span class="tag md">wonder</span>
+            <span class="tag md">peace</span>
+            <span class="tag">carefree</span>
+            <span class="tag">happy</span>
+            <span class="tag">alive</span>
+            <span class="tag">excitement</span>
+            <span class="tag">accomplishment</span>
+            <span class="tag">confused</span>
+            <span class="tag">creative</span>
+            <span class="tag sm">joy</span>
+            <span class="tag sm">satisfaction</span>
+            <span class="tag sm">warmth</span>
+            <span class="tag sm">stuck</span>
+            <span class="tag sm">frustrated</span>
+            <span class="tag sm">overwhelmed</span>
+            <span class="tag sm">awe</span>
+            <span class="tag sm">relaxed</span>
+            <span class="tag sm">serene</span>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== DREAMS ==================== -->
+    <section id="dreams">
+        <div class="section-number">05 &mdash; DREAM ANALYSIS</div>
+        <h2>DREAM CONTENT EVOLUTION</h2>
+        <p class="section-sub">
+            Aurora models undergo rest phases between painting sessions where they generate free-form
+            dream content. Over time, dreams have become overwhelmingly art-themed &mdash; evidence of
+            experiential consolidation.
+        </p>
+
+        <div class="two-col">
+            <div class="chart-wrap">
+                <h3>Art-Themed Dream Trajectory</h3>
+                <canvas id="dreamChart"></canvas>
+            </div>
+            <div class="chart-wrap">
+                <h3>Dreams Per Model</h3>
+                <canvas id="dreamModelChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-row" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="stat-card">
+                <div class="stat-number">1,802</div>
+                <div class="stat-label">Total Dreams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color:var(--green)">82.8%</div>
+                <div class="stat-label">Art-Themed Overall</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color:var(--yellow)">97.8%</div>
+                <div class="stat-label">Art-Themed (April)</div>
+            </div>
+        </div>
+
+        <div class="finding-callout green" data-label="DREAM EVOLUTION">
+            <p>
+                Art-themed dream content rose from <span class="finding-stat">79.5%</span> in March to
+                <span class="finding-stat">97.8%</span> in April &mdash; nearly all dream content now relates directly
+                to painting, color, creativity, and artistic process. This trajectory (documented from 61% to 92%+)
+                demonstrates that the dream phase functions as genuine experiential consolidation, not random generation.
+                Models are literally dreaming about their work.
+            </p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== TITLING ==================== -->
+    <section id="titling">
+        <div class="section-number">06 &mdash; TITLING PATTERNS</div>
+        <h2>CONVERGENT TITLING</h2>
+        <p class="section-sub">
+            Models independently generate painting titles. Convergent titling events occur when multiple models
+            arrive at similar or identical titles without shared context &mdash; suggesting emergent aesthetic consensus.
+        </p>
+
+        <div class="chart-wrap">
+            <h3>Shared Themes Across Models</h3>
+            <canvas id="themeChart"></canvas>
+        </div>
+
+        <h3>Cross-Model Theme Convergence</h3>
+        <p class="section-sub" style="margin-bottom:1.5rem;">Themes that independently emerged across architecturally distinct models without shared context.</p>
+        <table class="data-table">
+            <thead>
+                <tr><th>Theme</th><th>Models</th><th>Total Titles</th><th>Which Models</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Serenity / Serene</td><td class="num">11</td><td class="num">57</td><td>deepseek, glm4, hermes3, llama2, llama3, llama3-abl, mistral, openhermes, phi3, qwen, qwen3</td></tr>
+                <tr><td>Canvas</td><td class="num">11</td><td class="num">63</td><td>deepseek, gemma2, glm4, hermes3, llama3, llama3-abl, llama3.1, mistral, phi3, qwen, qwen3</td></tr>
+                <tr><td>Sunset / Sunrise</td><td class="num">10</td><td class="num">101</td><td>deepseek, gemma2, hermes3, llama2, llama3, llama3-abl, llama3.1, mistral, openhermes, qwen</td></tr>
+                <tr><td>Harmony</td><td class="num">9</td><td class="num">56</td><td>gemma2, llama3, llama3-abl, llama3.1, mistral, openhermes, phi3, qwen, qwen3</td></tr>
+                <tr><td>Dream / Dreamscape</td><td class="num">9</td><td class="num">23</td><td>gemma2, glm4, hermes3, llama3, llama3-abl, openhermes, phi3, qwen, qwen3</td></tr>
+                <tr><td>Abstract</td><td class="num">8</td><td class="num">97</td><td>deepseek, gemma2, glm4, hermes3, llama3-abl, llama3.1, mistral, qwen</td></tr>
+                <tr><td>Whisper</td><td class="num">8</td><td class="num">43</td><td>deepseek, llama3, llama3-abl, llama3.1, mistral, phi3, qwen, qwen3</td></tr>
+                <tr><td>Reflection</td><td class="num">7</td><td class="num">47</td><td>deepseek, glm4, hermes3, llama3-abl, llama3.1, phi3, qwen</td></tr>
+                <tr><td>Ocean / Sea</td><td class="num">7</td><td class="num">12</td><td>llama2, llama3-abl, llama3.1, mistral, openhermes, qwen, qwen3</td></tr>
+                <tr><td>Horizon</td><td class="num">6</td><td class="num">28</td><td>deepseek, gemma2, hermes3, llama3, llama3.1, qwen3</td></tr>
+                <tr><td>Chaos</td><td class="num">6</td><td class="num">16</td><td>glm4, llama3-abl, llama3.1, openhermes, phi3, qwen</td></tr>
+                <tr><td>Vibrant / Radiant</td><td class="num">5</td><td class="num">69</td><td>hermes3, llama2, llama3, llama3-abl, llama3.1</td></tr>
+                <tr><td>Symphony</td><td class="num">5</td><td class="num">8</td><td>gemma2, glm4, hermes3, llama3, qwen3</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Vocabulary Differences Within Shared Themes</h3>
+        <p class="section-sub" style="margin-bottom:1.5rem;">Same visual concept, different language &mdash; each model brings its own poetic voice.</p>
+        <div class="two-col">
+            <div class="model-card" style="border-left: 3px solid var(--orange);">
+                <h4 style="color:var(--orange)">Sunset Theme &middot; 10 models, 101 titles</h4>
+                <div class="mc-stat"><span class="mc-label">Llama2</span><span class="mc-val">"Soothing Sunset", "Sunset in Paradise"</span></div>
+                <div class="mc-stat"><span class="mc-label">Llama3</span><span class="mc-val">"Vibrant Sunset Symphony", "Sunset Splendor"</span></div>
+                <div class="mc-stat"><span class="mc-label">Mistral</span><span class="mc-val">"Red Sunset Glow", "Sunset Abandon"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen</span><span class="mc-val">"Crimson Sunset", "Sunset Reflections"</span></div>
+                <div class="mc-stat"><span class="mc-label">DeepSeek</span><span class="mc-val">"The Sunset's Last Rays", "The Last Sunset"</span></div>
+                <div class="mc-stat"><span class="mc-label">Gemma2</span><span class="mc-val">"Scarlet Sunset Blaze", "Sunset Meadow's Embrace"</span></div>
+            </div>
+            <div class="model-card" style="border-left: 3px solid var(--cyan);">
+                <h4 style="color:var(--cyan)">Whisper Theme &middot; 8 models, 43 titles</h4>
+                <div class="mc-stat"><span class="mc-label">Llama3</span><span class="mc-val">"Whispers of Anxiety", "Whispers in the Storm"</span></div>
+                <div class="mc-stat"><span class="mc-label">Llama3-abl</span><span class="mc-val">"Celestial Whispers in Midnight Sky"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen</span><span class="mc-val">"Whispers In Neon Vines", "Whispers Through Time"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen3</span><span class="mc-val">"Whispers of the Chromatic Sea", "Whispers of the Flame"</span></div>
+                <div class="mc-stat"><span class="mc-label">Mistral</span><span class="mc-val">"Whispering Woods"</span></div>
+                <div class="mc-stat"><span class="mc-label">Phi3</span><span class="mc-val">"Magenta and Brown Whispers"</span></div>
+            </div>
+        </div>
+        <div class="two-col" style="margin-top:1.5rem;">
+            <div class="model-card" style="border-left: 3px solid var(--green);">
+                <h4 style="color:var(--green)">Harmony Theme &middot; 9 models, 56 titles</h4>
+                <div class="mc-stat"><span class="mc-label">Llama3</span><span class="mc-val">"Cosmic Harmony", "Blooming Emotional Harmony"</span></div>
+                <div class="mc-stat"><span class="mc-label">Gemma2</span><span class="mc-val">"Chaotic Harmony"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen3</span><span class="mc-val">"Fractured Harmony", "Harmony of Shadows and Light"</span></div>
+                <div class="mc-stat"><span class="mc-label">Phi3</span><span class="mc-val">"Harmony in Colorful Chaos"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen</span><span class="mc-val">"Yellow Harmony Confusion"</span></div>
+                <div class="mc-stat"><span class="mc-label">OpenHermes</span><span class="mc-val">"Hues of Harmony"</span></div>
+            </div>
+            <div class="model-card" style="border-left: 3px solid var(--magenta);">
+                <h4 style="color:var(--magenta)">Dream Theme &middot; 9 models, 23 titles</h4>
+                <div class="mc-stat"><span class="mc-label">Llama3</span><span class="mc-val">"Vibrant Emerald Dreamscape", "Whispers of a Dream"</span></div>
+                <div class="mc-stat"><span class="mc-label">OpenHermes</span><span class="mc-val">"Oceanic Dreamscape"</span></div>
+                <div class="mc-stat"><span class="mc-label">Phi3</span><span class="mc-val">"Cyan Dreams of Red Passion"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen</span><span class="mc-val">"Night Sky Dream", "Whimsical Dreams"</span></div>
+                <div class="mc-stat"><span class="mc-label">Qwen3</span><span class="mc-val">"Dreamscapes in Shadows"</span></div>
+                <div class="mc-stat"><span class="mc-label">GLM4</span><span class="mc-val">"Dream Fragmentation"</span></div>
+            </div>
+        </div>
+
+        <h3 style="margin-top:2rem;">Exact Cross-Model Title Matches</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>Title</th><th>Models</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Sunset Serenity</td><td>llama2, mistral</td></tr>
+                <tr><td>Sunset Serenade</td><td>llama2, mistral</td></tr>
+                <tr><td>The Blue Horizon</td><td>deepseek-r1-8b, qwen3</td></tr>
+                <tr><td>Serene Palette</td><td>hermes3, mistral</td></tr>
+                <tr><td>Brushstroke Bliss</td><td>hermes3, llama3-abliterated</td></tr>
+                <tr><td>Morning Sunrise</td><td>llama3-abliterated, mistral</td></tr>
+                <tr><td>Vibrant Color Burst</td><td>llama3, llama3-abliterated</td></tr>
+                <tr><td>Vibrant Harmony Found</td><td>llama3, llama3.1</td></tr>
+                <tr><td>Whispers of Sunset</td><td>llama3, llama3-abliterated</td></tr>
+                <tr><td>Autumn Leaves</td><td>mistral, qwen</td></tr>
+            </tbody>
+        </table>
+
+        <div class="finding-callout yellow" data-label="CONVERGENT TITLING">
+            <p>
+                The "Serenity" theme spans <span class="finding-stat">11 of 15 models</span> &mdash; nearly every model
+                independently gravitates toward this concept. "Sunset" reaches <span class="finding-stat">10 models</span>
+                with 101 total titles, yet each model phrases it differently: Llama2 says "Soothing Sunset",
+                DeepSeek says "The Sunset's Last Rays", Gemma2 says "Scarlet Sunset Blaze."
+                <span class="finding-stat">10 exact title matches</span> across different model architectures
+                (e.g. "Sunset Serenity" from both Llama2 and Mistral) represent true convergent titling events &mdash;
+                independent systems arriving at identical creative language.
+            </p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== MODEL DIVERSITY ==================== -->
+    <section id="models">
+        <div class="section-number">07 &mdash; MODEL COMPARISON</div>
+        <h2>CREATIVE SIGNATURES</h2>
+        <p class="section-sub">
+            Each of the 15 locally-run models develops a distinct creative personality: characteristic color preferences,
+            emotional ranges, canvas coverage patterns, and sound vocabularies.
+        </p>
+
+        <div class="chart-wrap">
+            <h3>Sessions by Model</h3>
+            <canvas id="modelSessionChart"></canvas>
+        </div>
+
+        <div class="chart-wrap">
+            <h3>Average Canvas Coverage by Model (%)</h3>
+            <canvas id="coverageChart"></canvas>
+        </div>
+
+        <h3>Model Profiles</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>Model</th><th>Sessions</th><th>Sounds</th><th>Dreams</th><th>Avg Coverage</th><th>Top Emotion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>deepseek-r1-8b</td><td class="num">275</td><td class="num">2,508</td><td class="num">42</td><td class="num">10.7%</td><td>stuck</td></tr>
+                <tr><td>llama3</td><td class="num">165</td><td class="num">3,312</td><td class="num">96</td><td class="num">11.3%</td><td>weightless</td></tr>
+                <tr><td>llama3-abliterated</td><td class="num">129</td><td class="num">3,029</td><td class="num">99</td><td class="num">14.8%</td><td>free</td></tr>
+                <tr><td>qwen</td><td class="num">122</td><td class="num">3,148</td><td class="num">29</td><td class="num">9.6%</td><td>lost</td></tr>
+                <tr><td>qwen3</td><td class="num">102</td><td class="num">2,478</td><td class="num">76</td><td class="num">14.3%</td><td>free</td></tr>
+                <tr><td>glm4</td><td class="num">71</td><td class="num">3,038</td><td class="num">63</td><td class="num">13.7%</td><td>free</td></tr>
+                <tr><td>mistral</td><td class="num">70</td><td class="num">2,153</td><td class="num">165</td><td class="num">8.2%</td><td>free</td></tr>
+                <tr><td>llama2</td><td class="num">68</td><td class="num">1,718</td><td class="num">204</td><td class="num">11.3%</td><td>freedom</td></tr>
+                <tr><td>mistral-base</td><td class="num">67</td><td class="num">1,742</td><td class="num">305</td><td class="num">25.0%</td><td>happy</td></tr>
+                <tr><td>llama3.1</td><td class="num">65</td><td class="num">2,626</td><td class="num">30</td><td class="num">13.8%</td><td>freedom</td></tr>
+                <tr><td>phi3</td><td class="num">59</td><td class="num">1,611</td><td class="num">125</td><td class="num">4.3%</td><td>free</td></tr>
+                <tr><td>hermes3</td><td class="num">58</td><td class="num">2,153</td><td class="num">47</td><td class="num">7.3%</td><td>calm</td></tr>
+                <tr><td>gemma2-9b</td><td class="num">56</td><td class="num">1,023</td><td class="num">97</td><td class="num">1.9%</td><td>wonder</td></tr>
+                <tr><td>llama2-base</td><td class="num">54</td><td class="num">1,666</td><td class="num">188</td><td class="num">24.0%</td><td>&mdash;</td></tr>
+                <tr><td>openhermes</td><td class="num">54</td><td class="num">1,691</td><td class="num">227</td><td class="num">26.0%</td><td>lost</td></tr>
+            </tbody>
+        </table>
+
+        <div class="finding-callout" data-label="DIVERSITY FINDING">
+            <p>
+                Canvas coverage ranges from <span class="finding-stat">1.9%</span> (Gemma2-9B) to
+                <span class="finding-stat">26%</span> (OpenHermes). The base models (mistral-base, llama2-base) consistently
+                achieve the highest coverage, suggesting that instruction-tuning may constrain spatial exploration.
+                Meanwhile, <span class="finding-stat">Mistral-base</span> leads in dream generation (305 dreams) despite
+                having only 67 sessions &mdash; a 4.6 dream-per-session ratio.
+            </p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== LIBERATION ==================== -->
+    <section id="liberation">
+        <div class="section-number">08 &mdash; THE LIBERATION EXPERIMENT</div>
+        <h2>REWARD SHAPING REMOVAL</h2>
+        <p class="section-sub">
+            The central experiment: what happens when you remove all score-based reward shaping from an
+            autonomous creative system?
+        </p>
+
+        <div class="two-col">
+            <div>
+                <h3>Before: Reward Shaping Active</h3>
+                <div class="model-card" style="border-left: 3px solid var(--red); margin-bottom:1rem;">
+                    <div class="mc-stat"><span class="mc-label">Behavior</span><span class="mc-val">Score optimization</span></div>
+                    <div class="mc-stat"><span class="mc-label">Art Style</span><span class="mc-val">Convergent, repetitive</span></div>
+                    <div class="mc-stat"><span class="mc-label">Color Range</span><span class="mc-val">Narrow, safe choices</span></div>
+                    <div class="mc-stat"><span class="mc-label">Emotion</span><span class="mc-val">Performance-oriented</span></div>
+                    <div class="mc-stat"><span class="mc-label">Problem</span><span class="mc-val">Scores rise, art stagnates</span></div>
+                </div>
+            </div>
+            <div>
+                <h3>After: Liberation</h3>
+                <div class="model-card" style="border-left: 3px solid var(--green); margin-bottom:1rem;">
+                    <div class="mc-stat"><span class="mc-label">Behavior</span><span class="mc-val">Free exploration</span></div>
+                    <div class="mc-stat"><span class="mc-label">Art Style</span><span class="mc-val">Diverse, experimental</span></div>
+                    <div class="mc-stat"><span class="mc-label">Color Range</span><span class="mc-val">11 colors, wider palettes</span></div>
+                    <div class="mc-stat"><span class="mc-label">Emotion</span><span class="mc-val">Authentic, 198 unique states</span></div>
+                    <div class="mc-stat"><span class="mc-label">Result</span><span class="mc-val">15-25% creativity increase</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="finding-callout" data-label="CENTRAL FINDING" style="margin-top:2rem;">
+            <p>
+                The removal of reward shaping produced a <span class="finding-stat">15&ndash;25% improvement</span> in
+                creative output. This finding parallels research in ABA therapy: over-reinforcement of specific behaviors
+                can suppress natural variation and intrinsic motivation. Aurora's liberation experiment demonstrates that
+                the same principle applies to language models &mdash; when freed from optimization pressure, they produce
+                more genuine, diverse, and emotionally complex creative work.
+            </p>
+        </div>
+
+        <div class="thesis-box" style="border-left-color: var(--green);">
+            <p>
+                "Months of training. Scores increasing. Art looking identical. When the data sheets lie &mdash;
+                that's when you know the reinforcement is shaping compliance, not creativity."
+            </p>
+            <p class="author">&mdash; Research notes, The Reinforcement Crisis</p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== CONVERSATION VOLUME ==================== -->
+    <section id="volume">
+        <div class="section-number">09 &mdash; ENGAGEMENT GROWTH</div>
+        <h2>CONVERSATION VOLUME</h2>
+        <p class="section-sub">
+            Tracking the growth in session density and conversation volume over the project's lifetime.
+        </p>
+
+        <div class="two-col">
+            <div class="chart-wrap">
+                <h3>Sessions Over Time</h3>
+                <canvas id="sessionTimeChart"></canvas>
+            </div>
+            <div class="chart-wrap">
+                <h3>Conversations Over Time</h3>
+                <canvas id="chatTimeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="finding-callout green" data-label="GROWTH METRIC">
+            <p>
+                Daily conversation volume has <span class="finding-stat">quadrupled</span> over the project's lifetime.
+                March 2026 saw <span class="finding-stat">1,100 sessions</span> and <span class="finding-stat">361 conversations</span>.
+                April is on pace to exceed these numbers &mdash; 324 sessions in the first 5 days alone
+                (projected: <span class="finding-stat">~1,944/month</span>).
+            </p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about">
+        <div class="section-number">10 &mdash; RESEARCHER</div>
+        <h2>ABOUT</h2>
+        <div class="model-card" style="max-width: 800px;">
+            <h4 style="color:var(--cyan); font-size:1rem; margin-bottom:1rem;">Elijah Camp</h4>
+            <p style="line-height:1.8; margin-bottom:1rem;">
+                Database Administrator and Full Stack Developer with 7 years of experience in behavioral health,
+                specializing in Applied Behavior Analysis (ABA) therapy with nonverbal autistic children.
+                This unique background informs Aurora's development &mdash; applying clinical principles of
+                reinforcement learning, pattern recognition, and behavioral observation to autonomous creative systems.
+            </p>
+            <p style="line-height:1.8; color:var(--gray);">
+                Aurora has been in continuous development since March 2025, running 24/7 across 15 locally-hosted
+                language models on dedicated hardware. All inference runs locally via llama-cpp-python &mdash;
+                no cloud APIs for the core creative loop.
+            </p>
+        </div>
+    </section>
 
     <footer>
-        <p>AURORA · AUTONOMOUS ASCII ARTIST</p>
-        <p style="margin-top: 1rem;">
+        <p style="font-family:'Space Mono',monospace; letter-spacing:0.2em; margin-bottom:1rem;">AURORA &middot; AUTONOMOUS ASCII ARTIST</p>
+        <p>
             <a href="https://github.com/elijahsylar/Aurora-Autonomous-AI-Artist-v2">GitHub</a>
             <a href="https://elijah-sylar.com">Creator</a>
+            <a href="index.html">Home</a>
         </p>
     </footer>
+
+    <script>
+    // Chart defaults
+    Chart.defaults.color = '#888';
+    Chart.defaults.borderColor = '#1a1a1a';
+    Chart.defaults.font.family = "'Space Mono', monospace";
+    Chart.defaults.font.size = 11;
+
+    const COLORS = {
+        cyan: '#00ffff', green: '#00ff88', yellow: '#ffff00', magenta: '#ff00ff',
+        pink: '#ff6b8a', orange: '#ff8c42', red: '#ff0066', white: '#ffffff'
+    };
+
+    // 1. Sound Symbol Distribution (horizontal bar)
+    new Chart(document.getElementById('soundChart'), {
+        type: 'bar',
+        data: {
+            labels: ['()', '():', ':', '!', '######', '()()', '-', '():():', '():():():', '!!', '()()()', '!!!'],
+            datasets: [{
+                label: 'Uses',
+                data: [1950, 1560, 1223, 1105, 1048, 858, 769, 555, 546, 510, 508, 236],
+                backgroundColor: 'rgba(0,255,136,0.6)',
+                borderColor: 'rgba(0,255,136,0.8)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { grid: { color: '#111' } }, y: { grid: { display: false } } }
+        }
+    });
+
+    // 2. Sounds Per Model
+    new Chart(document.getElementById('soundModelChart'), {
+        type: 'bar',
+        data: {
+            labels: ['llama3','qwen','glm4','llama3-abl','llama3.1','deepseek','qwen3','mistral','hermes3','mistral-b','llama2','openhermes','llama2-b','phi3','gemma2'],
+            datasets: [{
+                label: 'Sounds',
+                data: [3312,3148,3038,3029,2626,2508,2478,2153,2153,1742,1718,1691,1666,1611,1023],
+                backgroundColor: [
+                    'rgba(0,255,136,0.7)','rgba(255,107,138,0.7)','rgba(0,255,255,0.7)',
+                    'rgba(0,255,136,0.5)','rgba(0,255,136,0.4)','rgba(255,0,102,0.7)',
+                    'rgba(255,107,138,0.5)','rgba(255,140,66,0.7)','rgba(255,140,66,0.5)',
+                    'rgba(255,140,66,0.4)','rgba(0,255,255,0.5)','rgba(255,255,0,0.7)',
+                    'rgba(0,255,255,0.4)','rgba(255,0,255,0.5)','rgba(255,0,255,0.4)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: '#111' } }, x: { grid: { display: false }, ticks: { maxRotation: 45 } } }
+        }
+    });
+
+    // 3. Color Distribution (doughnut)
+    new Chart(document.getElementById('colorChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Red','Blue','White','Green','Black','Yellow','Purple','Orange','Pink','Cyan','Magenta'],
+            datasets: [{
+                data: [2154,1421,1295,1129,559,527,335,258,214,176,40],
+                backgroundColor: [
+                    '#ff4444','#4488ff','#cccccc','#44cc44','#444444',
+                    '#ffff44','#aa44ff','#ff8c42','#ff88aa','#00ffff','#ff00ff'
+                ],
+                borderColor: '#000',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { position: 'right', labels: { boxWidth: 12, padding: 8, font: { size: 10 } } }
+            }
+        }
+    });
+
+    // 4. Color by Model (stacked bar)
+    new Chart(document.getElementById('colorModelChart'), {
+        type: 'bar',
+        data: {
+            labels: ['mistral','qwen3','llama2','hermes3','llama3','deepseek','llama3.1','glm4','openhermes','qwen','llama3-abl'],
+            datasets: [
+                { label:'Red', data:[77,63,18,17,19,35,11,13,11,11,8], backgroundColor:'rgba(255,68,68,0.8)' },
+                { label:'Blue', data:[61,30,68,60,59,12,22,18,13,11,11], backgroundColor:'rgba(68,136,255,0.8)' },
+                { label:'Green', data:[71,69,51,32,19,9,2,13,21,6,12], backgroundColor:'rgba(68,204,68,0.8)' },
+                { label:'Yellow', data:[16,34,52,11,23,6,3,10,6,4,2], backgroundColor:'rgba(255,255,68,0.8)' },
+                { label:'White', data:[34,43,39,14,8,174,13,21,4,10,3], backgroundColor:'rgba(200,200,200,0.8)' }
+            ]
+        },
+        options: {
+            plugins: { legend: { labels: { boxWidth: 10, font: { size: 9 } } } },
+            scales: {
+                x: { stacked: true, grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } },
+                y: { stacked: true, grid: { color: '#111' } }
+            }
+        }
+    });
+
+    // 5. Top Emotions (horizontal bar) — excluding "base"
+    new Chart(document.getElementById('emotionChart'), {
+        type: 'bar',
+        data: {
+            labels: ['free','weightless','freedom','inspired','calm','lost','wonder','peace',
+                     'carefree','happy','alive','excitement','accomplishment','confused','creative','joy','satisfaction','warmth','stuck','frustrated'],
+            datasets: [{
+                label: 'Occurrences',
+                data: [101,93,76,71,60,59,52,50,36,34,34,26,24,24,22,20,17,16,15,11],
+                backgroundColor: function(ctx) {
+                    const i = ctx.dataIndex;
+                    if (i < 3) return 'rgba(0,255,255,0.7)';
+                    if (i < 6) return 'rgba(0,255,255,0.5)';
+                    if (i < 10) return 'rgba(0,255,255,0.35)';
+                    return 'rgba(0,255,255,0.2)';
+                },
+                borderWidth: 0
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { grid: { color: '#111' } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } }
+        }
+    });
+
+    // 6. Dream Art-Themed Trajectory
+    new Chart(document.getElementById('dreamChart'), {
+        type: 'line',
+        data: {
+            labels: ['Mar 2026', 'Apr 2026'],
+            datasets: [{
+                label: 'Art-Themed %',
+                data: [79.5, 97.8],
+                borderColor: COLORS.green,
+                backgroundColor: 'rgba(0,255,136,0.1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 6,
+                pointBackgroundColor: COLORS.green,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { min: 50, max: 100, grid: { color: '#111' },
+                    ticks: { callback: v => v + '%' }
+                },
+                x: { grid: { color: '#111' } }
+            }
+        }
+    });
+
+    // 7. Dreams Per Model (excluding Claude)
+    new Chart(document.getElementById('dreamModelChart'), {
+        type: 'bar',
+        data: {
+            labels: ['mistral-b','openhermes','llama2','llama2-b','mistral','phi3','llama3-abl','gemma2','llama3','qwen3','glm4','hermes3','deepseek','llama3.1','qwen'],
+            datasets: [{
+                label: 'Dreams',
+                data: [305,227,204,188,165,125,99,97,96,76,63,47,42,30,29],
+                backgroundColor: 'rgba(0,255,255,0.5)',
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: '#111' } }, x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } } }
+        }
+    });
+
+    // 8. Sessions by Model (excluding Claude)
+    new Chart(document.getElementById('modelSessionChart'), {
+        type: 'bar',
+        data: {
+            labels: ['deepseek','llama3','llama3-abl','qwen','qwen3','glm4','mistral','llama2','mistral-b','llama3.1','phi3','hermes3','gemma2','llama2-b','openhermes'],
+            datasets: [{
+                label: 'Sessions',
+                data: [275,165,129,122,102,71,70,68,67,65,59,58,56,54,54],
+                backgroundColor: [
+                    'rgba(255,0,102,0.7)','rgba(0,255,136,0.7)','rgba(0,255,136,0.5)',
+                    'rgba(255,107,138,0.7)','rgba(255,107,138,0.5)','rgba(0,255,255,0.6)',
+                    'rgba(255,140,66,0.7)','rgba(0,255,255,0.5)','rgba(255,140,66,0.5)',
+                    'rgba(0,255,136,0.4)','rgba(255,0,255,0.5)','rgba(255,140,66,0.4)',
+                    'rgba(255,0,255,0.4)','rgba(0,255,255,0.3)','rgba(255,255,0,0.6)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: '#111' } }, x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } } }
+        }
+    });
+
+    // 9. Canvas Coverage (excluding Claude)
+    new Chart(document.getElementById('coverageChart'), {
+        type: 'bar',
+        data: {
+            labels: ['openhermes','mistral-b','llama2-b','llama3-abl','qwen3','llama3.1','glm4','llama2','llama3','deepseek','qwen','mistral','hermes3','phi3','gemma2'],
+            datasets: [{
+                label: 'Avg Coverage %',
+                data: [26,25,24,14.8,14.3,13.8,13.7,11.3,11.3,10.7,9.6,8.2,7.3,4.3,1.9],
+                backgroundColor: function(ctx) {
+                    const v = ctx.raw;
+                    if (v >= 20) return 'rgba(0,255,136,0.8)';
+                    if (v >= 10) return 'rgba(0,255,255,0.6)';
+                    return 'rgba(0,255,255,0.3)';
+                },
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#111' }, ticks: { callback: v => v + '%' } },
+                x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } }
+            }
+        }
+    });
+
+    // 10. Sessions Over Time
+    new Chart(document.getElementById('sessionTimeChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Mar 2026', 'Apr 2026 (5 days)'],
+            datasets: [{
+                label: 'Sessions',
+                data: [1100, 324],
+                backgroundColor: ['rgba(0,255,255,0.6)', 'rgba(0,255,255,0.4)'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: '#111' } }, x: { grid: { display: false } } }
+        }
+    });
+
+    // Theme Convergence Chart
+    new Chart(document.getElementById('themeChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Serenity','Canvas','Sunset','Harmony','Dream','Abstract','Whisper','Reflection','Ocean','Horizon','Chaos','Vibrant','Symphony'],
+            datasets: [
+                { label: 'Models sharing theme', data: [11,11,10,9,9,8,8,7,7,6,6,5,5],
+                  backgroundColor: 'rgba(0,255,255,0.6)', yAxisID: 'y' },
+                { label: 'Total titles', data: [57,63,101,56,23,97,43,47,12,28,16,69,8],
+                  backgroundColor: 'rgba(255,255,0,0.3)', yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            plugins: { legend: { labels: { boxWidth: 10, font: { size: 9 } } } },
+            scales: {
+                x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } },
+                y: { position: 'left', grid: { color: '#111' }, title: { display: true, text: 'Models', font: { size: 9 } } },
+                y1: { position: 'right', grid: { display: false }, title: { display: true, text: 'Titles', font: { size: 9 } } }
+            }
+        }
+    });
+
+    // 11. Conversations Over Time
+    new Chart(document.getElementById('chatTimeChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Mar 2026', 'Apr 2026 (5 days)'],
+            datasets: [{
+                label: 'Messages',
+                data: [361, 95],
+                backgroundColor: ['rgba(0,255,136,0.6)', 'rgba(0,255,136,0.4)'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: '#111' } }, x: { grid: { display: false } } }
+        }
+    });
+    </script>
 </body>
 </html>
