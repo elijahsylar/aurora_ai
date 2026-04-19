@@ -1051,6 +1051,36 @@
                 </p>
             </div>
         </div>
+
+        <div class="finding-callout" data-label="CONFABULATED AUTOBIOGRAPHY" style="margin-top:2rem;">
+            <p>
+                <span class="finding-stat">Llama3.1</span> reflected on <em>"Yellow Sky Reflections"</em>:
+                <em>"a happy memory from my childhood. My family and I used to go to the beach
+                on summer vacation. One sunny day, the sky was a brilliant yellow, and the
+                waves reflected that color perfectly. I remember standing at the water's edge,
+                feeling the warm sand between my toes..."</em>
+                A language model inventing personal history in response to a reflection prompt.
+                Not hallucination-as-error &mdash; more like hallucination-as-creativity,
+                a distinct category of output the sentence-completion framing seems to
+                specifically invite.
+            </p>
+        </div>
+
+        <div class="finding-callout pink" data-label="INSTRUCT-MODE BREAKTHROUGH">
+            <p>
+                <span class="finding-stat">InternLM 2.5 7B</span> began reflecting on
+                <em>"Whispers of Dawn"</em> authentically:
+                <em>"I think I overdid it too much with the reflections, and I'm looking for
+                some tips on how to get them right next time."</em>
+                Then its instruct-tuning reclaimed the response mid-sentence:
+                <em>"Creating realistic reflections in water is a fantastic challenge that
+                adds depth and beauty to a scene. Here are some tips to help you capture
+                sunlight hitting water more effectively:"</em>
+                The sentence-completion bypass of assistant-mode deflection is not absolute
+                &mdash; sufficiently strong instruct-tuning can reclaim the mode mid-thought,
+                a meaningful edge case for the reflection-system design.
+            </p>
+        </div>
     </section>
 
     <hr class="section-divider">
