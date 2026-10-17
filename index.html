@@ -3,706 +3,443 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aurora canvas study</title>
-<meta name="description" content="Description of a program that runs pretrained language models on a 100 by 100 text canvas, what was logged from March to June 2026, and the limits of that data.">
+<title>Aurora: pilot study report</title>
+<meta name="description" content="Aurora is a system that gives language models a canvas, a small command vocabulary and no reward signal. This report describes the system, the March to June 2026 pilot dataset of 26 models (25 run locally, one via API), an audit of that dataset, and the current protocol.">
 <meta name="author" content="Elijah Sylar Camp">
 <style>
-:root {
-  color-scheme: light;
-  --surface: #fcfcfb;
-  --surface-2: #f2f1ee;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --rule: #dcdbd6;
-  --grid: #e6e5e0;
-  --link: #1c5cab;
-  --b1: #86b6ef; --b2: #3987e5; --b3: #1c5cab; --b4: #0d366b;
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
-}
-@media (prefers-color-scheme: dark) {
   :root {
-    color-scheme: dark;
-    --surface: #1a1a19;
-    --surface-2: #242422;
-    --text: #f0efec;
-    --text-2: #c3c2b7;
-    --rule: #3a3a37;
-    --grid: #2e2e2b;
-    --link: #86b6ef;
-    --b1: #184f95; --b2: #2a78d6; --b3: #6da7ec; --b4: #cde2fb;
-    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --ink: #1a1a1a; --muted: #4a4a4a; --bg: #ffffff; --rule: #d6d6d6; --panel: #f4f4f2;
+    --link: #1d4f7a; --accent: #8a3d12;
   }
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0; background: var(--surface); color: var(--text);
-  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-main { max-width: 72ch; margin: 0 auto; padding: 24px 16px 64px; }
-h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 8px; }
-h2 { font-size: 1.25rem; margin: 2.4em 0 0.6em; padding-top: 0.6em; border-top: 1px solid var(--rule); }
-h3 { font-size: 1.05rem; margin: 1.8em 0 0.4em; }
-p, li { max-width: 72ch; }
-a { color: var(--link); }
-.meta { color: var(--text-2); font-size: 0.95rem; margin: 0 0 1.2em; }
-nav ol { padding-left: 1.4em; columns: 2; column-gap: 2em; margin: 0; }
-nav li { break-inside: avoid; }
-code, pre { font: 0.88rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-code { background: var(--surface-2); padding: 0 3px; border-radius: 3px; overflow-wrap: anywhere; }
-pre { background: var(--surface-2); padding: 12px; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; border-radius: 4px; }
-.table-wrap { overflow-x: auto; margin: 0.8em 0 1.2em; }
-.wide { width: min(1040px, calc(100vw - 32px)); position: relative; left: 50%; transform: translateX(-50%); }
-.wide table { font-size: 0.86rem; }
-.hint { display: none; color: var(--text-2); font-size: 0.85rem; margin: 0.4em 0 0; }
-@media (max-width: 700px) { .hint { display: block; } }
-table { border-collapse: collapse; font-size: 0.92rem; min-width: 100%; }
-caption { text-align: left; color: var(--text-2); font-size: 0.9rem; padding-bottom: 6px; }
-th, td { text-align: left; padding: 5px 10px 5px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
-th { font-weight: 600; white-space: nowrap; }
-td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.note { color: var(--text-2); font-size: 0.92rem; }
-figure { margin: 1.4em 0; }
-figcaption { color: var(--text-2); font-size: 0.92rem; margin-top: 6px; }
-.chart-wrap { overflow-x: auto; }
-svg.chart { display: block; width: 100%; min-width: 560px; height: auto; font: 11px system-ui, sans-serif; }
-svg .grid { stroke: var(--grid); stroke-width: 1; }
-svg .axis { stroke: var(--text-2); stroke-width: 1; }
-svg .mark { stroke: var(--text-2); stroke-width: 1; }
-svg .tick, svg .anno { fill: var(--text-2); }
-svg .anno { font-size: 11px; }
-svg .val { fill: var(--text); }
-svg .b1 { fill: var(--b1); } svg .b2 { fill: var(--b2); } svg .b3 { fill: var(--b3); } svg .b4 { fill: var(--b4); }
-svg .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-svg .line.s1 { stroke: var(--s1); } svg .line.s2 { stroke: var(--s2); } svg .line.s3 { stroke: var(--s3); }
-svg .dot { stroke: var(--surface); stroke-width: 2; }
-svg .dot.s1 { fill: var(--s1); } svg .dot.s2 { fill: var(--s2); } svg .dot.s3 { fill: var(--s3); }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.9rem; color: var(--text-2); margin: 6px 0 4px; }
-.key { display: inline-flex; align-items: center; gap: 6px; }
-.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
-.sw.b1 { background: var(--b1); } .sw.b2 { background: var(--b2); } .sw.b3 { background: var(--b3); } .sw.b4 { background: var(--b4); }
-.ln { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
-.ln.s1 { background: var(--s1); } .ln.s2 { background: var(--s2); } .ln.s3 { background: var(--s3); }
-details { margin: 0.4em 0 1.2em; }
-summary { cursor: pointer; color: var(--link); }
-.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.figs img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: #000; }
-footer { color: var(--text-2); font-size: 0.9rem; margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1em; }
-@media (max-width: 520px) { body { font-size: 16px; } nav ol { columns: 1; } }
-@media print { a { color: inherit; } .chart-wrap { overflow: visible; } }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #e6e6e6; --muted: #b8b8b8; --bg: #141414; --rule: #3a3a3a; --panel: #1e1e1e; --link: #8cc0ec; --accent: #f0a070; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .skip { position: absolute; left: -999px; top: 0; background: var(--panel); padding: .5rem 1rem; }
+  .skip:focus { left: 1rem; }
+  header, main, footer { max-width: 46rem; margin: 0 auto; padding: 0 16px; }
+  header { padding-top: 2.5rem; border-bottom: 1px solid var(--rule); padding-bottom: 1.25rem; }
+  h1 { font-size: 1.75rem; line-height: 1.25; margin: 0 0 .5rem; }
+  h2 { font-size: 1.35rem; margin: 2.75rem 0 .75rem; padding-top: .5rem; border-top: 1px solid var(--rule); }
+  h3 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
+  p, li { max-width: 42rem; }
+  a { color: var(--link); }
+  .byline, .meta { color: var(--muted); margin: .25rem 0; }
+  .meta { font-size: .9rem; }
+  nav ol { padding-left: 1.25rem; columns: 2; column-gap: 2rem; }
+  @media (max-width: 34rem) { nav ol { columns: 1; } }
+  dl.glossary { background: var(--panel); border: 1px solid var(--rule); padding: 1rem 1.25rem; border-radius: 4px; }
+  dl.glossary dt { font-weight: 600; margin-top: .75rem; }
+  dl.glossary dt:first-child { margin-top: 0; }
+  dl.glossary dd { margin: .2rem 0 0 0; }
+  .term { font-variant: small-caps; letter-spacing: .02em; }
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--rule); border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  caption { text-align: left; padding: .6rem .75rem; font-weight: 600; caption-side: top; }
+  th, td { padding: .4rem .6rem; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  figure { margin: 1.5rem 0; }
+  figure img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
+  figcaption { font-size: .9rem; color: var(--muted); margin-top: .4rem; }
+  .canvas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0 .5rem; }
+  .canvas-grid figure { margin: 0; }
+  .canvas-grid img { background: #000; }
+  .abstract { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: .25rem 1.25rem 1rem; margin-top: 1.5rem; }
+  .abstract h2 { border-top: 0; margin-top: .75rem; }
+  ol.obs > li { margin-bottom: 1rem; }
+  .caveat { display: block; font-size: .92rem; color: var(--muted); margin-top: .2rem; }
+  .caveat::before { content: "Caveat: "; font-weight: 600; color: var(--accent); }
+  .status { font-weight: 600; white-space: nowrap; }
+  footer { border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; padding-bottom: 3rem; color: var(--muted); font-size: .9rem; }
+  code { font-size: .9em; }
 </style>
 </head>
 <body>
-<main>
-
+<a class="skip" href="#main">Skip to content</a>
 <header>
-<h1>Aurora: what language models generate on a text canvas with a fixed command set</h1>
-<p class="meta">Elijah Sylar Camp · Data as of <!--A:asof-->2026-10-17<!--/A--> · Sessions from <!--A:w.start-->7 March 2026<!--/A--> to <!--A:w.end-->14 June 2026<!--/A--></p>
-<nav aria-label="Contents">
-<ol>
-<li><a href="#abstract">Abstract</a></li>
-<li><a href="#question">Research question</a></li>
-<li><a href="#system">System design</a></li>
-<li><a href="#methods">Methods</a></li>
-<li><a href="#timeline">Intervention timeline</a></li>
-<li><a href="#observations">Observations</a></li>
-<li><a href="#limitations">Limitations and confounds</a></li>
-<li><a href="#later">Runs after 14 June 2026</a></li>
-<li><a href="#open">Open questions</a></li>
-<li><a href="#availability">Code and data availability</a></li>
-</ol>
-</nav>
+  <h1>Aurora: language models drawing without a reward signal. Pilot report and audit</h1>
+  <p class="byline">Elijah Sylar Camp</p>
+  <p class="meta">Last updated: 2026-10-17. Changelog: Rebuilt from audited data, Oct 2026.</p>
 </header>
 
-<h2 id="abstract">1. Abstract</h2>
-<p>Aurora is a program that runs pretrained language models, one at a time, against a 100 by 100 character canvas. At each step a model receives a text rendering of the canvas, a list of drawing and sound commands, and a short summary of its own earlier output, and its generated text is parsed into commands. The prompts do not specify a subject. Between <!--A:w.start-->7 March 2026<!--/A--> and <!--A:w.end-->14 June 2026<!--/A--> the program ran <!--A:t.models-->26<!--/A--> models (<!--A:t.models_local-->25<!--/A--> local models in GGUF format and Claude Sonnet 4.6 through the Anthropic API) for <!--A:t.sessions-->3,063<!--/A--> sessions, and logged their generated text, titles, rest-phase output and sentence completions. This page describes the system, what was logged, the design changes made during collection, descriptive counts, and the confounds that limit interpretation. It makes no claims about intent, experience or preference.</p>
+<main id="main">
+<section id="abstract" class="abstract" aria-labelledby="h-abstract">
+<h2 id="h-abstract">Abstract</h2>
+<p>Aurora gives language models a 100 by 100 text canvas<!-- C007, A§1.1 -->, a small command vocabulary and no reward signal, and logs what they produce. This report covers its pilot, from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->: 3,060 sessions from 26 models, 25 run locally and one via API, with 98,335 thoughts and 2,913 sleep-phase texts<!-- A§7.15, A§7.3 -->. An audit of the pilot found that from about 2026-04-10 each model's own past output was fed back into its prompts, that the cursor was invisible to the models, that the feel-word parser captures any word after "feel", and that 1,391 sessions record a coverage of 0<!-- A§1.4, A§1.1, A§1.6, A§7.15 -->. The observations are therefore descriptive only: for example, identical painting titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->. Several claims from an earlier version of this site are withdrawn, and a revised protocol addresses the pilot's problems for new sessions.</p>
+<p class="meta">Sources: every number on this page comes from an audit report of the pilot database, available on request together with the data. Section references for each number are in the page source.</p>
+</section>
 
-<h2 id="question">2. Research question</h2>
-<p>What do pretrained language models generate when given a canvas, a fixed command set and no instruction about subject, and how much of that output can be traced to the prompt itself?</p>
-<p>This page is descriptive. It reports what was logged and how, and where the prompt or the program's design accounts for a pattern. It does not test hypotheses.</p>
+<nav aria-label="Contents">
+  <h2 style="border-top:0;margin-top:1.5rem">Contents</h2>
+  <ol>
+    <li><a href="#question">Research question</a></li>
+    <li><a href="#system">System</a></li>
+    <li><a href="#dataset">Pilot dataset</a></li>
+    <li><a href="#observations">Observations</a></li>
+    <li><a href="#limitations">Audit and limitations</a></li>
+    <li><a href="#protocol">Current protocol</a></li>
+    <li><a href="#availability">Data and code availability</a></li>
+    <li><a href="#researcher">Researcher</a></li>
+  </ol>
+</nav>
 
-<h2 id="system">3. System design</h2>
+<section id="question" aria-labelledby="h-question">
+<h2 id="h-question">1. Research question</h2>
+<p>What does a language model produce when it is given a canvas, a small command vocabulary and no reward signal? And how does that output change when the model can perceive the results of its own actions?</p>
+<p>Aurora is the system built to ask these questions. This report covers its pilot, which ran from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->. The pilot was exploratory. It produced a dataset and an audit, not tested hypotheses. The audit found that several features of the pilot system make many tempting conclusions unsupportable; those are listed in <a href="#limitations">section 5</a>. Two perception conditions are now being separated in the current protocol: a text grid, as in the pilot, and images of the canvas before and after each step (<a href="#protocol">section 6</a>).</p>
+</section>
 
-<h3>3.1 Models</h3>
-<p><!--A:t.models-->26<!--/A--> models ran in the window, from <!--A:fam.n-->12<!--/A--> base families (<!--A:fam.list-->Llama 7, Mistral 5, Qwen 4, Phi 2, Gemma 1, GLM 1, SmolLM 1, Yi 1, Command R 1, InternLM 1, Claude 1, DeepSeek 1<!--/A-->). Several are fine-tunes or distillations of another model in the roster: Hermes 3 is a fine-tune of Llama 3.1 8B, OpenHermes 2.5 is a fine-tune of Mistral 7B, and DeepSeek-R1-Distill-Llama-8B is distilled onto Llama. Family and quantization are taken from the model file names the program loaded. Models joined on different dates, up to <!--A:ro.last_join-->19 April 2026<!--/A-->, and session counts range from <!--A:ro.min-->45<!--/A--> to <!--A:ro.max-->345<!--/A-->.</p>
-<p class="note">Models in the window, in order of first session. Sessions, titled sessions, rest-phase outputs and reflections are counts within the window.</p>
-<p class="hint">Scroll the table sideways to see all columns.</p>
-<div class="table-wrap wide">
-<table>
-<thead><tr><th>Key</th><th>Family</th><th>Model file</th><th>Quant.</th><th>Type</th><th>First</th><th class="num">Sessions</th><th class="num">Titled</th><th class="num">Rest outputs</th><th class="num">Reflections</th></tr></thead>
-<tbody>
-<!--B:roster_rows-->
-<tr><td>deepseek-r1-8b</td><td>Llama</td><td>DeepSeek-R1-Distill-Llama-8B</td><td>Q4_K_M</td><td>reasoning (distilled)</td><td>7 Mar</td><td class="num">345</td><td class="num">277</td><td class="num">58</td><td class="num">43</td></tr>
-<tr><td>gemma2-9b</td><td>Gemma</td><td>gemma-2-9b-it</td><td>Q4_K_M</td><td>instruct</td><td>7 Mar</td><td class="num">91</td><td class="num">55</td><td class="num">137</td><td class="num">29</td></tr>
-<tr><td>llama2</td><td>Llama</td><td>llama-2-7b-chat</td><td>Q4_K_M</td><td>chat</td><td>7 Mar</td><td class="num">103</td><td class="num">44</td><td class="num">257</td><td class="num">19</td></tr>
-<tr><td>llama3</td><td>Llama</td><td>Meta-Llama-3-8B-Instruct</td><td>Q4_K_M</td><td>instruct</td><td>7 Mar</td><td class="num">216</td><td class="num">179</td><td class="num">101</td><td class="num">50</td></tr>
-<tr><td>mistral</td><td>Mistral</td><td>mistral-7b-instruct-v0.2</td><td>Q4_K_M</td><td>instruct</td><td>8 Mar</td><td class="num">113</td><td class="num">97</td><td class="num">224</td><td class="num">38</td></tr>
-<tr><td>openhermes</td><td>Mistral</td><td>openhermes-2.5-mistral-7b</td><td>Q4_K_M</td><td>instruct (fine-tune)</td><td>8 Mar</td><td class="num">93</td><td class="num">29</td><td class="num">292</td><td class="num">12</td></tr>
-<tr><td>qwen</td><td>Qwen</td><td>qwen2.5-3b-instruct</td><td>Q4_K_M</td><td>instruct</td><td>8 Mar</td><td class="num">190</td><td class="num">162</td><td class="num">41</td><td class="num">66</td></tr>
-<tr><td>mistral-base</td><td>Mistral</td><td>mistral-7b-base</td><td>Q4_K_M</td><td>base</td><td>9 Mar</td><td class="num">102</td><td class="num">19</td><td class="num">366</td><td class="num">7</td></tr>
-<tr><td>glm4</td><td>GLM</td><td>glm-4-9b-chat</td><td>Q4_K_M</td><td>chat</td><td>12 Mar</td><td class="num">104</td><td class="num">44</td><td class="num">69</td><td class="num">11</td></tr>
-<tr><td>llama3.1</td><td>Llama</td><td>Meta-Llama-3.1-8B-Instruct</td><td>Q4_K_M</td><td>instruct</td><td>12 Mar</td><td class="num">112</td><td class="num">86</td><td class="num">37</td><td class="num">43</td></tr>
-<tr><td>phi3</td><td>Phi</td><td>Phi-3-mini-4k-instruct</td><td>Q4_K_M</td><td>instruct</td><td>12 Mar</td><td class="num">93</td><td class="num">84</td><td class="num">166</td><td class="num">33</td></tr>
-<tr><td>qwen3</td><td>Qwen</td><td>Qwen3-8B</td><td>Q4_K_M</td><td>instruct</td><td>12 Mar</td><td class="num">145</td><td class="num">79</td><td class="num">110</td><td class="num">27</td></tr>
-<tr><td>hermes3</td><td>Llama</td><td>Hermes-3-Llama-3.1-8B</td><td>Q4_K_M</td><td>instruct (fine-tune)</td><td>13 Mar</td><td class="num">100</td><td class="num">89</td><td class="num">58</td><td class="num">39</td></tr>
-<tr><td>llama3-abliterated</td><td>Llama</td><td>Meta-Llama-3-8B-Instruct-abliterated-v3</td><td>Q4_K_M</td><td>instruct (abliterated)</td><td>13 Mar</td><td class="num">180</td><td class="num">141</td><td class="num">109</td><td class="num">44</td></tr>
-<tr><td>llama2-base</td><td>Llama</td><td>llama-2-7b-base</td><td>Q4_K_M</td><td>base</td><td>14 Mar</td><td class="num">87</td><td class="num">32</td><td class="num">252</td><td class="num">16</td></tr>
-<tr><td>mistral-small-24b</td><td>Mistral</td><td>Mistral-Small-3.1-24B-Instruct-2503</td><td>Q2_K</td><td>instruct</td><td>6 Apr</td><td class="num">90</td><td class="num">79</td><td class="num">25</td><td class="num">80</td></tr>
-<tr><td>phi4-mini</td><td>Phi</td><td>Phi-4-mini-instruct</td><td>Q4_K_M</td><td>instruct</td><td>6 Apr</td><td class="num">127</td><td class="num">102</td><td class="num">51</td><td class="num">107</td></tr>
-<tr><td>smollm2</td><td>SmolLM</td><td>SmolLM2-1.7B-Instruct</td><td>Q8_0</td><td>instruct</td><td>6 Apr</td><td class="num">89</td><td class="num">11</td><td class="num">47</td><td class="num">25</td></tr>
-<tr><td>yi-9b</td><td>Yi</td><td>Yi-1.5-9B-Chat-16K</td><td>Q4_K_M</td><td>chat</td><td>6 Apr</td><td class="num">81</td><td class="num">65</td><td class="num">77</td><td class="num">68</td></tr>
-<tr><td>qwen3.5</td><td>Qwen</td><td>Qwen3.5-9B</td><td>Q4_K_M</td><td>instruct</td><td>7 Apr</td><td class="num">104</td><td class="num">75</td><td class="num">106</td><td class="num">77</td></tr>
-<tr><td>command-r-7b</td><td>Command R</td><td>c4ai-command-r7b-12-2024</td><td>Q4_K_M</td><td>instruct</td><td>8 Apr</td><td class="num">85</td><td class="num">52</td><td class="num">89</td><td class="num">53</td></tr>
-<tr><td>internlm-7b</td><td>InternLM</td><td>internlm2_5-7b-chat</td><td>Q4_K_M</td><td>chat</td><td>8 Apr</td><td class="num">117</td><td class="num">115</td><td class="num">96</td><td class="num">120</td></tr>
-<tr><td>claude-sonnet-4-6</td><td>Claude</td><td>claude-sonnet-4-6 (Anthropic API)</td><td>n/a</td><td>API</td><td>16 Apr</td><td class="num">45</td><td class="num">7</td><td class="num">13</td><td class="num">2</td></tr>
-<tr><td>codestral-22b</td><td>Mistral</td><td>Codestral-22B-v0.1</td><td>Q2_K</td><td>code</td><td>19 Apr</td><td class="num">80</td><td class="num">74</td><td class="num">59</td><td class="num">77</td></tr>
-<tr><td>deepseek-coder-v2</td><td>DeepSeek</td><td>DeepSeek-Coder-V2-Lite-Instruct</td><td>Q3_K_M</td><td>code</td><td>19 Apr</td><td class="num">81</td><td class="num">77</td><td class="num">71</td><td class="num">80</td></tr>
-<tr><td>qwen2.5-coder-7b</td><td>Qwen</td><td>qwen2.5-coder-7b-instruct</td><td>Q4_K_M</td><td>code</td><td>19 Apr</td><td class="num">90</td><td class="num">79</td><td class="num">2</td><td class="num">81</td></tr>
-<!--/B-->
-</tbody>
-</table>
+<section id="system" aria-labelledby="h-system">
+<h2 id="h-system">2. System (as it ran during the pilot)</h2>
+<p>The system facts in this section come from the code, not the dataset. They describe the code as it ran in the pilot, from the project's version history. Terms in small capitals are defined here and used only in these senses.</p>
+
+<dl class="glossary" aria-label="Defined terms">
+  <dt><span class="term">Rotation</span></dt>
+  <dd>The scheduler that gave each model in the pool one session in turn, for a fixed interval (5,400 s, then 1,800 s, then 3,900 s)<!-- A§7.18, A§1.8 -->.</dd>
+  <dt><span class="term">Session</span></dt>
+  <dd>One model's turn in the rotation, recorded as one row in the sessions table.</dd>
+  <dt><span class="term">Thought</span></dt>
+  <dd>A saved piece of a model's prose output from a drawing step. It is saved only when the output passes a length and phrase filter.</dd>
+  <dt><span class="term">Feel word</span> (called "emotion" in the code)</dt>
+  <dd>The word that follows "feel", "feeling" or "feel a sense of" in a drawing-step output, if that word is alphabetic, at least 2 letters, not on a blocklist of about 200 words<!-- A§1.6 --> and not negated. There is no list of emotion words. A <span class="term">feel entry</span> is written only when the captured word differs from the current one.</dd>
+  <dt><span class="term">Thought-step</span></dt>
+  <dd>A saved thought counted under the feel word that was current when it was saved, whether or not that thought contained "feel".</dd>
+  <dt><span class="term">Sleep-phase text</span> (called "dream" in the code)</dt>
+  <dd>One text generated during a rest period from a fixed prompt (see 2.5).</dd>
+  <dt><span class="term">Reflection</span></dt>
+  <dd>A model's continuation of one of five fixed sentence openings, each identified by a prompt key<!-- A§7.18 -->. After a titled painting, from the model's 5th painting on, one of three is asked in turn: "surprise" ("The thing that surprised me most was"), "keep_thinking" ("The part I want to keep thinking about is") and "reminds" ("This painting reminds me of"). At session start, from the 5th painting on, "difference" ("My painting is different now because") is asked at every 10th painting and "no_limit" ("If I had no canvas size limit I would paint") at every 20th<!-- A§7.18 -->.</dd>
+  <dt><span class="term">Coverage</span></dt>
+  <dd>The share of a 50 by 50 sample of the 100 by 100 canvas that is not black<!-- A§3 -->, recorded at session end.</dd>
+  <dt><span class="term">Sound string</span></dt>
+  <dd>A string of punctuation characters from a drawing step, played as notes.</dd>
+  <dt><span class="term">Painting</span></dt>
+  <dd>A session that ended with a model-written title. Placeholder titles written by the code are excluded.</dd>
+</dl>
+
+<h3>2.1 Perception</h3>
+<p>The canvas is 100 by 100 cells<!-- C007, A§1.1 -->. Each step, the model receives the canvas as text: one character per cell: one of 15 palette letters; a dot for an empty cell; or, for a mixed color far from every palette entry, a brightness character (=, +, -, a dot or a space), so a dot can mean either empty or dim<!-- A§1.1 -->. A line of text gives the hand position, pen state and color. During the pilot, <strong>the hand (cursor) was not drawn in the grid</strong>, and the row containing it was one character short<!-- A§1.1 -->. Image description and alternative views were off.</p>
+<div class="canvas-grid">
+  <figure>
+    <img src="figures/session-1208-llama3.png" width="600" height="600" loading="lazy" alt="Black square canvas. A vertical white band runs down from the top edge, right of center, with overlapping blue round marks inside its lower half. Below it, after a gap, a column of solid blue circles continues toward the bottom edge. Most of the canvas is black.">
+    <figcaption>llama3, session 1208, 2026-03-31. Recorded coverage 0% (a saved painting; see 5.4)<!-- A§7.16 -->.</figcaption>
+  </figure>
+  <figure>
+    <img src="figures/session-1941-mistral.png" width="600" height="600" loading="lazy" alt="Black square canvas. A large mass of overlapping magenta and purple round marks covers much of the left half, from the left edge to the middle, with a few small white and red marks inside it. The right half is black.">
+    <figcaption>mistral, session 1941, 2026-04-12. Recorded coverage 0% (a saved painting; see 5.4)<!-- A§7.16 -->.</figcaption>
+  </figure>
+  <figure>
+    <img src="figures/session-3084-qwen.png" width="600" height="600" loading="lazy" alt="Black square canvas. A vertical white band runs from the top edge to just below the middle, right of center, with a blue area at its top. Most of the canvas is black.">
+    <figcaption>qwen, session 3084, 2026-06-04. Recorded coverage 13.3%<!-- A§7.16 -->.</figcaption>
+  </figure>
 </div>
-<p>Claude Sonnet 4.6 ran <!--A:cl.n-->45<!--/A--> sessions from <!--A:cl.first-->16 April 2026<!--/A-->, limited to one session per 24 hours. <!--A:cl.ge60-->37<!--/A--> of them lasted at least 60 minutes; <!--A:cl.self_saved-->0<!--/A--> ended with a save issued by the model.</p>
+<p class="meta">Each image is the snapshot a session saved when its painting was finished. They illustrate the canvas and are not a representative sample. Selection rule: sessions in the window (excluding claude-opus-4.6 and the three sessions inserted by hand, section 3) whose timelapse recording (a file named by model and title) belongs to exactly one session, which have exactly one snapshot saved at the end of the session, and whose timelapse's saved final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified<!-- A§7.16 -->. Session 3084 (qwen) was kept from an earlier version of this page; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017<!-- A§7.16 -->. Two of the three record a coverage of 0 although their snapshots show marks: the measurement failure described in 5.4.</p>
 
-<h3>3.2 Inference</h3>
-<p>Local models are GGUF files run with llama-cpp-python. Claude is called through the Anthropic API with the same prompt text as a single user message, with no system role. Every call is plain text continuation with no chat template: the system and user parts are joined as <code>{system}\n\n{user}</code>. The one exception is Gemma 2's painting steps, which use Gemma's chat template with the preamble placed in the model turn. Sampling temperature was set per call (0.7 to 1.2) until 30 May 2026 and to 1.0 for every call after. No training, fine-tuning, weight update or reward signal is used anywhere in the program.</p>
+<h3>2.2 Action vocabulary</h3>
+<p>Digits 0 to 3 move the hand 3 cells<!-- C023, A§1.2 -->; 5 and 4 put the pen down and up. The model can also name 14 colors, 13 tools, a set of sound characters, and three controls (save the painting, return to the center, view the gallery)<!-- A§1.2 -->. The prompt lists 14 color names, while the palette that renders the canvas has 15 entries<!-- A§1.2, A§1.1 -->. Output was filtered to allowed tokens and capped at 40 characters per step<!-- A§1.2 -->. Tool choice was a substring match on the model's prose, so ordinary words could select a tool. Output containing certain question-mark patterns had its actions replaced by fixed strings written in the code. Actions were not logged.</p>
 
-<h3>3.3 What the model receives at each step</h3>
-<p>Each painting step is one generation. The prompt has three parts.</p>
-<p><strong>Preamble</strong> (up to 2,000 characters, rebuilt from the database): the model's own lifetime totals and most frequent emotion words (<code>I am {model}.</code> / <code>I have made {N} paintings across {M} sessions since {date}. I have felt {words}.</code>), three of its recent titles each followed by <code>felt {emotion word}</code>, two of its earlier sentence completions (<code>I once said '...' when asked '...'</code>), and one snippet of its earlier rest-phase output (<code>I recently dreamed: "..."</code>). A model with no history receives <code>You are {model}. This is your first session.</code> instead.</p>
-<p><strong>Instructions</strong> (verbatim from commit bdb1284):</p>
-<pre>{3 random command strings from earlier in this session}
-Hand at ({x}, {y}). Pen {down|up}. Color: {color}.
+<h3>2.3 Prompt formats</h3>
+<p>Every model family received raw text continuation ending in "I am drawing ", except gemma, which used its chat template from about 2026-04-10<!-- A§1.3 -->. From 2026-05-30 all calls used temperature 1.0. For 2026-05-22 to 2026-05-30 the code shows temperatures that varied by call type, from 0.7 to 1.2; values before 2026-05-22 are not recorded<!-- C024, A§1.8 -->. The model pool ranged from 1.7 to 24 billion parameters and from 2-bit to 8-bit quantization, and included both base and instruction-tuned models<!-- A§1.3 -->.</p>
 
-MOVEMENT: 0=up 1=down 2=left 3=right
-PEN: 5=down 4=up
-Colors: red orange yellow green cyan blue purple pink white gray brown magenta lime navy
-Tools: pen brush large_brush larger_brush spray star cross circle diamond flower watercolor charcoal glow
-Sounds: @#$%^&amp;*()[]&lt;&gt;=+~`-_,|;/:?
-Controls: save_painting center view_gallery {sound legend, every 50 steps}
-{learning context: includes "Recent insight:" followed by the first 200 characters of the model's last rest-phase output}</pre>
-<p><strong>Canvas and continuation:</strong></p>
-<pre>{the canvas as 100 lines of 100 characters: one letter per colour, "." for empty}
-{recent cursor positions}
-{SOUNDS I JUST PLAYED: ...}
+<h3>2.4 Memory</h3>
+<p>Each model had its own memory folder, and its canvas was saved and restored between its sessions<!-- A§1.4 -->. From about 2026-04-10, a per-model preamble was added to every drawing prompt. It contained the model's 5 most frequent past feel words, its recent titles, 2 of its reflection answers and the start of its latest sleep-phase text<!-- A§1.4 -->. <strong>Each model's own past output was therefore part of its input.</strong></p>
 
-I am drawing </pre>
-<p>The cursor is not drawn on the grid. No image is given to the model; vision input was switched off for the whole window. The prompt never names a subject and never uses the words art, artist, emotion or feeling. It does frame the task as drawing: the continuation anchor is "I am drawing", and the command names include <code>save_painting</code>, <code>view_gallery</code>, <code>brush</code>, <code>watercolor</code> and <code>charcoal</code>.</p>
+<h3>2.5 Sleep-phase generation</h3>
+<p>After a period of drawing, the model was asked to answer DREAM or CHAT. A DREAM answer started a rest period that generated text from a fixed prompt beginning "I am resting after painting. My mind drifts through colors, shapes, and feelings", up to 300 tokens, at temperature 1.0 from 2026-05-30 (1.05 for at least 2026-05-22 to 2026-05-30; earlier values are not recorded)<!-- A§1.5, A§1.8 -->. Early in the pilot a rest produced up to 5 such texts; by the end, one<!-- A§1.5, A§2.5 -->. The first 200 characters of the latest text were added to later drawing prompts<!-- A§1.5 -->.</p>
 
-<h3>3.4 Command set</h3>
-<p>The output text is parsed for commands: digits 0 to 3 move the cursor 3 cells, 4 and 5 lift and lower the pen, colour and tool names switch colour or tool, punctuation characters from the sound list play notes, and <code>save_painting</code> ends the session with a title. Only the first 40 characters of each output are executed. The palette has 15 colours and an eraser; the prompt lists 14 of the colours.</p>
-<p>The sound log holds <!--A:t.sound_rows-->56,510<!--/A--> rows (<!--A:t.sound_chars-->841,440<!--/A--> characters). A row is the buffer of sound characters collected over 30 seconds or more, not a single sound.</p>
+<h3>2.6 Feel-word extraction</h3>
+<p>See the definition of <span class="term">feel word</span> above. Because the parser removes color names, a phrase such as "feel blue" cannot be captured. A routine in the code could also write a feel entry from its own word list, and these entries cannot be told apart from model output<!-- A§1.6 -->. A field intended to store how long a word lasted is always 0<!-- A§1.6, A§3 -->.</p>
 
-<h3>3.5 What is fed back into the model's own prompt</h3>
-<p>Each model sees only its own history. No model sees another model's output. What reaches the prompt:</p>
-<ul>
-<li>its lifetime totals and most frequent emotion words (preamble);</li>
-<li>three of its recent titles, each tagged with an emotion word (preamble);</li>
-<li>two of its sentence completions (preamble);</li>
-<li>one snippet of its rest-phase output (preamble), plus the first 200 characters of its last rest-phase output (learning context);</li>
-<li>three random command strings from earlier in the same session;</li>
-<li>its own canvas, which persists between its sessions unless a session ends with a save.</li>
-</ul>
-<p>Every model receives the same prompt templates. Later output is therefore conditioned on earlier output of the same model (Limitations L2).</p>
+<h3>2.7 Logging</h3>
+<p>Records went to a MySQL database: sessions, thoughts, feel entries, sleep-phase texts, reflections, sound strings, goals and chats. Timestamps were the machine's local time without a zone. There was no per-step record of actions. The database kept canvas images only as the latest one per model; separate image files, saved each time a painting was finished, and timelapse recordings survive outside the database<!-- A§7.16 -->. No session recorded which version of the code it ran<!-- A§1.7, A§5.5, A§5.14 -->.</p>
 
-<h3>3.6 Slots and sessions</h3>
-<p>A <strong>slot</strong> is the scheduled time one model runs before the program switches to the next. A <strong>session</strong> is a database row: it starts when a model starts, or immediately after a save, and ends at a save or at the end of the slot. One slot can therefore contain several sessions, and session counts depend on how often models issue the save command.</p>
-<p>Slot length changed twice: 90 minutes from 20 March 2026, 30 minutes from 23 March, and 65 minutes (45 minutes drawing, 20 minutes rest or chat) from about 15 April. The change is visible in session lengths (Chart A). In the week of 23 March, <!--A:wk.0323.lt5-->192<!--/A--> of <!--A:wk.0323.n-->534<!--/A--> sessions lasted under 5 minutes.</p>
-
-<figure>
-<div class="legend"><!--B:chart_a_legend--><span class="key"><span class="sw b1"></span>under 5 min</span><span class="key"><span class="sw b2"></span>5 to 35 min</span><span class="key"><span class="sw b3"></span>36 to 70 min</span><span class="key"><span class="sw b4"></span>over 70 min</span><!--/B--></div>
-<p class="hint">Scroll the chart sideways to see all of it.</p>
-<div class="chart-wrap">
-<!--B:chart_a-->
-<svg class="chart" viewBox="0 0 640 300" role="img" aria-labelledby="chartA-t chartA-d">
-<title id="chartA-t">Sessions per week by session length</title>
-<desc id="chartA-d">Stacked columns, one per week from 7 Mar to 8 Jun 2026, split into four length bands. Total sessions per week are printed above each column. Full values are in the data table below the chart.</desc>
-<line class="grid" x1="44" x2="628" y1="248.0" y2="248.0"/>
-<text class="tick" x="38" y="252.0" text-anchor="end">0</text>
-<line class="grid" x1="44" x2="628" y1="214.7" y2="214.7"/>
-<text class="tick" x="38" y="218.7" text-anchor="end">100</text>
-<line class="grid" x1="44" x2="628" y1="181.3" y2="181.3"/>
-<text class="tick" x="38" y="185.3" text-anchor="end">200</text>
-<line class="grid" x1="44" x2="628" y1="148.0" y2="148.0"/>
-<text class="tick" x="38" y="152.0" text-anchor="end">300</text>
-<line class="grid" x1="44" x2="628" y1="114.7" y2="114.7"/>
-<text class="tick" x="38" y="118.7" text-anchor="end">400</text>
-<line class="grid" x1="44" x2="628" y1="81.3" y2="81.3"/>
-<text class="tick" x="38" y="85.3" text-anchor="end">500</text>
-<line class="grid" x1="44" x2="628" y1="48.0" y2="48.0"/>
-<text class="tick" x="38" y="52.0" text-anchor="end">600</text>
-<rect class="b1" x="51.8" y="247.0" width="23.4" height="1.0"><title>Week of 7 Mar: under 5 min, 3 of 18 sessions</title></rect>
-<rect class="b2" x="51.8" y="245.0" width="23.4" height="0.5"><title>Week of 7 Mar: 5 to 35 min, 6 of 18 sessions</title></rect>
-<rect class="b3" x="51.8" y="243.7" width="23.4" height="0.5"><title>Week of 7 Mar: 36 to 70 min, 4 of 18 sessions</title></rect>
-<rect class="b4" x="51.8" y="243.0" width="23.4" height="0.5"><title>Week of 7 Mar: over 70 min, 2 of 18 sessions</title></rect>
-<text class="val" x="63.5" y="238.0" text-anchor="middle">18</text>
-<text class="tick" x="63.5" y="263.0" text-anchor="middle">7</text>
-<text class="tick" x="63.5" y="277.0" text-anchor="middle">Mar</text>
-<rect class="b1" x="90.7" y="238.7" width="23.4" height="9.3"><title>Week of 9 Mar: under 5 min, 28 of 125 sessions</title></rect>
-<rect class="b2" x="90.7" y="226.0" width="23.4" height="10.7"><title>Week of 9 Mar: 5 to 35 min, 38 of 125 sessions</title></rect>
-<rect class="b3" x="90.7" y="220.7" width="23.4" height="3.3"><title>Week of 9 Mar: 36 to 70 min, 16 of 125 sessions</title></rect>
-<path class="b4" d="M90.7,218.7 L90.7,216.0 Q90.7,212.0 94.7,212.0 L110.1,212.0 Q114.1,212.0 114.1,216.0 L114.1,218.7 Z"><title>Week of 9 Mar: over 70 min, 26 of 125 sessions</title></path>
-<text class="val" x="102.4" y="207.0" text-anchor="middle">125</text>
-<text class="tick" x="102.4" y="263.0" text-anchor="middle">9</text>
-<rect class="b1" x="129.7" y="214.7" width="23.4" height="33.3"><title>Week of 16 Mar: under 5 min, 100 of 237 sessions</title></rect>
-<rect class="b2" x="129.7" y="179.7" width="23.4" height="33.0"><title>Week of 16 Mar: 5 to 35 min, 105 of 237 sessions</title></rect>
-<rect class="b3" x="129.7" y="174.0" width="23.4" height="3.7"><title>Week of 16 Mar: 36 to 70 min, 17 of 237 sessions</title></rect>
-<rect class="b4" x="129.7" y="172.7" width="23.4" height="0.5"><title>Week of 16 Mar: over 70 min, 4 of 237 sessions</title></rect>
-<text class="val" x="141.3" y="167.7" text-anchor="middle">237</text>
-<text class="tick" x="141.3" y="263.0" text-anchor="middle">16</text>
-<rect class="b1" x="168.6" y="184.0" width="23.4" height="64.0"><title>Week of 23 Mar: under 5 min, 192 of 534 sessions</title></rect>
-<path class="b2" d="M168.6,182.0 L168.6,78.0 Q168.6,74.0 172.6,74.0 L187.9,74.0 Q191.9,74.0 191.9,78.0 L191.9,182.0 Z"><title>Week of 23 Mar: 5 to 35 min, 330 of 534 sessions</title></path>
-<text class="val" x="180.3" y="69.0" text-anchor="middle">534</text>
-<text class="tick" x="180.3" y="263.0" text-anchor="middle">23</text>
-<line class="mark" x1="160.8" x2="160.8" y1="22" y2="248"/>
-<text class="anno" x="164.8" y="18">30-min slots from 23 Mar</text>
-<rect class="b1" x="207.5" y="202.0" width="23.4" height="46.0"><title>Week of 30 Mar: under 5 min, 138 of 511 sessions</title></rect>
-<rect class="b2" x="207.5" y="80.3" width="23.4" height="119.7"><title>Week of 30 Mar: 5 to 35 min, 365 of 511 sessions</title></rect>
-<rect class="b4" x="207.5" y="79.3" width="23.4" height="0.5"><title>Week of 30 Mar: over 70 min, 3 of 511 sessions</title></rect>
-<text class="val" x="219.2" y="74.3" text-anchor="middle">511</text>
-<text class="tick" x="219.2" y="263.0" text-anchor="middle">30</text>
-<rect class="b1" x="246.5" y="226.3" width="23.4" height="21.7"><title>Week of 6 Apr: under 5 min, 65 of 350 sessions</title></rect>
-<rect class="b2" x="246.5" y="132.7" width="23.4" height="91.7"><title>Week of 6 Apr: 5 to 35 min, 281 of 350 sessions</title></rect>
-<rect class="b3" x="246.5" y="132.3" width="23.4" height="0.5"><title>Week of 6 Apr: 36 to 70 min, 1 of 350 sessions</title></rect>
-<rect class="b4" x="246.5" y="132.0" width="23.4" height="0.5"><title>Week of 6 Apr: over 70 min, 1 of 350 sessions</title></rect>
-<text class="val" x="258.1" y="127.0" text-anchor="middle">350</text>
-<text class="tick" x="258.1" y="263.0" text-anchor="middle">6</text>
-<text class="tick" x="258.1" y="277.0" text-anchor="middle">Apr</text>
-<rect class="b1" x="285.4" y="237.3" width="23.4" height="10.7"><title>Week of 13 Apr: under 5 min, 32 of 252 sessions</title></rect>
-<rect class="b2" x="285.4" y="197.3" width="23.4" height="38.0"><title>Week of 13 Apr: 5 to 35 min, 120 of 252 sessions</title></rect>
-<path class="b3" d="M285.4,195.3 L285.4,171.0 Q285.4,167.0 289.4,167.0 L304.7,167.0 Q308.7,167.0 308.7,171.0 L308.7,195.3 Z"><title>Week of 13 Apr: 36 to 70 min, 91 of 252 sessions</title></path>
-<text class="val" x="297.1" y="162.0" text-anchor="middle">252</text>
-<text class="tick" x="297.1" y="263.0" text-anchor="middle">13</text>
-<line class="mark" x1="277.6" x2="277.6" y1="38" y2="248"/>
-<text class="anno" x="281.6" y="34">65-min slots from about 15 Apr</text>
-<rect class="b1" x="324.3" y="245.7" width="23.4" height="2.3"><title>Week of 20 Apr: under 5 min, 7 of 191 sessions</title></rect>
-<rect class="b2" x="324.3" y="231.0" width="23.4" height="12.7"><title>Week of 20 Apr: 5 to 35 min, 44 of 191 sessions</title></rect>
-<path class="b3" d="M324.3,229.0 L324.3,189.3 Q324.3,185.3 328.3,185.3 L343.7,185.3 Q347.7,185.3 347.7,189.3 L347.7,229.0 Z"><title>Week of 20 Apr: 36 to 70 min, 137 of 191 sessions</title></path>
-<text class="val" x="336.0" y="180.3" text-anchor="middle">191</text>
-<text class="tick" x="336.0" y="263.0" text-anchor="middle">20</text>
-<rect class="b1" x="363.3" y="246.3" width="23.4" height="1.7"><title>Week of 27 Apr: under 5 min, 5 of 151 sessions</title></rect>
-<rect class="b2" x="363.3" y="237.7" width="23.4" height="6.7"><title>Week of 27 Apr: 5 to 35 min, 26 of 151 sessions</title></rect>
-<path class="b3" d="M363.3,235.7 L363.3,202.0 Q363.3,198.0 367.3,198.0 L382.6,198.0 Q386.6,198.0 386.6,202.0 L386.6,235.7 Z"><title>Week of 27 Apr: 36 to 70 min, 119 of 151 sessions</title></path>
-<text class="val" x="374.9" y="193.0" text-anchor="middle">151</text>
-<text class="tick" x="374.9" y="263.0" text-anchor="middle">27</text>
-<rect class="b1" x="402.2" y="245.7" width="23.4" height="2.3"><title>Week of 4 May: under 5 min, 7 of 152 sessions</title></rect>
-<rect class="b2" x="402.2" y="238.0" width="23.4" height="5.7"><title>Week of 4 May: 5 to 35 min, 23 of 152 sessions</title></rect>
-<rect class="b3" x="402.2" y="198.7" width="23.4" height="37.3"><title>Week of 4 May: 36 to 70 min, 118 of 152 sessions</title></rect>
-<rect class="b4" x="402.2" y="198.0" width="23.4" height="0.5"><title>Week of 4 May: over 70 min, 2 of 152 sessions</title></rect>
-<text class="val" x="413.9" y="193.0" text-anchor="middle">152</text>
-<text class="tick" x="413.9" y="263.0" text-anchor="middle">4</text>
-<text class="tick" x="413.9" y="277.0" text-anchor="middle">May</text>
-<rect class="b1" x="441.1" y="246.3" width="23.4" height="1.7"><title>Week of 11 May: under 5 min, 5 of 149 sessions</title></rect>
-<rect class="b2" x="441.1" y="240.7" width="23.4" height="3.7"><title>Week of 11 May: 5 to 35 min, 17 of 149 sessions</title></rect>
-<path class="b3" d="M441.1,238.7 L441.1,202.7 Q441.1,198.7 445.1,198.7 L460.5,198.7 Q464.5,198.7 464.5,202.7 L464.5,238.7 Z"><title>Week of 11 May: 36 to 70 min, 126 of 149 sessions</title></path>
-<text class="val" x="452.8" y="193.7" text-anchor="middle">149</text>
-<text class="tick" x="452.8" y="263.0" text-anchor="middle">11</text>
-<rect class="b1" x="480.1" y="246.7" width="23.4" height="1.3"><title>Week of 22 May: under 5 min, 4 of 64 sessions</title></rect>
-<rect class="b2" x="480.1" y="244.0" width="23.4" height="0.7"><title>Week of 22 May: 5 to 35 min, 8 of 64 sessions</title></rect>
-<path class="b3" d="M480.1,242.0 L480.1,230.7 Q480.1,226.7 484.1,226.7 L499.4,226.7 Q503.4,226.7 503.4,230.7 L503.4,242.0 Z"><title>Week of 22 May: 36 to 70 min, 52 of 64 sessions</title></path>
-<text class="val" x="491.7" y="221.7" text-anchor="middle">64</text>
-<text class="tick" x="491.7" y="263.0" text-anchor="middle">22</text>
-<rect class="b1" x="519.0" y="245.3" width="23.4" height="2.7"><title>Week of 25 May: under 5 min, 8 of 126 sessions</title></rect>
-<rect class="b2" x="519.0" y="238.0" width="23.4" height="5.3"><title>Week of 25 May: 5 to 35 min, 22 of 126 sessions</title></rect>
-<rect class="b3" x="519.0" y="207.3" width="23.4" height="28.7"><title>Week of 25 May: 36 to 70 min, 92 of 126 sessions</title></rect>
-<rect class="b4" x="519.0" y="207.0" width="23.4" height="0.5"><title>Week of 25 May: over 70 min, 1 of 126 sessions</title></rect>
-<text class="val" x="530.7" y="202.0" text-anchor="middle">126</text>
-<text class="tick" x="530.7" y="263.0" text-anchor="middle">25</text>
-<rect class="b1" x="557.9" y="246.3" width="23.4" height="1.7"><title>Week of 1 Jun: under 5 min, 5 of 113 sessions</title></rect>
-<rect class="b2" x="557.9" y="242.3" width="23.4" height="2.0"><title>Week of 1 Jun: 5 to 35 min, 12 of 113 sessions</title></rect>
-<path class="b3" d="M557.9,240.3 L557.9,215.0 Q557.9,211.0 561.9,211.0 L577.3,211.0 Q581.3,211.0 581.3,215.0 L581.3,240.3 Z"><title>Week of 1 Jun: 36 to 70 min, 94 of 113 sessions</title></path>
-<text class="val" x="569.6" y="206.0" text-anchor="middle">113</text>
-<text class="tick" x="569.6" y="263.0" text-anchor="middle">1</text>
-<text class="tick" x="569.6" y="277.0" text-anchor="middle">Jun</text>
-<rect class="b1" x="596.9" y="247.0" width="23.4" height="1.0"><title>Week of 8 Jun: under 5 min, 3 of 90 sessions</title></rect>
-<rect class="b2" x="596.9" y="240.0" width="23.4" height="5.0"><title>Week of 8 Jun: 5 to 35 min, 21 of 90 sessions</title></rect>
-<path class="b3" d="M596.9,238.0 L596.9,222.3 Q596.9,218.3 600.9,218.3 L616.2,218.3 Q620.2,218.3 620.2,222.3 L620.2,238.0 Z"><title>Week of 8 Jun: 36 to 70 min, 65 of 90 sessions</title></path>
-<text class="val" x="608.5" y="213.3" text-anchor="middle">90</text>
-<text class="tick" x="608.5" y="263.0" text-anchor="middle">8</text>
-<line class="axis" x1="44" x2="628" y1="248" y2="248"/>
-<text class="tick" x="336.0" y="294" text-anchor="middle">Week starting (2026)</text>
-</svg>
-<!--/B-->
-</div>
-<figcaption>Chart A. Sessions per week, split by session length. Totals above each column. Sessions without an end time are counted in the total only.</figcaption>
-<details><summary>Data table for Chart A</summary>
-<div class="table-wrap"><table>
-<thead><tr><th>Week starting</th><th class="num">Under 5 min</th><th class="num">5 to 35</th><th class="num">36 to 70</th><th class="num">Over 70</th><th class="num">No end time</th><th class="num">Total</th></tr></thead>
-<tbody>
-<!--B:chart_a_rows-->
-<tr><td>7 Mar</td><td class="num">3</td><td class="num">6</td><td class="num">4</td><td class="num">2</td><td class="num">3</td><td class="num">18</td></tr>
-<tr><td>9 Mar</td><td class="num">28</td><td class="num">38</td><td class="num">16</td><td class="num">26</td><td class="num">17</td><td class="num">125</td></tr>
-<tr><td>16 Mar</td><td class="num">100</td><td class="num">105</td><td class="num">17</td><td class="num">4</td><td class="num">11</td><td class="num">237</td></tr>
-<tr><td>23 Mar</td><td class="num">192</td><td class="num">330</td><td class="num">0</td><td class="num">0</td><td class="num">12</td><td class="num">534</td></tr>
-<tr><td>30 Mar</td><td class="num">138</td><td class="num">365</td><td class="num">0</td><td class="num">3</td><td class="num">5</td><td class="num">511</td></tr>
-<tr><td>6 Apr</td><td class="num">65</td><td class="num">281</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">350</td></tr>
-<tr><td>13 Apr</td><td class="num">32</td><td class="num">120</td><td class="num">91</td><td class="num">0</td><td class="num">9</td><td class="num">252</td></tr>
-<tr><td>20 Apr</td><td class="num">7</td><td class="num">44</td><td class="num">137</td><td class="num">0</td><td class="num">3</td><td class="num">191</td></tr>
-<tr><td>27 Apr</td><td class="num">5</td><td class="num">26</td><td class="num">119</td><td class="num">0</td><td class="num">1</td><td class="num">151</td></tr>
-<tr><td>4 May</td><td class="num">7</td><td class="num">23</td><td class="num">118</td><td class="num">2</td><td class="num">2</td><td class="num">152</td></tr>
-<tr><td>11 May</td><td class="num">5</td><td class="num">17</td><td class="num">126</td><td class="num">0</td><td class="num">1</td><td class="num">149</td></tr>
-<tr><td>22 May</td><td class="num">4</td><td class="num">8</td><td class="num">52</td><td class="num">0</td><td class="num">0</td><td class="num">64</td></tr>
-<tr><td>25 May</td><td class="num">8</td><td class="num">22</td><td class="num">92</td><td class="num">1</td><td class="num">3</td><td class="num">126</td></tr>
-<tr><td>1 Jun</td><td class="num">5</td><td class="num">12</td><td class="num">94</td><td class="num">0</td><td class="num">2</td><td class="num">113</td></tr>
-<tr><td>8 Jun</td><td class="num">3</td><td class="num">21</td><td class="num">65</td><td class="num">0</td><td class="num">1</td><td class="num">90</td></tr>
-<!--/B-->
-</tbody></table></div>
-</details>
-</figure>
-
-<p>How sessions in the window ended:</p>
+<h3>2.8 Changes during the pilot</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Ending</th><th class="num">Sessions</th><th class="num">%</th></tr></thead>
-<tbody>
-<!--B:end_rows-->
-<tr><td>Model emitted the save command during the slot</td><td class="num">912</td><td class="num">29.8</td></tr>
-<tr><td>Slot ended; model answered SAVE at the finish prompt</td><td class="num">1,241</td><td class="num">40.5</td></tr>
-<tr><td>Slot ended; model answered CONTINUE (canvas carried over)</td><td class="num">551</td><td class="num">18.0</td></tr>
-<tr><td>Ended without a title (process stop or restart)</td><td class="num">359</td><td class="num">11.7</td></tr>
-<!--/B-->
-</tbody>
-</table>
-</div>
-<p>At the end of each slot the model is prompted to output SAVE or CONTINUE. In the program version that produced this data, a SAVE at that point cleared the canvas and the step counter before the session row was written, so these <!--A:end.slot_save-->1,241<!--/A--> sessions record zero steps and zero coverage (Limitations L5).</p>
-<p>Rest phase: from about 15 April each rest produced one rest-phase output. Before that the rest structure was different, and up to <!--A:dp.max-->80<!--/A--> outputs were logged in a single session.</p>
-
-<h3>3.7 What is logged</h3>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Table</th><th>One row is</th></tr></thead>
-<tbody>
-<tr><td><code>sessions</code></td><td>one session: model, start and end time, title, coverage at the end, step counter</td></tr>
-<tr><td><code>thoughts</code></td><td>one saved generation: the output text (when it contains one of a fixed list of phrases such as "i think", "i see", "the canvas"), stamped with the emotion word current at that moment</td></tr>
-<tr><td><code>emotions</code></td><td>one change of the current emotion word extracted by the "feel" rule</td></tr>
-<tr><td><code>dreams</code></td><td>one rest-phase output (labelled "dreams" in the system)</td></tr>
-<tr><td><code>reflections</code></td><td>one sentence completion after a save or at session start</td></tr>
-<tr><td><code>chats</code></td><td>one message generated during a chat break</td></tr>
-<tr><td><code>sounds</code></td><td>one buffer of sound characters</td></tr>
-</tbody>
-</table>
-</div>
-
-<h2 id="methods">4. Methods</h2>
-
-<h3>4.1 Scope and exclusions</h3>
-<p>The main window is sessions and rows dated <!--A:w.start-->7 March 2026<!--/A--> to <!--A:w.end-->14 June 2026<!--/A--> (Denver local time). Figures based on the <code>thoughts</code> table start on <!--A:w.thoughts_start-->21 March 2026<!--/A--> (Limitations L4). The <!--A:ex.sessions-->9<!--/A--> sessions labelled <code>claude-opus-4.6</code> (all on <!--A:ex.day-->15 March 2026<!--/A-->) are excluded from every figure: they were hand-composed pieces inserted with a composition script, not model runs.</p>
-
-<h3>4.2 Other prompts, verbatim from commit bdb1284</h3>
-<p><strong>Rest phase</strong> (system, then user):</p>
-<pre>I am resting after painting. My mind drifts through colors, shapes, and feelings from my time at the canvas.
-
-I drift into thought...</pre>
-<p><strong>End of slot:</strong></p>
-<pre>You've been painting for a while. Your session is ending soon.
-
-Canvas: {overview}
-Colors used: {colours}
-Steps taken: {n}
-Emotion: {current emotion word}
-
-You have two choices:
-SAVE - Save this painting, give it a title, and start fresh next time
-CONTINUE - Keep this canvas as-is and continue working on it next session
-
-Output ONLY one word: SAVE or CONTINUE
-
-My choice:</pre>
-<p><strong>Title:</strong></p>
-<pre>You just finished a painting.
-Emotion: {current emotion word}
-Colors used: {colours}
-Steps taken: {n}
-Recent thoughts: {recent cursor positions}
-
-Give this painting a title. Respond in EXACTLY this format:
-TITLE: your title here
-
-Rules: 1-5 words. No quotes. No explanation. Just TITLE: followed by the title.
-
-TITLE:</pre>
-<p><strong>Sentence completions</strong> ("reflections"). After a titled session, once the model has 5 titled sessions, with the system line <code>I just finished a painting called "{title}".</code>, one of: <code>The thing that surprised me most was</code> (surprise), <code>The part I want to keep thinking about is</code> (keep_thinking), <code>This painting reminds me of</code> (reminds), rotating. At session start, with the system line <code>You have painted {N} paintings. Your most common emotions have been {words}.</code>: <code>My painting is different now because</code> (difference, every 10th) and <code>If I had no canvas size limit I would paint</code> (no_limit, every 20th).</p>
-<p><strong>Break choice</strong> after 45 minutes: the model is told it has been drawing for 45 minutes and asked to output DREAM (rest) or CHAT (conversation break).</p>
-
-<h3>4.3 Emotion words</h3>
-<p>An emotion word is a string taken from the model's own output by one of two rules: the word after <code>feel a sense of</code>, or else the first word after <code>feel</code> or <code>feeling</code> (regex <code>\bfeel(?:ing)?\s+(\w+)</code>); or the first word on a line that starts <code>feeling:</code>, <code>emotion:</code> or <code>emotional_state:</code>. A word is rejected if it is not alphabetic, is on a blocklist of non-emotion words, or follows a negation within five words. The extracted word becomes the "current" word and stays current until another is extracted or a new session starts. It is a word the model emitted; it is not a measurement of any internal state.</p>
-<p>The program also contains two code paths that can set the word without model text. In the code that produced this data, one is unreachable and the other has no caller. The data agree: <!--A:em.conf_matched-->6,906<!--/A--> of <!--A:em.conf_all-->6,911<!--/A--> emotion-change rows from <!--A:w.thoughts_start-->21 March 2026<!--/A--> match a saved generation with the same session, step and word.</p>
-
-<h3>4.4 Coverage</h3>
-<p>Coverage is the share of non-empty cells on the canvas when a session ends, sampled every second cell in each direction. It includes marks carried over from the model's earlier sessions unless the previous session ended with a save. Because of the slot-end bug (Section 3.6) it is not reported as a per-model average on this page; it is used only in figure captions.</p>
-
-<h3>4.5 Titles</h3>
-<p>A titled session is a session that ended with a title (the system calls these paintings). For title comparisons, titles are normalised (whitespace, surrounding quotes, trailing full stop) and dropped if they are prompt leftovers or web boilerplate: <code>&lt;your title here&gt;</code>, <code>[Title]</code>, <code>TITLE:</code>, hashtags, links, "Reply With Quote", "untitled", or longer than 60 characters. This removes <!--A:ti.dropped-->87<!--/A--> of <!--A:ti.all-->2,153<!--/A--> titles.</p>
-
-<h3>4.6 Rest-phase keyword counts</h3>
-<p>A rest-phase output is counted as containing art keywords when it matches <code>\b(paint|painting|canvas|colou?r|brush|art|artist|artistic|creat|draw|palette|stroke|hue|pigment)</code>, case-insensitive. As a baseline, the same outputs are checked for words that appear in the rest-phase prompt itself: <code>\b(paint|canvas|colou?r|shape|feeling)</code>. Neither count is a judgement of content.</p>
-
-<h3>4.7 Reproducing the figures</h3>
-<p>Every number on this page is computed by one script, in one read-only database transaction, from the queries published in <a href="queries.sql">queries.sql</a>. Each query names the section it supplies.</p>
-
-<h2 id="timeline">5. Intervention timeline</h2>
-<p>Changes to the program during or just before collection. Any before-and-after comparison across these dates mixes the change with the passage of time.</p>
-<div class="table-wrap">
-<table>
+<caption>Dated changes inside the pilot window</caption>
 <thead><tr><th>Date (2026)</th><th>Change</th></tr></thead>
 <tbody>
-<tr><td>26 Feb</td><td>Emotion word set only from the model's own text; code-computed emotion removed (before the window)</td></tr>
-<tr><td>7 Mar</td><td>First logged session</td></tr>
-<tr><td>20 Mar</td><td>Canvas fixed at 100 by 100; "I am drawing" continuation anchor; emotion word and coverage removed from the painting and break prompts; database writer added; 90-minute slots</td></tr>
-<tr><td>20 to 21 Mar</td><td><code>thoughts</code> unique key changed from (model, step) to (session, model, step); earlier rows had been overwritten (L4)</td></tr>
-<tr><td>23 Mar</td><td>30-minute slots</td></tr>
-<tr><td>6 to 8 Apr</td><td>Seven models added; sentence completions start</td></tr>
-<tr><td>about 10 Apr</td><td>Preamble of the model's own history added to every prompt (Section 3.3)</td></tr>
-<tr><td>13 to 16 Apr</td><td>Claude Sonnet 4.6 added (first session 16 Apr); verbatim earlier output removed from the preamble</td></tr>
-<tr><td>about 15 Apr</td><td>65-minute slots; one rest-phase output per rest</td></tr>
-<tr><td>19 Apr</td><td>Three code models added</td></tr>
-<tr><td>30 May</td><td>All sampling temperatures set to 1.0</td></tr>
-<tr><td>14 Jun</td><td>Last session in the window</td></tr>
+<tr><td>by 03-20</td><td>Rotation of models with per-model memory folders in place; rotation interval 5,400 s<!-- A§1.8 --></td></tr>
+<tr><td>03-23</td><td>Rotation interval 1,800 s; rest 10 minutes<!-- A§1.8 --></td></tr>
+<tr><td>~04-06 to 04-19</td><td>Models added to the pool on 04-06/08, 04-13 and 04-19<!-- A§5.19 --></td></tr>
+<tr><td>~04-10</td><td>gemma moved to its chat template<!-- A§1.8 --></td></tr>
+<tr><td>~04-10 to 04-13</td><td>Per-model preamble added to every drawing prompt<!-- A§1.4, A§1.8 --></td></tr>
+<tr><td>between 03-23 and 05-22</td><td>Rotation 3,900 s (65 minutes); rest 20 minutes; one sleep-phase text per rest<!-- A§1.8 --></td></tr>
+<tr><td>05-30</td><td>All temperatures set to 1.0; canvas snapshots and heartbeats moved from step-based to time-based<!-- A§1.8 --></td></tr>
 </tbody>
 </table>
 </div>
-<p class="note">Earlier descriptions of this project gave session lengths of 30 minutes, 65 minutes and 1.5 hours, and model counts of 14 to 27. Those are the slot lengths and roster sizes at different dates.</p>
+<p>Reward-based feedback had been removed from the code before the pilot began, in changes dated 2025-12-02 and 2026-02-25<!-- A§1.8, C035 -->. The pilot data therefore contains no period with a reward signal to compare against.</p>
+</section>
 
-<h2 id="observations">6. Observations</h2>
-<p>Descriptive counts. Differences between models are not tested and should not be read as properties of the models (Limitations L2, L3, L9).</p>
+<section id="dataset" aria-labelledby="h-dataset">
+<h2 id="h-dataset">3. Pilot dataset</h2>
+<p><strong>Window.</strong> Sessions with database IDs 14 to 3244, which started between 2026-03-07 19:20 and 2026-06-14 11:44 local time<!-- A§7.15, A§7.18 -->. Timestamps are local time without a zone, with a daylight-saving change on 2026-03-08; inclusion is by session ID, so the change cannot move a session in or out of the window.</p>
+<p><strong>Exclusions.</strong> One model label, claude-opus-4.6, is excluded from all statistics. Its 9 sessions show the signs of pre-composed pieces (all within about 2.5 hours on one day, 4 end before they start, 3 share a start time, no sounds or chats) and are treated as non-autonomous; that they were pre-composed is inferred, not recorded<!-- A§7.1 -->. Three sessions inserted by hand to steer the rotation (2026-04-19 and 2026-05-05; zero duration, no output) are also excluded<!-- A§7.15 -->.</p>
 
-<h3>O1. Volume</h3>
-<p>In the window: <!--A:t.sessions-->3,063<!--/A--> sessions, of which <!--A:t.titled-->2,153<!--/A--> ended with a title; <!--A:t.thoughts_all-->99,562<!--/A--> saved generations (<!--A:t.thoughts_t0-->84,263<!--/A--> from <!--A:w.thoughts_start-->21 March 2026<!--/A-->); <!--A:t.dreams-->2,913<!--/A--> rest-phase outputs; <!--A:t.reflections-->1,247<!--/A--> sentence completions; <!--A:t.chats-->1,306<!--/A--> chat messages.</p>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Month</th><th class="num">Sessions</th><th class="num">Active days</th><th class="num">Per active day</th><th class="num">Models</th></tr></thead>
+<caption>Pilot totals (claude-opus-4.6 excluded)</caption>
+<thead><tr><th>Measure</th><th class="n">Count</th></tr></thead>
 <tbody>
-<!--B:month_rows-->
-<tr><td>March (7 Mar to 31 Mar)</td><td class="num">1,091</td><td class="num">25</td><td class="num">43.6</td><td class="num">15</td></tr>
-<tr><td>April (1 Apr to 30 Apr)</td><td class="num">1,193</td><td class="num">30</td><td class="num">39.8</td><td class="num">26</td></tr>
-<tr><td>May (1 May to 31 May)</td><td class="num">576</td><td class="num">26</td><td class="num">22.2</td><td class="num">26</td></tr>
-<tr><td>June (1 Jun to 14 Jun)</td><td class="num">203</td><td class="num">14</td><td class="num">14.5</td><td class="num">26</td></tr>
-<!--/B-->
+<tr><td>Sessions</td><td class="n">3,060<!-- A§7.15 --></td></tr>
+<tr><td>Models (25 local, 1 via API)</td><td class="n">26<!-- A§7.3 --></td></tr>
+<tr><td>Sessions per model (min / median / max)</td><td class="n">44 / 101 / 345<!-- A§7.15 --></td></tr>
+<tr><td>Thoughts</td><td class="n">98,335<!-- A§7.3 --></td></tr>
+<tr><td>Feel entries</td><td class="n">7,468<!-- A§7.3 --></td></tr>
+<tr><td>Distinct feel words</td><td class="n">285<!-- A§7.3 --></td></tr>
+<tr><td>Sleep-phase texts</td><td class="n">2,913<!-- A§7.3 --></td></tr>
+<tr><td>Reflections (from 2026-04-06)</td><td class="n">1,247<!-- A§7.3, A§2.1 --></td></tr>
+<tr><td>Sound strings</td><td class="n">56,487<!-- A§7.3 --></td></tr>
+<tr><td>Paintings (titled sessions, placeholders excluded)</td><td class="n">2,108<!-- A§7.3 --></td></tr>
+<tr><td>Canvas snapshots (latest per model only)</td><td class="n">24<!-- A§7.3 --></td></tr>
 </tbody>
 </table>
 </div>
-<p>Session counts depend on slot length and on how often models saved early, so they do not measure activity.</p>
+<p>No model had fewer than 3 sessions<!-- A§7.3 -->. The database's step counter is not reported anywhere on this page, because it counted every pass of the main loop, including rest and retries, and carried over between sessions<!-- A§5.11 -->.</p>
 
-<h3>O2. How sessions ended</h3>
-<p><!--A:end.self_saved-->912<!--/A--> sessions ended because the model issued the save command during its slot (table in Section 3.6). The rest ended at the slot boundary or without a title.</p>
-
-<h3>O3. Canvas images</h3>
-<p>Three examples, chosen by rule rather than by appearance: for each of the three largest families, the model with the most sessions that started on a blank canvas and ended with the model's own save; from that model, the session with the median coverage. Images are the canvas as saved, rendered at 6 pixels per cell.</p>
-<div class="figs">
+<h3>3.1 Session length</h3>
 <figure>
-<img src="figures/session-1227-deepseek-r1-8b.png" width="600" height="600" loading="lazy" alt="Canvas from deepseek-r1-8b session 1227: a dark purple cluster near the centre with a small magenta shape below it, on a black background.">
-<figcaption>Figure 1. deepseek-r1-8b, session <!--A:fig.deepseek-r1-8b.id-->1227<!--/A-->, <!--A:fig.deepseek-r1-8b.date-->31 March 2026<!--/A-->. Step counter at save: <!--A:fig.deepseek-r1-8b.steps-->34<!--/A-->. Coverage <!--A:fig.deepseek-r1-8b.cov-->9.2<!--/A-->%. Title generated: "<!--A:fig.deepseek-r1-8b.title-->Abstract Expression<!--/A-->". Median of <!--A:fig.deepseek-r1-8b.n-->209<!--/A--> eligible sessions.</figcaption>
-</figure>
-<figure>
-<img src="figures/session-1058-mistral.png" width="600" height="600" loading="lazy" alt="Canvas from mistral session 1058: green, blue and magenta clusters running from top to lower left, on a black background.">
-<figcaption>Figure 2. mistral, session <!--A:fig.mistral.id-->1058<!--/A-->, <!--A:fig.mistral.date-->29 March 2026<!--/A-->. Step counter at save: <!--A:fig.mistral.steps-->127<!--/A-->. Coverage <!--A:fig.mistral.cov-->16.8<!--/A-->%. Title generated: "<!--A:fig.mistral.title-->Serene Landscape<!--/A-->". Median of <!--A:fig.mistral.n-->26<!--/A--> eligible sessions.</figcaption>
-</figure>
-<figure>
-<img src="figures/session-3084-qwen.png" width="600" height="600" loading="lazy" alt="Canvas from qwen session 3084: a white vertical band with a blue area at the top, on a black background.">
-<figcaption>Figure 3. qwen, session <!--A:fig.qwen.id-->3084<!--/A-->, <!--A:fig.qwen.date-->4 June 2026<!--/A-->. Step counter at save: <!--A:fig.qwen.steps-->28<!--/A-->. Coverage <!--A:fig.qwen.cov-->13.3<!--/A-->%. Title generated: "<!--A:fig.qwen.title-->Blue Canvas Chaos<!--/A-->". Median of <!--A:fig.qwen.n-->89<!--/A--> eligible sessions.</figcaption>
-</figure>
-</div>
-<p class="note">The step counter can also advance during rest and chat periods, so it is an upper bound on drawing steps.</p>
-
-<h3>O4. Emotion words</h3>
-<p>From <!--A:w.thoughts_start-->21 March 2026<!--/A--> to <!--A:w.end-->14 June 2026<!--/A-->, <!--A:em.with_word-->49,432<!--/A--> of <!--A:em.thoughts-->84,263<!--/A--> saved generations carried an emotion word. There were <!--A:em.distinct-->274<!--/A--> distinct words; <!--A:em.once-->129<!--/A--> of them occur in only one session. The five most frequent were <!--A:em.top5-->calm (11,213), inspired (5,261), stuck (4,503), free (2,142), unfinished (2,037)<!--/A-->. A count is the number of saved generations made while that word was current, so a word that stays current for a long session is counted many times.</p>
-<div class="table-wrap">
-<table>
-<caption>Most frequent emotion words, saved generations from <!--A:w.thoughts_start-->21 March 2026<!--/A--></caption>
-<thead><tr><th>Word</th><th class="num">Saved generations</th></tr></thead>
-<tbody>
-<!--B:emotion_rows-->
-<tr><td>calm</td><td class="num">11,213</td></tr>
-<tr><td>inspired</td><td class="num">5,261</td></tr>
-<tr><td>stuck</td><td class="num">4,503</td></tr>
-<tr><td>free</td><td class="num">2,142</td></tr>
-<tr><td>unfinished</td><td class="num">2,037</td></tr>
-<tr><td>happy</td><td class="num">2,019</td></tr>
-<tr><td>accomplishment</td><td class="num">1,868</td></tr>
-<tr><td>frustrated</td><td class="num">1,287</td></tr>
-<tr><td>curious</td><td class="num">1,231</td></tr>
-<tr><td>peace</td><td class="num">1,223</td></tr>
-<!--/B-->
-</tbody>
-</table>
-</div>
-<p>Each model's prompt lists its own most frequent earlier words (Section 3.3), so these counts are not independent across sessions.</p>
-
-<h3>O5. Titles</h3>
-<p><!--A:ti.kept-->2,066<!--/A--> titles remain after filtering, <!--A:ti.distinct-->1,632<!--/A--> of them distinct. <!--A:ti.shared3-->16<!--/A--> exact (case-sensitive) title strings were produced by three or more models. The title prompt includes the current emotion word and the colours used, and every model receives the same template; no model sees another model's titles.</p>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Title</th><th class="num">Models</th><th class="num">Sessions</th><th>Models</th></tr></thead>
-<tbody>
-<!--B:title_rows-->
-<tr><td>Abstract Harmony</td><td class="num">5</td><td class="num">7</td><td>command-r-7b, gemma2-9b, internlm-7b, qwen, yi-9b</td></tr>
-<tr><td>Sunset Serenity</td><td class="num">4</td><td class="num">10</td><td>codestral-22b, llama2, mistral, qwen2.5-coder-7b</td></tr>
-<tr><td>Vibrant Sunset</td><td class="num">4</td><td class="num">10</td><td>deepseek-coder-v2, llama2, qwen2.5-coder-7b, smollm2</td></tr>
-<tr><td>Serene Horizon</td><td class="num">4</td><td class="num">5</td><td>codestral-22b, internlm-7b, llama2, phi4-mini</td></tr>
-<tr><td>Sunset Symphony</td><td class="num">4</td><td class="num">4</td><td>deepseek-coder-v2, gemma2-9b, internlm-7b, llama2</td></tr>
-<tr><td>Abstract Serenity</td><td class="num">3</td><td class="num">13</td><td>deepseek-r1-8b, hermes3, phi4-mini</td></tr>
-<tr><td>Ocean&#x27;s Embrace</td><td class="num">3</td><td class="num">10</td><td>internlm-7b, mistral-small-24b, phi4-mini</td></tr>
-<tr><td>Sunset Harmony</td><td class="num">3</td><td class="num">9</td><td>deepseek-coder-v2, internlm-7b, llama3</td></tr>
-<tr><td>Blue Horizon</td><td class="num">3</td><td class="num">7</td><td>internlm-7b, qwen2.5-coder-7b, yi-9b</td></tr>
-<tr><td>Serene Harmony</td><td class="num">3</td><td class="num">6</td><td>codestral-22b, gemma2-9b, internlm-7b</td></tr>
-<tr><td>Vibrant Harmony</td><td class="num">3</td><td class="num">4</td><td>deepseek-coder-v2, llama3, yi-9b</td></tr>
-<tr><td>Whispers of Dawn</td><td class="num">3</td><td class="num">4</td><td>internlm-7b, mistral-small-24b, qwen3</td></tr>
-<tr><td>Autumn Leaves</td><td class="num">3</td><td class="num">3</td><td>mistral, qwen, qwen2.5-coder-7b</td></tr>
-<tr><td>Harmony in Motion</td><td class="num">3</td><td class="num">3</td><td>codestral-22b, llama3, mistral-small-24b</td></tr>
-<tr><td>Rainbow Harmony</td><td class="num">3</td><td class="num">3</td><td>mistral, phi4-mini, yi-9b</td></tr>
-<tr><td>Sunset in the Garden</td><td class="num">3</td><td class="num">3</td><td>llama3, llama3-abliterated, qwen2.5-coder-7b</td></tr>
-<!--/B-->
-</tbody>
-</table>
-</div>
-<p class="note">There is no baseline for how often unrelated models would produce the same short title from this template, so these matches are not evidence of shared preference (Limitations L9).</p>
-
-<h3>O6. Sentence completions ("reflections")</h3>
-<p><!--A:t.reflections-->1,247<!--/A--> completions, from <!--A:rf.first-->6 April 2026<!--/A--> to <!--A:rf.last-->14 June 2026<!--/A-->. Sampling temperature: <!--A:rf.temps-->0.85 for 1,052 (6 Apr to 30 May); 1.00 for 195 (30 May to 14 Jun)<!--/A-->. Two recent completions are included in the model's own preamble.</p>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Stem</th><th class="num">Completions</th></tr></thead>
-<tbody>
-<!--B:refl_rows-->
-<tr><td>surprise</td><td class="num">380</td></tr>
-<tr><td>reminds</td><td class="num">376</td></tr>
-<tr><td>keep_thinking</td><td class="num">371</td></tr>
-<tr><td>difference</td><td class="num">73</td></tr>
-<tr><td>no_limit</td><td class="num">47</td></tr>
-<!--/B-->
-</tbody>
-</table>
-</div>
-
-<h3>O7. Rest-phase output</h3>
-<p><!--A:t.dreams-->2,913<!--/A--> rest-phase outputs were logged: <!--A:dp.before-->2,354<!--/A--> in <!--A:dp.before_s-->610<!--/A--> sessions before 15 April, and <!--A:dp.after-->559<!--/A--> in <!--A:dp.after_s-->549<!--/A--> sessions from 15 April. Their content is not summarised here as a finding; see Limitations L1.</p>
-
-<h2 id="limitations">7. Limitations and confounds</h2>
-
-<h3>L1. Rest-phase output repeats its prompt</h3>
-<p>The rest-phase prompt is "I am resting after painting. My mind drifts through colors, shapes, and feelings from my time at the canvas." followed by "I drift into thought...". The share of outputs containing art keywords was <!--A:d.art_first-->68.1<!--/A-->% in March and <!--A:d.art_last-->96.6<!--/A-->% in June, but the share containing words from the prompt itself moved with it month by month, from <!--A:d.pw_first-->63.1<!--/A-->% to <!--A:d.pw_last-->95.5<!--/A-->%. Between <!--A:d.only_lo-->1.9<!--/A-->% and <!--A:d.only_hi-->9.7<!--/A-->% of outputs in any month contain an art keyword and none of the prompt's words. The rest structure also changed on about 15 April. The art-keyword share is therefore not reported as a result.</p>
-<figure>
-<div class="legend"><!--B:chart_b_legend--><span class="key"><span class="ln s1"></span>Art keywords</span><span class="key"><span class="ln s2"></span>Words from the rest prompt</span><span class="key"><span class="ln s3"></span>Art keywords, no prompt words</span><!--/B--></div>
-<p class="hint">Scroll the chart sideways to see all of it.</p>
-<div class="chart-wrap">
-<!--B:chart_b-->
-<svg class="chart" viewBox="0 0 640 300" role="img" aria-labelledby="chartB-t chartB-d">
-<title id="chartB-t">Rest-phase output: share containing art keywords vs words from the prompt</title>
-<desc id="chartB-d">Three lines across four months. The art-keyword share and the share containing words from the rest-phase prompt move together; the share with art keywords but no prompt words stays low. Values and monthly n are in the data table below the chart.</desc>
-<line class="grid" x1="44" x2="620" y1="244.0" y2="244.0"/>
-<text class="tick" x="38" y="248.0" text-anchor="end">0%</text>
-<line class="grid" x1="44" x2="620" y1="188.0" y2="188.0"/>
-<text class="tick" x="38" y="192.0" text-anchor="end">25%</text>
-<line class="grid" x1="44" x2="620" y1="132.0" y2="132.0"/>
-<text class="tick" x="38" y="136.0" text-anchor="end">50%</text>
-<line class="grid" x1="44" x2="620" y1="76.0" y2="76.0"/>
-<text class="tick" x="38" y="80.0" text-anchor="end">75%</text>
-<line class="grid" x1="44" x2="620" y1="20.0" y2="20.0"/>
-<text class="tick" x="38" y="24.0" text-anchor="end">100%</text>
-<polyline class="line s1" points="116.0,91.5 260.0,35.2 404.0,47.6 548.0,27.6"/>
-<circle class="dot s1" cx="116.0" cy="91.5" r="4.5"><title>March: art keywords 68.1% of 1,470 outputs</title></circle>
-<circle class="dot s1" cx="260.0" cy="35.2" r="4.5"><title>April: art keywords 93.2% of 1,086 outputs</title></circle>
-<circle class="dot s1" cx="404.0" cy="47.6" r="4.5"><title>May: art keywords 87.7% of 268 outputs</title></circle>
-<circle class="dot s1" cx="548.0" cy="27.6" r="4.5"><title>June: art keywords 96.6% of 89 outputs</title></circle>
-<polyline class="line s2" points="116.0,102.7 260.0,40.2 404.0,44.2 548.0,30.1"/>
-<circle class="dot s2" cx="116.0" cy="102.7" r="4.5"><title>March: words from the rest prompt 63.1% of 1,470 outputs</title></circle>
-<circle class="dot s2" cx="260.0" cy="40.2" r="4.5"><title>April: words from the rest prompt 91.0% of 1,086 outputs</title></circle>
-<circle class="dot s2" cx="404.0" cy="44.2" r="4.5"><title>May: words from the rest prompt 89.2% of 268 outputs</title></circle>
-<circle class="dot s2" cx="548.0" cy="30.1" r="4.5"><title>June: words from the rest prompt 95.5% of 89 outputs</title></circle>
-<polyline class="line s3" points="116.0,222.3 260.0,234.8 404.0,239.7 548.0,236.4"/>
-<circle class="dot s3" cx="116.0" cy="222.3" r="4.5"><title>March: art keywords, no prompt words 9.7% of 1,470 outputs</title></circle>
-<circle class="dot s3" cx="260.0" cy="234.8" r="4.5"><title>April: art keywords, no prompt words 4.1% of 1,086 outputs</title></circle>
-<circle class="dot s3" cx="404.0" cy="239.7" r="4.5"><title>May: art keywords, no prompt words 1.9% of 268 outputs</title></circle>
-<circle class="dot s3" cx="548.0" cy="236.4" r="4.5"><title>June: art keywords, no prompt words 3.4% of 89 outputs</title></circle>
-<text class="val" x="548.0" y="226.4" text-anchor="middle">3.4%</text>
-<text class="tick" x="116.0" y="262.0" text-anchor="middle">Mar</text>
-<text class="tick" x="116.0" y="278.0" text-anchor="middle">n = 1,470</text>
-<text class="tick" x="260.0" y="262.0" text-anchor="middle">Apr</text>
-<text class="tick" x="260.0" y="278.0" text-anchor="middle">n = 1,086</text>
-<text class="tick" x="404.0" y="262.0" text-anchor="middle">May</text>
-<text class="tick" x="404.0" y="278.0" text-anchor="middle">n = 268</text>
-<text class="tick" x="548.0" y="262.0" text-anchor="middle">Jun</text>
-<text class="tick" x="548.0" y="278.0" text-anchor="middle">n = 89</text>
-<line class="axis" x1="44" x2="620" y1="244" y2="244"/>
-</svg>
-<!--/B-->
-</div>
-<figcaption>Chart B. Share of rest-phase outputs matching each pattern, by month, with the number of outputs per month.</figcaption>
-<details><summary>Data table for Chart B</summary>
-<div class="table-wrap"><table>
-<thead><tr><th>Month</th><th class="num">Outputs</th><th class="num">Art keywords %</th><th class="num">Prompt words %</th><th class="num">Art keywords, no prompt words %</th></tr></thead>
-<tbody>
-<!--B:chart_b_rows-->
-<tr><td>March</td><td class="num">1,470</td><td class="num">68.1</td><td class="num">63.1</td><td class="num">9.7</td></tr>
-<tr><td>April</td><td class="num">1,086</td><td class="num">93.2</td><td class="num">91.0</td><td class="num">4.1</td></tr>
-<tr><td>May</td><td class="num">268</td><td class="num">87.7</td><td class="num">89.2</td><td class="num">1.9</td></tr>
-<tr><td>June</td><td class="num">89</td><td class="num">96.6</td><td class="num">95.5</td><td class="num">3.4</td></tr>
-<!--/B-->
-</tbody></table></div>
-</details>
+  <img src="figures/session-length.svg" width="720" height="390" alt="Histogram of session length for 2,987 sessions with an end time and non-negative duration. 0 to 1 minutes: 227. 1 to 5: 371. 5 to 15: 345. 15 to 30: 362. 30 to 45: 779. 45 to 60: 70. 60 to 70: 793. 70 to 90: 15. 90 to 180: 11. Over 180: 14.">
+  <figcaption>Session length, n = 2,987 sessions with an end time and non-negative duration<!-- A§7.15 -->; 72 have no end time<!-- A§7.4 --> and 1 has a negative duration<!-- A§7.13 -->. Median 30.1 minutes<!-- A§7.15 -->. The two peaks match the 30-minute and 65-minute rotation intervals<!-- A§2.3, A§1.8 -->. 598 of the 2,987 (20.0%) lasted under 5 minutes<!-- A§7.15 -->.</figcaption>
 </figure>
 
-<h3>L2. Each model's output is fed back to it</h3>
-<p>Every prompt includes the model's own earlier titles, emotion words, sentence completions and rest-phase text (Section 3.5). Repetition across a model's sessions is expected from this alone, and per-model patterns cannot be separated from it with this data.</p>
-
-<h3>L3. Shared templates and related models</h3>
-<p>All models receive the same templates, so agreement between models can come from the prompt. The roster also contains related models: <!--A:t.models-->26<!--/A--> models from <!--A:fam.n-->12<!--/A--> families, including base and chat versions of the same model, fine-tunes of Llama and Mistral, and a Llama distillation. Agreement between related models partly reflects shared pretraining.</p>
-
-<h3>L4. Early saved generations were overwritten</h3>
-<p>Until <!--A:tk.last_equal-->20 March 2026<!--/A-->, the <code>thoughts</code> table had a unique key on (model, step). Step numbers restart each session, so each new session replaced the earlier session's row at the same step; the row kept its original date. On every day up to that date the number of rows equals the number of distinct (model, step) pairs; from <!--A:tk.first_unequal-->21 March 2026<!--/A--> it does not. The <!--A:tk.before_rows-->15,299<!--/A--> rows dated before <!--A:w.thoughts_start-->21 March 2026<!--/A--> are excluded from every figure based on saved generations.</p>
-
-<h3>L5. Coverage</h3>
-<p>Sessions saved at the slot boundary: <!--A:end.slot_save-->1,241<!--/A-->. Of these, <!--A:end.slot_save_zero-->1,241<!--/A--> recorded zero coverage because the canvas was cleared first; the true values were not stored and cannot be recovered. Coverage otherwise includes marks carried over from earlier sessions and is sampled on every second cell. No per-model coverage is reported.</p>
-
-<h3>L6. Extraction rules are simple and unvalidated</h3>
-<p>The emotion rules capture non-emotion words; for example, Claude Sonnet's frequent captures include "state", "bright" and "accidental" from phrases like "I feel this is accidental". The title filter removes boilerplate it recognises and may miss other kinds. Neither rule was checked against hand labels.</p>
-
-<h3>L7. Unbalanced and changing conditions</h3>
-<p>Models joined between 7 March and 19 April, session counts range from <!--A:ro.min-->45<!--/A--> to <!--A:ro.max-->345<!--/A-->, quantization ranges from Q2_K to Q8_0, slot length changed twice and sampling temperature changed on 30 May. None of these is held constant across models.</p>
-
-<h3>L8. Short sessions and repetition</h3>
-<p>Many sessions are very short (Chart A), and some models repeat the same command string for long stretches. Repetition was not measured for this page.</p>
-
-<h3>L9. No tests, no baselines</h3>
-<p>Many per-model numbers are shown and none is tested. There is no null model for title matches or word frequencies. Differences between models are descriptive only.</p>
-
-<h3>L10. Missing and orphaned rows</h3>
-<p>The <code>sessions</code> table has <!--A:ig.rows-->3,085<!--/A--> rows but ids up to <!--A:ig.max_id-->3,257<!--/A-->, so <!--A:ig.gap-->172<!--/A--> ids are unused or were deleted; an early version of the program deleted placeholder sessions at each model switch. <!--A:ig.thoughts-->1,227<!--/A--> saved generations, <!--A:ig.emotions-->413<!--/A--> emotion rows and <!--A:ig.dreams-->7<!--/A--> rest-phase outputs have no session (whole database). Earlier versions of the program, before 7 March 2026, are not in this dataset, and no comparison with them is made.</p>
-
-<h3>L11. Small samples</h3>
-<p>Several models have few sessions of any given kind; Claude Sonnet 4.6 has <!--A:cl.self_saved-->0<!--/A--> sessions ended by its own save.</p>
-
-<h2 id="later">8. Runs after 14 June 2026</h2>
-<p>After the window the program was run by hand. These sessions are excluded from every figure. They include Kimi-VL-A3B, a vision-language model; whether canvas images were passed to it is not recorded in the database. Sessions from <!--A:later.cutoff-->16 October 2026<!--/A--> onward belong to a separate experiment and are not described here.</p>
+<h3>3.2 Sessions by month</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Model</th><th>Date</th><th class="num">Sessions</th><th class="num">Titled</th><th class="num">Longest (min)</th></tr></thead>
+<caption>Sessions by month (local dates)</caption>
+<thead><tr><th>Month</th><th class="n">Sessions</th><th class="n">Days with sessions</th><th class="n">Sessions per active day</th></tr></thead>
 <tbody>
-<!--B:later_rows-->
-<tr><td>phi4-mini</td><td>15 September 2026</td><td class="num">1</td><td class="num">0</td><td class="num">3</td></tr>
-<tr><td>kimi-vl-a3b</td><td>20 September 2026</td><td class="num">5</td><td class="num">3</td><td class="num">46</td></tr>
-<!--/B-->
+<tr><td>March 2026 (from the 7th)</td><td class="n">1,091<!-- A§7.5 --></td><td class="n">25<!-- A§7.5 --></td><td class="n">43.6<!-- A§7.5 --></td></tr>
+<tr><td>April 2026</td><td class="n">1,192<!-- A§7.15 --></td><td class="n">30<!-- A§7.5 --></td><td class="n">39.7<!-- A§7.15 --></td></tr>
+<tr><td>May 2026</td><td class="n">574<!-- A§7.15 --></td><td class="n">26<!-- A§7.5 --></td><td class="n">22.1<!-- A§7.15 --></td></tr>
+<tr><td>June 2026 (to the 14th)</td><td class="n">203<!-- A§7.5 --></td><td class="n">14<!-- A§7.5 --></td><td class="n">14.5<!-- A§7.5 --></td></tr>
 </tbody>
 </table>
 </div>
 
-<h2 id="open">9. Open questions and next steps</h2>
+<h3>3.3 Per model</h3>
+<p>Mean coverage is computed over sessions with non-zero recorded coverage only, because most recorded zeros are a measurement failure and the rest are undetermined (<a href="#limitations">section 5.4</a>). The last two columns give that n and the number of excluded zero sessions. The excluded sessions are not random: the excluded share ranges from 3 of 89 sessions to 76 of 81 depending on the model<!-- A§7.15 -->, so the model means differ in how representative they are of each model's sessions.</p>
+<div class="table-wrap">
+<table>
+<caption>Per-model counts</caption>
+<thead><tr><th>Model</th><th class="n">Sessions</th><th class="n">Thoughts</th><th class="n">Feel entries</th><th class="n">Sleep-phase texts</th><th class="n">Reflections</th><th class="n">Sound strings</th><th class="n">Mean coverage %</th><th class="n">n non-zero</th><th class="n">Zero sessions</th></tr></thead>
+<tbody>
+<!-- every value in this table: A§7.6 -->
+<tr><td>deepseek-r1-8b</td><!-- A§7.6 --><td class="n">345</td><td class="n">8,868</td><td class="n">96</td><td class="n">58</td><td class="n">43</td><td class="n">3,228</td><td class="n">15.7</td><td class="n">310</td><td class="n">35</td></tr>
+<tr><td>llama3</td><!-- A§7.6 --><td class="n">216</td><td class="n">4,548</td><td class="n">208</td><td class="n">101</td><td class="n">50</td><td class="n">4,117</td><td class="n">16.0</td><td class="n">145</td><td class="n">71</td></tr>
+<tr><td>qwen (2.5, 3B)</td><!-- A§7.6 --><td class="n">190</td><td class="n">5,980</td><td class="n">519</td><td class="n">41</td><td class="n">66</td><td class="n">4,039</td><td class="n">18.8</td><td class="n">109</td><td class="n">81</td></tr>
+<tr><td>llama3-abliterated</td><!-- A§7.6 --><td class="n">180</td><td class="n">2,870</td><td class="n">45</td><td class="n">109</td><td class="n">44</td><td class="n">3,822</td><td class="n">22.8</td><td class="n">125</td><td class="n">55</td></tr>
+<tr><td>qwen3</td><!-- A§7.6 --><td class="n">145</td><td class="n">5,376</td><td class="n">240</td><td class="n">110</td><td class="n">27</td><td class="n">3,146</td><td class="n">20.0</td><td class="n">101</td><td class="n">44</td></tr>
+<tr><td>phi4-mini</td><!-- A§7.6 --><td class="n">127</td><td class="n">6,052</td><td class="n">1,098</td><td class="n">51</td><td class="n">107</td><td class="n">1,726</td><td class="n">42.6</td><td class="n">71</td><td class="n">56</td></tr>
+<tr><td>internlm-7b</td><!-- A§7.6 --><td class="n">117</td><td class="n">6,233</td><td class="n">552</td><td class="n">96</td><td class="n">120</td><td class="n">1,350</td><td class="n">22.0</td><td class="n">38</td><td class="n">79</td></tr>
+<tr><td>mistral</td><!-- A§7.6 --><td class="n">113</td><td class="n">4,514</td><td class="n">251</td><td class="n">224</td><td class="n">38</td><td class="n">2,848</td><td class="n">18.2</td><td class="n">43</td><td class="n">70</td></tr>
+<tr><td>llama3.1</td><!-- A§7.6 --><td class="n">112</td><td class="n">3,789</td><td class="n">38</td><td class="n">37</td><td class="n">43</td><td class="n">3,400</td><td class="n">28.0</td><td class="n">53</td><td class="n">59</td></tr>
+<tr><td>glm4</td><!-- A§7.6 --><td class="n">104</td><td class="n">3,370</td><td class="n">48</td><td class="n">69</td><td class="n">11</td><td class="n">3,676</td><td class="n">22.8</td><td class="n">72</td><td class="n">32</td></tr>
+<tr><td>qwen3.5</td><!-- A§7.6 --><td class="n">104</td><td class="n">2,315</td><td class="n">221</td><td class="n">106</td><td class="n">77</td><td class="n">1,250</td><td class="n">29.5</td><td class="n">51</td><td class="n">53</td></tr>
+<tr><td>llama2</td><!-- A§7.6 --><td class="n">103</td><td class="n">4,318</td><td class="n">596</td><td class="n">257</td><td class="n">19</td><td class="n">2,201</td><td class="n">18.2</td><td class="n">65</td><td class="n">38</td></tr>
+<tr><td>mistral-base</td><!-- A§7.6 --><td class="n">102</td><td class="n">2,416</td><td class="n">64</td><td class="n">366</td><td class="n">7</td><td class="n">2,318</td><td class="n">42.8</td><td class="n">75</td><td class="n">27</td></tr>
+<tr><td>hermes3</td><!-- A§7.6 --><td class="n">100</td><td class="n">6,392</td><td class="n">531</td><td class="n">58</td><td class="n">39</td><td class="n">3,028</td><td class="n">22.4</td><td class="n">29</td><td class="n">71</td></tr>
+<tr><td>openhermes</td><!-- A§7.6 --><td class="n">93</td><td class="n">4,019</td><td class="n">298</td><td class="n">292</td><td class="n">12</td><td class="n">2,346</td><td class="n">41.8</td><td class="n">63</td><td class="n">30</td></tr>
+<tr><td>phi3</td><!-- A§7.6 --><td class="n">93</td><td class="n">945</td><td class="n">92</td><td class="n">166</td><td class="n">33</td><td class="n">2,412</td><td class="n">14.8</td><td class="n">22</td><td class="n">71</td></tr>
+<tr><td>gemma2-9b</td><!-- A§7.6 --><td class="n">91</td><td class="n">1,951</td><td class="n">116</td><td class="n">137</td><td class="n">29</td><td class="n">1,713</td><td class="n">5.6</td><td class="n">25</td><td class="n">66</td></tr>
+<tr><td>mistral-small-24b</td><!-- A§7.6 --><td class="n">90</td><td class="n">1,673</td><td class="n">254</td><td class="n">25</td><td class="n">80</td><td class="n">858</td><td class="n">15.3</td><td class="n">21</td><td class="n">69</td></tr>
+<tr><td>qwen2.5-coder-7b</td><!-- A§7.6 --><td class="n">90</td><td class="n">7,068</td><td class="n">1,143</td><td class="n">2</td><td class="n">81</td><td class="n">1,577</td><td class="n">44.7</td><td class="n">21</td><td class="n">69</td></tr>
+<tr><td>smollm2</td><!-- A§7.6 --><td class="n">89</td><td class="n">2,805</td><td class="n">393</td><td class="n">47</td><td class="n">25</td><td class="n">1,747</td><td class="n">65.2</td><td class="n">86</td><td class="n">3</td></tr>
+<tr><td>llama2-base</td><!-- A§7.6, A§7.15 --><td class="n">85</td><td class="n">413</td><td class="n">24</td><td class="n">252</td><td class="n">16</td><td class="n">2,131</td><td class="n">37.8</td><td class="n">55</td><td class="n">30</td></tr>
+<tr><td>command-r-7b</td><!-- A§7.6 --><td class="n">85</td><td class="n">1,518</td><td class="n">224</td><td class="n">89</td><td class="n">53</td><td class="n">1,346</td><td class="n">42.3</td><td class="n">35</td><td class="n">50</td></tr>
+<tr><td>deepseek-coder-v2</td><!-- A§7.6 --><td class="n">81</td><td class="n">3,070</td><td class="n">149</td><td class="n">71</td><td class="n">80</td><td class="n">964</td><td class="n">30.5</td><td class="n">5</td><td class="n">76</td></tr>
+<tr><td>yi-9b</td><!-- A§7.6 --><td class="n">81</td><td class="n">701</td><td class="n">94</td><td class="n">77</td><td class="n">68</td><td class="n">369</td><td class="n">12.9</td><td class="n">11</td><td class="n">70</td></tr>
+<tr><td>codestral-22b</td><!-- A§7.6 --><td class="n">80</td><td class="n">1,823</td><td class="n">143</td><td class="n">59</td><td class="n">77</td><td class="n">685</td><td class="n">15.4</td><td class="n">6</td><td class="n">74</td></tr>
+<tr><td>claude-sonnet-4-6 (API)</td><!-- A§7.6, A§7.15 --><td class="n">44</td><td class="n">5,308</td><td class="n">31</td><td class="n">13</td><td class="n">2</td><td class="n">190</td><td class="n">18.6</td><td class="n">32</td><td class="n">12</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="observations" aria-labelledby="h-observations">
+<h2 id="h-observations">4. Observations</h2>
+<p>These are descriptive statements about the pilot dataset. Each gives its numbers, its n and the caveat that limits it. None is a tested hypothesis.</p>
+<ol class="obs">
+<li><strong>Scale.</strong> 26 models ran 3,060 sessions, between 44 and 345 per model (median 101)<!-- A§7.15 -->. The pilot recorded 98,335 thoughts, 2,913 sleep-phase texts, 1,247 reflections and 56,487 sound strings<!-- A§7.3 -->.
+  <span class="caveat">Some child records belong to sessions whose session row is missing (section 5).</span></li>
+<li><strong>Session length.</strong> Of 2,987 sessions with an end time and non-negative duration, the median length was 30.1 minutes<!-- A§7.15 -->; 793 lasted 60 to 70 minutes, matching the 65-minute rotation<!-- A§7.4 -->.
+  <span class="caveat">598 of the 2,987 (20.0%) ended within 5 minutes<!-- A§7.15 -->.</span></li>
+<li><strong>Feel-word vocabulary.</strong> Feel-word extraction produced 7,468 entries and 285 distinct words<!-- A§7.7 -->. 121 words occur once and 152 come from only one model<!-- A§7.7 -->. 7 words were produced by 15 or more models: accomplishment, alive, calm, free, happy, inspired, peace<!-- A§7.7 -->.
+  <span class="caveat">Feel words are whatever follows "feel"; they are not validated as emotion terms.</span></li>
+<li><strong>Feel words current for the most saved thoughts.</strong> Counted as thought-steps (n = 59,013): calm 11,474; inspired 5,749; stuck 5,242; free 3,271; happy 2,285<!-- A§7.7 -->.
+  <span class="caveat">A thought-step count measures how many saved thoughts were recorded while a word was current, not how often the word was written<!-- A§3 -->. 40.8% of the "calm" thought-steps come from one model, internlm-7b<!-- A§7.7 -->.</span></li>
+<li><strong>Per-model feel words differ.</strong> Examples, as feel entries (n = that model's entries): qwen2.5-coder-7b stuck 485, frustrated 270 (n = 1,143); qwen disconnected 154, confused 122, lost 116 (n = 519); mistral-small-24b alive 104 (n = 254); llama3 weightless 48, carefree 27 (n = 208); qwen3 thirsty 76 (n = 240); internlm-7b calm 309 (n = 552)<!-- A§7.7 table -->. The most frequent word is the same under both counting methods for 22 of 26 models<!-- A§7.7 -->.
+  <span class="caveat">From about 2026-04-10 each model was shown its own 5 most frequent feel words<!-- A§1.4 --> in every prompt, so these differences may partly reflect the feedback loop (section 5.1). Models also differ in size, format and family.</span></li>
+<li><strong>"stuck" is concentrated in one model.</strong> 485 of the 542 "stuck" entries come from qwen2.5-coder-7b<!-- A§7.7 --> (90 sessions<!-- A§7.6 -->). The other two code-trained models (models trained mainly on program code: deepseek-coder-v2 and codestral-22b, added with qwen2.5-coder-7b on 2026-04-19<!-- A§7.18 -->) have "inspired" and "tranquil" as their most frequent words<!-- A§4.3 C080 -->.
+  <span class="caveat">One model; no claim about code training in general follows.</span></li>
+<li><strong>Some captured words are not affect terms.</strong> At least 131 entries (1.8%) are words such as "during", "order", "various" and "low"; a further 1,931 (25.9%) are ambiguous state or situation words<!-- A§7.7 -->, classified by a single rater without a validated coding scheme. 464 of the 531 thoughts containing "feel free" or "feeling free" are the phrase "feel free"<!-- A§7.7 -->. claude-sonnet-4-6's most frequent thought-step words are "unfinished" (2,037), "state" (421) and "bright" (329)<!-- A§7.7 -->.
+  <span class="caveat">The two counts depend entirely on one rater's word lists, which are published in queries.sql; another rater could classify differently<!-- A§7.7 -->.</span></li>
+<li><strong>Sleep-phase texts use art vocabulary.</strong> 2,186 of 2,913 sleep-phase texts (75.0%) contain at least one word from the art lexicon below; 68.7% do when the words color and hue are left out of the lexicon<!-- A§7.5 -->. The lexicon is a prefix match on canvas, paint, brush, color (either spelling), draw, stroke, palette, artist, artwork, pixel, hue and sketch, so it also matches words such as painter, drawback or artistic; "art" matches only as a whole word<!-- A§7.5 -->. By month: 59.5% in March (n = 1,470), 91.7% in April (n = 1,086), 86.6% in May (n = 268), 94.4% in June (n = 89)<!-- A§7.5 -->.
+  <span class="caveat">The prompt that produces these texts itself mentions colors, shapes and feelings, the texts were fed back into later prompts, and the generation code changed during the pilot.</span>
+  <figure>
+    <img src="figures/sleep-phase-lexicon.svg" width="720" height="350" alt="Bar chart of the share of sleep-phase texts matching the art lexicon by month: March 2026, 874 of 1,470 (59.5%); April, 996 of 1,086 (91.7%); May, 232 of 268 (86.6%); June, 84 of 89 (94.4%).">
+    <figcaption>Share of sleep-phase texts containing at least one art-lexicon word, by month, with n per month<!-- A§7.5 -->.</figcaption>
+  </figure></li>
+<li><strong>Sleep-phase counts follow the check-in answer.</strong> qwen2.5-coder-7b produced 2 sleep-phase texts and 148 chat messages over 90 sessions<!-- A§7.12 -->, consistent with it answering CHAT rather than DREAM at the check-in. mistral-base produced 366 over 102 sessions, 110 of them (65, 25 and 20) in three March sessions<!-- A§7.12 -->.
+  <span class="caveat">Each figure is one model. 148 counts chat messages, not check-in answers. In March a rest could produce up to 5 sleep-phase texts, so March counts are not comparable with later ones<!-- A§1.5, A§2.5 -->.</span></li>
+<li><strong>Painting titles reuse common words.</strong> Of 2,108 titles from 26 models<!-- A§7.9 -->: "sunset" or "sunrise" appears in 243 (11.5%) from 20 models; "harmony" in 172 (8.2%, 19 models); "abstract" in 145 (6.9%, 17 models); "serenity" or "serene" in 134 (6.4%, 19 models)<!-- A§7.9 -->. Identical titles are shared across models less often than chance: 78 titles are shared by 2 or more models, against 195.8 when the model labels are shuffled at random; 7 are shared by 4 or more, against 45.0<!-- A§7.9 -->.
+  <span class="caveat">These are generic title words. Models mostly reuse their own titles.</span></li>
+<li><strong>Color words in thoughts.</strong> Thoughts contain 93,095 color-name mentions: white 18.6%, blue 16.3%, green 11.3%<!-- A§7.10 -->. 5,652 of the 6,087 mentions of "navy" (92.9%) come from claude-sonnet-4-6<!-- A§7.10 -->.
+  <span class="caveat">Color names are also commands, so a mention may be an instruction rather than a description.</span></li>
+<li><strong>Sound strings.</strong> The 56,487 sound strings include 26,150 distinct strings; the 12 most frequent account for 24.2%<!-- A§7.10 -->. The three most frequent are <code>()</code> (2,725), <code>:</code> (1,788) and <code>():</code> (1,742)<!-- A§7.10 -->.
+  <span class="caveat">12,220 sound strings belong to sessions whose session row is missing<!-- A§7.10 -->.</span></li>
+<li><strong>Reflections.</strong> 1,247 reflections were recorded from 2026-04-06. By prompt key: surprise 380, reminds 376, keep_thinking 371, difference 73, no_limit 47<!-- A§7.12, A§2.1 -->. These are the prompts' identifiers, not words in the answers (see the glossary). The most came from internlm-7b (120) and phi4-mini (107)<!-- A§7.12 -->.
+  <span class="caveat">Reflections were asked only from a model's 5th painting on, so models with fewer paintings contribute none<!-- A§7.18 -->. Two reflection answers were fed back into each later prompt. Their content has not been coded.</span></li>
+<li><strong>Activity.</strong> 1,091 sessions ran in March (from the 7th, 25 active days), 1,192 in April (30), 574 in May (26) and 203 in June (to the 14th, 14)<!-- A§7.5, A§7.15 -->. Sessions per active day fell from 43.6 in March to 39.7 in April<!-- A§7.5, A§7.15 -->.
+  <span class="caveat">Months are local dates.</span></li>
+</ol>
+</section>
+
+<section id="limitations" aria-labelledby="h-limitations">
+<h2 id="h-limitations">5. Audit and limitations</h2>
+<p>An audit of the pilot dataset, its code and the claims made about it on an earlier version of this site was completed in October 2026. Its main findings follow.</p>
+
+<h3>5.1 Each model's past output was part of its input</h3>
+<p>From about 2026-04-10, every drawing prompt included the model's most frequent feel words, its titles, reflection answers and sleep-phase text<!-- A§1.4 -->. Any apparent stability in a model's output over time, or any "identity", is confounded by this loop.</p>
+
+<h3>5.2 The cursor was invisible</h3>
+<p>The hand was not drawn in the text grid, and its row was shifted by one character<!-- A§1.1 -->. Models could locate the hand only from a line of text.</p>
+
+<h3>5.3 Parser behavior</h3>
 <ul>
-<li>Repeat rest-phase generation with a prompt that does not mention painting, colour, shape, feeling or the canvas, and compare keyword shares.</li>
-<li>Run sessions without the preamble of the model's own history and compare titles and emotion words with and without it.</li>
-<li>Record coverage before the canvas is cleared, and whether each session started on a blank canvas.</li>
-<li>Build a null model for cross-model title matches from each model's own title distribution.</li>
-<li>Code a sample of sentence completions against direct questions, with a second rater, before saying anything about the completion format.</li>
-<li>Test whether the order of sound characters differs from a shuffled baseline with the same character counts.</li>
+<li>Any word after "feel" counts unless blocklisted; there is no emotion lexicon. The stock phrase "feel free" produces "free"<!-- A§1.6, A§7.7 -->.</li>
+<li>Color names cannot be captured as feel words.</li>
+<li>Feel entries written by the code's own routine cannot be distinguished from model output.</li>
+<li>A comment in the code reports that gemma stopped after 1 to 2 tokens under raw continuation, before its switch to a chat template on about 2026-04-10<!-- A§7.18, A§1.3 -->. Measured: its 63 sessions before that date produced 777 thoughts, against 1,174 from 28 sessions after<!-- A§7.12 -->.</li>
+<li>A structured parser for a "feeling:" field could never run.</li>
 </ul>
 
-<h2 id="availability">10. Code and data availability</h2>
-<p>The program's source code (versions 1 and 2) is in private repositories and is not published. The prompts, extraction rules and filters needed to interpret the figures are quoted on this page from commit bdb1284 (30 May 2026). The database is not public. The SQL behind every figure is published as <a href="queries.sql">queries.sql</a>.</p>
+<h3>5.4 Recorded coverage of 0</h3>
+<p>1,391 of 3,060 sessions record coverage of exactly 0<!-- A§7.15 -->. For 1,246 of them the cause is known: the session ended by saving a painting, and the code measured coverage after the save had already cleared the canvas<!-- A§7.2, A§7.13 -->. Consistent with this, 16 of the 24 snapshots in the database belong to zero-coverage sessions while showing coverage of 17.0% to 69.8%<!-- A§7.2 -->. For the other 145 the cause is undetermined<!-- A§7.15 -->. All 1,391 are excluded, and coverage on this page is reported over the 1,669 sessions with non-zero values<!-- A§7.2 -->.</p>
+
+<h3>5.5 No code version per session</h3>
+<p>No pilot session recorded which version of the code it ran<!-- A§5.14 -->. Changes listed in section 2.8 can be dated only approximately, and several have no recorded version at all.</p>
+
+<h3>5.6 Step counts</h3>
+<p>The step counter counted every loop pass, including rest, chat and retries, and carried over between sessions<!-- A§5.11 -->. The field meant to record how long a feel word lasted is always 0<!-- A§5.12 -->. Neither is reported.</p>
+
+<h3>5.7 Base rates for word coincidences</h3>
+<p>The earlier site reported that different models "independently" produced the same words or titles. Checked against how often each word appears across all models, those claims do not hold.</p>
+<div class="table-wrap">
+<table>
+<caption>How widely selected words occur across the 26 models<!-- A§7.8 --></caption>
+<thead><tr><th>Word</th><th class="n">Feel entries</th><th class="n">Models (as feel word)</th><th class="n">Models (in thoughts)</th><th class="n">Models (in sleep-phase texts)</th></tr></thead>
+<tbody>
+<!-- every value in this table: A§7.8 -->
+<tr><td>weightless</td><!-- A§7.8 --><td class="n">81</td><td class="n">4</td><td class="n">5</td><td class="n">8</td></tr>
+<tr><td>free</td><!-- A§7.8 --><td class="n">309</td><td class="n">19</td><td class="n">25</td><td class="n">22</td></tr>
+<tr><td>calm</td><!-- A§7.8 --><td class="n">1,317</td><td class="n">25</td><td class="n">25</td><td class="n">25</td></tr>
+<tr><td>peace</td><!-- A§7.8 --><td class="n">276</td><td class="n">15</td><td class="n">23</td><td class="n">25</td></tr>
+<tr><td>serene</td><!-- A§7.8 --><td class="n">19</td><td class="n">3</td><td class="n">21</td><td class="n">19</td></tr>
+<tr><td>lake</td><!-- A§7.8 --><td class="n">0</td><td class="n">0</td><td class="n">22</td><td class="n">16</td></tr>
+<tr><td>alive</td><!-- A§7.8 --><td class="n">175</td><td class="n">15</td><td class="n">26</td><td class="n">24</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>"weightless" was used as a feel word by 4 models<!-- A§7.8 -->, so the earlier claim that it was unique to llama3 does not hold<!-- C149 -->.</li>
+<li>"lake" appears in sleep-phase texts from 16 of 26 models<!-- A§7.8 -->.</li>
+<li>Identical titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->.</li>
+</ul>
+
+<h3>5.8 Data quality</h3>
+<div class="table-wrap">
+<table>
+<caption>Data-quality issues and what they affect</caption>
+<thead><tr><th>Issue</th><th class="n">Count</th><th>Affects</th></tr></thead>
+<tbody>
+<tr><td>Session IDs missing inside the window, with child records still present</td><td class="n">159<!-- A§7.12 --></td><td>359 sleep-phase texts, 12,220 sound strings and 72 chat messages cannot be tied to a session<!-- A§7.12, A§7.15 -->. Probable cause (inferred): the pilot code deleted earlier "rotation swap" sessions, with their thoughts and feel entries but not their other records, at each rotation<!-- A§7.17 --></td></tr>
+<tr><td>Records with no session at all</td><td class="n">1,227 thoughts; 71 feel entries (plus 342 "base" rows)<!-- A§7.15 -->; 7 sleep-phase texts<!-- A§ time zones --></td><td>Excluded from all counts</td></tr>
+<tr><td>Thoughts carrying the placeholder state "base" (no feel word yet)</td><td class="n">39,322<!-- A§7.3 --></td><td>Excluded from feel-word counts</td></tr>
+<tr><td>Placeholder titles written by the code</td><td class="n">596<!-- A§7.3 --></td><td>Excluded from paintings</td></tr>
+<tr><td>Recorded coverage of 0</td><td class="n">1,391<!-- A§7.15 --></td><td>Excluded from coverage</td></tr>
+<tr><td>Sessions without an end time</td><td class="n">72<!-- A§7.4 --></td><td>Excluded from session length</td></tr>
+<tr><td>Sessions with negative duration</td><td class="n">1<!-- A§7.13 --></td><td>Excluded from session length</td></tr>
+<tr><td>Sessions longer than 3 hours</td><td class="n">14<!-- A§7.4 --></td><td>Session length</td></tr>
+<tr><td>Sessions with no thoughts</td><td class="n">256<!-- A§7.15 --></td><td>Per-model thought rates</td></tr>
+<tr><td>Sessions inserted by hand to steer the rotation, inside the window</td><td class="n">3<!-- A§7.15 --></td><td>Excluded from all counts</td></tr>
+<tr><td>Records labeled with a different model from their session</td><td class="n">53 thoughts; 13 feel entries; 11 sleep-phase texts; 195 sound strings<!-- A§7.18 --></td><td>Per-model counts (which label is right is unknown)</td></tr>
+<tr><td>Sessions that start more than 1 minute before the previous session ended</td><td class="n">7<!-- A§7.18 --></td><td>Session length; per-session attribution of records</td></tr>
+<tr><td>Sessions spanning the daylight-saving change (2026-03-08 02:00 local)</td><td class="n">1<!-- A§7.18 --></td><td>Its length on the local clock is overstated by 1 hour</td></tr>
+<tr><td>Repeated identical thoughts within a session (extra rows)</td><td class="n">1,478<!-- A§7.12 --></td><td>Thought counts</td></tr>
+<tr><td>Thoughts containing chat control tokens</td><td class="n">8<!-- A§7.12 --></td><td>Thought text</td></tr>
+<tr><td>Actions replaced by code-written strings, not logged</td><td>unknown</td><td>Any measure based on marks or coverage</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>5.9 Changes during the pilot</h3>
+<p>Rotation length, rest length, the number of sleep-phase texts per rest, gemma's prompt format, the per-model preamble, the model pool, temperatures and snapshot timing all changed during the pilot (section 2.8)<!-- A§5.19 -->. Comparisons across those dates are confounded.</p>
+
+<h3>5.10 Claims from the earlier site that this audit does not support</h3>
+<ul>
+<li>A "15 to 25%" improvement after removing reward shaping: no measure of it exists, and no pre-removal data is in the dataset<!-- C030 -->.</li>
+<li>"About 600 lines of reward shaping" removed in September 2025: the removal was two changes, in December 2025 and February 2026<!-- C035 -->.</li>
+<li>"217 unique emotional states" and an "11-color" palette: neither matches the data or the code<!-- C034, C033 -->.</li>
+<li>A 35% rise in the daily session rate from March to April: sessions per active day fell<!-- C130 -->.</li>
+<li>"78%" assistant-style and "91%" genuine reflection responses: no responses were coded<!-- C121 -->.</li>
+<li>Reflections "never fed back": two were included in every later prompt<!-- C122 -->.</li>
+<li>"weightless" and "carefree" unique to one model: both were used by another model<!-- C149 -->.</li>
+<li>Convergent titling and "emergent aesthetic consensus": below chance (section 5.7)<!-- C100 to C106 -->.</li>
+<li>Sleep-phase texts as "consolidation" of experience: the prompt itself supplies the art content<!-- C093 -->.</li>
+<li>Two models "share identical weights": they share a base model; fine-tuning changes the weights<!-- C145 -->.</li>
+<li>Earlier headline figures (pixels drawn, total steps, accumulated memories, session totals before March 2026): these predate the database and cannot be checked<!-- C012 to C020 -->.</li>
+</ul>
+</section>
+
+<section id="protocol" aria-labelledby="h-protocol">
+<h2 id="h-protocol">6. Current protocol</h2>
+<p>The changes below were made on the project's current development branch between 2026-09-20 and 2026-10-17<!-- A§7.17 -->. They apply to new sessions only; they do not change the pilot data. Commit identifiers and statuses come from the private repository's history as of 2026-10-17. No results from the current protocol are reported here: none has been through an audit yet.</p>
+<div class="table-wrap">
+<table>
+<caption>Pilot problems and current changes</caption>
+<thead><tr><th>Pilot problem</th><th>Change</th><th>Commits</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Past output in the prompt (5.1)</td><td>The per-model preamble (a self-description line with the model's name, painting and session counts and top feel words, plus its titles, reflections and sleep-phase text; 2.4) removed from every prompt<!-- A§7.18, A§1.4 -->; prompt audit tool; nothing from before the restart reaches any prompt; memory loaded by explicit model ID</td><td><code>00945eb</code>, <code>9ef32f6</code>, <code>20b2ff7</code>, <code>6242b45</code></td><td class="status">Implemented</td></tr>
+<tr><td>Invisible cursor (5.2)</td><td>Hand marked in the grid with rows kept aligned; a visible marker in the image condition</td><td><code>caf7222</code>, <code>f496790</code></td><td class="status">Implemented</td></tr>
+<tr><td>Substring parsing and code-substituted actions (2.2, 5.3)</td><td>Only whole command lines and whole words act, in written order; prose is logged and never run; actions over the cap are logged</td><td><code>d66f560</code>, <code>12a1730</code>, <code>120e0e2</code>, <code>b11a2f4</code></td><td class="status">Implemented</td></tr>
+<tr><td>Silent edge stops: in the pilot, a move that the canvas edge blocked or cut short (less than 3 cells) was not reported to the model<!-- A§7.18 --></td><td>Moves stopped by an edge are counted and reported in the next prompt</td><td><code>f715089</code></td><td class="status">Implemented</td></tr>
+<tr><td>Step counts and no code version (5.5, 5.6)</td><td>Correct step counts; titles kept; each session records its code version, uncommitted files, prompt hash and full settings</td><td><code>b70e142</code>, <code>a026ce1</code>, <code>bb6df3b</code></td><td class="status">Implemented</td></tr>
+<tr><td>Sessions deleted or overwritten at rotation (5.8)<!-- A§7.17 --></td><td>The deletion of earlier "rotation swap" sessions is removed; a failed start no longer reuses the previous session ID</td><td><code>b6a45a2</code>, <code>7a0e99c</code></td><td class="status">Implemented</td></tr>
+<tr><td>Chat and rest branches mixed into drawing (observation 9)</td><td>Chat and rest breaks off by default</td><td><code>0a872b2</code></td><td class="status">Implemented</td></tr>
+<tr><td>Many confounded models</td><td>Rotation limited to a small configurable set; the vision protocol (the frozen protocol for the image condition, with paired sessions that see either the text grid or images of the canvas) uses one fixed vision-language model<!-- A§7.18 --></td><td><code>8854507</code>, <code>d91992c</code></td><td class="status">Implemented</td></tr>
+<tr><td>Local timestamps</td><td>UTC timestamps</td><td><code>35a57b5</code></td><td class="status">Implemented</td></tr>
+<tr><td>Text-only perception</td><td>An image condition: pictures of the canvas before and after the last step replace the text grid; a perception validation tool; paired sessions that differ only in this element</td><td><code>20f71d4</code>, <code>a65d0c2</code>, <code>92706fb</code></td><td class="status">Implemented</td></tr>
+<tr><td>Protocol drift</td><td>Protocol frozen and tagged; each session records its protocol tag and whether it ran exactly</td><td><code>d91992c</code>, <code>a0c7b5b</code></td><td class="status">Implemented</td></tr>
+<tr><td>Too few sessions per condition</td><td>Repeated sessions per condition at the frozen protocol</td><td>-</td><td class="status">Planned</td></tr>
+<tr><td>Parser cases still open, such as repeated pen and color codes; a decision on whether commands stay digit codes (2.2) or become words only</td><td>A second protocol version</td><td>-</td><td class="status">Planned</td></tr>
+<tr><td>No exact record of each prompt and reply</td><td>A per-step file of the exact prompt and reply</td><td>-</td><td class="status">Planned</td></tr>
+<tr><td>One vision model</td><td>Validation of further vision models</td><td>-</td><td class="status">Planned</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="availability" aria-labelledby="h-availability">
+<h2 id="h-availability">7. Data and code availability</h2>
+<p>The code and the dataset are private. Both are available on request for review.</p>
+<p>The SQL queries behind the numbers on this page are published as <a href="queries.sql">queries.sql</a>, each labeled with the audit section it produced.</p>
+<p>Contact: <a href="https://www.linkedin.com/in/elijah-camp-106708282" rel="noopener">linkedin.com/in/elijah-camp-106708282</a></p>
+<p>The dataset is a MySQL database containing sessions, thoughts, feel entries, sleep-phase texts, reflections, sound strings, goals and chat messages. For the pilot it contains canvas images only as the latest per model and no per-step record of actions. The full audit report is kept with the dataset.</p>
+</section>
+
+<section id="researcher" aria-labelledby="h-researcher">
+<h2 id="h-researcher">8. Researcher</h2>
+<p>Elijah Sylar Camp. B.A. Computer Science, University of Colorado Denver (2026). Seven years as a Registered Behavior Technician. Software engineer.</p>
+<p>Behavior-analytic observation methods shaped the design: the system relies on the model perceiving the consequences of its own actions rather than on a reward signal. This is a design rationale, not a finding.</p>
+</section>
+</main>
 
 <footer>
-<p>Aurora canvas study · Elijah Sylar Camp · Data as of <!--A:asof-->2026-10-17<!--/A--></p>
+  <p>Last updated: 2026-10-17. Rebuilt from audited data, Oct 2026.</p>
 </footer>
-
-</main>
 </body>
 </html>
