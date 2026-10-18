@@ -55,10 +55,53 @@
   .status { font-weight: 600; white-space: nowrap; }
   footer { border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; padding-bottom: 3rem; color: var(--muted); font-size: .9rem; }
   code { font-size: .9em; }
+  /* Aurora shared top bar, used unchanged on the dashboard and the pilot report.
+     Own fixed colors, so it looks the same on both sites in light and dark.
+     The current site is marked three ways: a lighter box, a "You are here"
+     label, and aria-current on the current page link. */
+  .abar { background: #111214; color: #ececec; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; border-bottom: 1px solid #000; }
+  .abar * { box-sizing: border-box; }
+  .abar-in { max-width: 72rem; margin: 0 auto; padding: .4rem 16px; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; }
+  .abar a { color: #ececec; text-decoration: none; }
+  .abar a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .abar a:focus-visible { outline: 3px solid #8cc0ec; outline-offset: 2px; border-radius: 2px; }
+  .abar-brand { font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: .85rem; padding: .3rem 0; margin-right: .25rem; }
+  .abar-sites, .abar-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; }
+  .abar-sites { gap: .35rem .5rem; }
+  .abar-site { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .75rem; padding: .25rem .6rem; border: 1px solid transparent; border-radius: 4px; max-width: none; }
+  .abar-site.is-here { background: #2a2c31; border-color: #55585f; }
+  .abar-kind { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #b4b6bb; }
+  .abar-here { display: none; margin-left: .4rem; font-size: .68rem; font-weight: 700; letter-spacing: .04em; color: #111214; background: #ececec; border-radius: 3px; padding: 0 .3rem; vertical-align: .08em; }
+  .abar-site.is-here .abar-here { display: inline-block; }
+  .abar-links { gap: .1rem .9rem; }
+  .abar-links li { max-width: none; }
+  .abar-links a { display: inline-block; padding: .3rem 0; border-bottom: 2px solid transparent; }
+  .abar-links a[aria-current="page"] { border-bottom-color: #ececec; font-weight: 600; }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<nav class="abar" aria-label="Aurora sites">
+  <div class="abar-in">
+    <a class="abar-brand" href="https://aurora.elijah-sylar.com/">Aurora</a>
+    <ul class="abar-sites">
+      <li class="abar-site">
+        <span class="abar-kind">Dashboard<span class="abar-here">You are here</span></span>
+        <ul class="abar-links">
+          <li><a href="https://aurora.elijah-sylar.com/">Overview</a></li>
+          <li><a href="https://aurora.elijah-sylar.com/live/">Current session</a></li>
+          <li><a href="https://aurora.elijah-sylar.com/gallery/">Paintings</a></li>
+        </ul>
+      </li>
+      <li class="abar-site is-here">
+        <span class="abar-kind">Report<span class="abar-here">You are here</span></span>
+        <ul class="abar-links">
+          <li><a href="https://elijahsylar.github.io/aurora_ai/" aria-current="page">Pilot report</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
 <header>
   <h1>Aurora: language models drawing without a reward signal. Pilot report and audit</h1>
   <p class="byline">Elijah Sylar Camp</p>
