@@ -1,502 +1,372 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-base="" data-v3="img/v3/">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aurora: pilot report and audit</title>
-<meta name="description" content="Aurora is a system that gives language models a canvas, a small command vocabulary and no reward signal. This report describes the system, the March to June 2026 pilot dataset of 26 models (25 run locally, one via API), an audit of that dataset, and the current protocol.">
-<meta name="author" content="Elijah Sylar Camp">
-<style>
-  :root {
-    --ink: #1a1a1a; --muted: #4a4a4a; --bg: #ffffff; --rule: #d6d6d6; --panel: #f4f4f2;
-    --link: #1d4f7a; --accent: #8a3d12;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --ink: #e6e6e6; --muted: #b8b8b8; --bg: #141414; --rule: #3a3a3a; --panel: #1e1e1e; --link: #8cc0ec; --accent: #f0a070; }
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .skip { position: absolute; left: -999px; top: 0; background: var(--panel); padding: .5rem 1rem; }
-  .skip:focus { left: 1rem; }
-  header, main, footer { max-width: 46rem; margin: 0 auto; padding: 0 16px; }
-  header { padding-top: 2.5rem; border-bottom: 1px solid var(--rule); padding-bottom: 1.25rem; }
-  h1 { font-size: 1.75rem; line-height: 1.25; margin: 0 0 .5rem; }
-  h2 { font-size: 1.35rem; margin: 2.75rem 0 .75rem; padding-top: .5rem; border-top: 1px solid var(--rule); }
-  h3 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
-  p, li { max-width: 42rem; }
-  a { color: var(--link); }
-  .byline, .meta { color: var(--muted); margin: .25rem 0; }
-  .meta { font-size: .9rem; }
-  nav ol { padding-left: 1.25rem; columns: 2; column-gap: 2rem; }
-  @media (max-width: 34rem) { nav ol { columns: 1; } }
-  dl.glossary { background: var(--panel); border: 1px solid var(--rule); padding: 1rem 1.25rem; border-radius: 4px; }
-  dl.glossary dt { font-weight: 600; margin-top: .75rem; }
-  dl.glossary dt:first-child { margin-top: 0; }
-  dl.glossary dd { margin: .2rem 0 0 0; }
-  .term { font-variant: small-caps; letter-spacing: .02em; }
-  .table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--rule); border-radius: 4px; }
-  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
-  caption { text-align: left; padding: .6rem .75rem; font-weight: 600; caption-side: top; }
-  th, td { padding: .4rem .6rem; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; }
-  th { background: var(--panel); font-weight: 600; }
-  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  figure { margin: 1.5rem 0; }
-  figure img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
-  figcaption { font-size: .9rem; color: var(--muted); margin-top: .4rem; }
-  .canvas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0 .5rem; }
-  .canvas-grid figure { margin: 0; }
-  .canvas-grid img { background: #000; }
-  .abstract { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: .25rem 1.25rem 1rem; margin-top: 1.5rem; }
-  .abstract h2 { border-top: 0; margin-top: .75rem; }
-  ol.obs > li { margin-bottom: 1rem; }
-  .caveat { display: block; font-size: .92rem; color: var(--muted); margin-top: .2rem; }
-  .caveat::before { content: "Caveat: "; font-weight: 600; color: var(--accent); }
-  .status { font-weight: 600; white-space: nowrap; }
-  footer { border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; padding-bottom: 3rem; color: var(--muted); font-size: .9rem; }
-  code { font-size: .9em; }
-  /* Aurora shared top bar: the same CSS and markup on the dashboard and the
-     pilot report (src/bar.html). Own fixed colors, so it looks the same on
-     both sites in light and dark. The current site is marked by a lighter
-     box and by aria-current plus an underline on the current page; wide
-     screens also show the site names and a "You are here" label. */
-  .abar { background: #111214; color: #ececec; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; border-bottom: 1px solid #000; }
-  .abar * { box-sizing: border-box; }
-  .abar-in { max-width: 72rem; margin: 0 auto; padding: .4rem 16px; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; }
-  .abar a { color: #ececec; text-decoration: none; }
-  .abar a:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .abar a:focus-visible { outline: 3px solid #8cc0ec; outline-offset: 2px; border-radius: 2px; }
-  .abar-brand { font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: .85rem; padding: .3rem 0; margin-right: .25rem; }
-  .abar-sites, .abar-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; }
-  .abar-sites { gap: .35rem .5rem; }
-  .abar-site { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .75rem; padding: .25rem .6rem; border: 1px solid transparent; border-radius: 4px; max-width: none; }
-  .abar-site.is-here { background: #2a2c31; border-color: #55585f; }
-  .abar-kind { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #b4b6bb; }
-  .abar-here { display: none; margin-left: .4rem; font-size: .68rem; font-weight: 700; letter-spacing: .04em; color: #111214; background: #ececec; border-radius: 3px; padding: 0 .3rem; vertical-align: .08em; }
-  .abar-site.is-here .abar-here { display: inline-block; }
-  .abar-links { gap: .1rem .9rem; }
-  .abar-links li { max-width: none; }
-  .abar-links a { display: inline-block; padding: .3rem 0; border-bottom: 2px solid transparent; }
-  .abar-links a[aria-current="page"] { border-bottom-color: #ececec; font-weight: 600; }
-  /* Phones: as short as it goes. The site names and "You are here" are
-     dropped; the lighter box and the underline still mark where you are. */
-  @media (max-width: 37.5rem) {
-    .abar { font-size: 13px; }
-    .abar-in { padding: .2rem 12px; gap: .15rem .5rem; }
-    .abar-sites { gap: .15rem .35rem; flex: 1 1 0; min-width: 0; }   /* share the brand's row */
-    .abar-site { padding: 0 .4rem; gap: 0 .55rem; }
-    .abar-kind, .abar-site.is-here .abar-here { display: none; }
-    .abar-links { gap: 0 .55rem; }
-    .abar-links a { padding: .3rem 0 .2rem; }
-    .abar-brand { padding: .25rem 0; }
-  }
-</style>
+<title>Aurora research</title>
+<meta name="description" content="How Aurora, a system that gives a program a canvas and a small set of commands, changed from a pattern engine to language models drawing to a blank-slate agent, and what each version showed.">
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>(function(){var h=decodeURIComponent(location.hash.slice(1)),m=["abstract","availability","dataset","h-abstract","h-availability","h-dataset","h-limitations","h-observations","h-protocol","h-question","h-researcher","h-system","limitations","observations","protocol","question","system"];if(h&&m.indexOf(h)>=0)location.replace("pilot/#"+encodeURIComponent(h));})();</script>
+
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="s-lab">
 <a class="skip" href="#main">Skip to content</a>
-<nav class="abar" aria-label="Aurora sites">
-  <div class="abar-in">
-    <a class="abar-brand" href="https://aurora.elijah-sylar.com/">Aurora</a>
-    <ul class="abar-sites">
-      <li class="abar-site">
-        <span class="abar-kind">Dashboard<span class="abar-here">You are here</span></span>
-        <ul class="abar-links">
-          <li><a href="https://aurora.elijah-sylar.com/">Overview</a></li>
-          <li><a href="https://aurora.elijah-sylar.com/live/">Current session</a></li>
-          <li><a href="https://aurora.elijah-sylar.com/gallery/">Paintings</a></li>
-        </ul>
-      </li>
-      <li class="abar-site is-here">
-        <span class="abar-kind">Report<span class="abar-here">You are here</span></span>
-        <ul class="abar-links">
-          <li><a href="https://elijahsylar.github.io/aurora_ai/" aria-current="page">Pilot report</a></li>
-        </ul>
-      </li>
-    </ul>
+<button class="themebtn btn" type="button">Theme: Auto</button>
+<header class="hero" data-hero="ascii">
+  <div class="wrap hero-in">
+  <div class="hero-text">
+  <p class="kicker">Aurora research <span class="draft">Draft</span></p>
+  <h1>Aurora: from pattern engine to blank-slate agent</h1>
+  <p class="dek">Aurora gives a program a canvas and a small set of commands and records what it does. Since the reward code was removed (chapter 3), nothing rewards it. This page follows the system in six chapters, from a generative pattern engine to language models choosing every stroke to an agent that has to learn what its actions do. Each chapter leads with what it revealed and cites its evidence.</p>
+  <p class="question"><b>The question.</b> What does a language model produce when it is given a canvas, a small command vocabulary and no reward signal? And how does that output change when the model can perceive the results of its own actions?</p>
+  <p class="byline"><strong>Elijah Sylar Camp</strong> · Last updated 2026-10-27 · <a href="pilot/">Pilot report and audit (appendix)</a></p>
   </div>
-</nav>
-<header>
-  <h1>Aurora: language models drawing without a reward signal. Pilot report and audit</h1>
-  <p class="byline">Elijah Sylar Camp</p>
-  <p class="meta">Last updated: 2026-10-17. Changelog: Rebuilt from audited data, Oct 2026.</p>
+  <figure class="hero-fig">
+    <div class="asciiwrap"><pre class="ascii hero-grid" aria-hidden="true"></pre></div>
+    <div class="hero-ctl"><button type="button" class="btn" data-hero-toggle data-play="Play replay" data-pause="Pause replay">Pause replay</button><span data-hero-step aria-live="off">Step 86 of 86</span><span class="hero-cap">Replay of one rebuild session, step by step. Shakedown 1e, session 900015, phi4-mini.</span></div>
+  </figure>
+  </div>
 </header>
-
-<main id="main">
-<section id="abstract" class="abstract" aria-labelledby="h-abstract">
-<h2 id="h-abstract">Abstract</h2>
-<p>Aurora gives language models a 100 by 100 text canvas<!-- C007, A§1.1 -->, a small command vocabulary and no reward signal, and logs what they produce. This report covers its pilot, from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->: 3,060 sessions from 26 models, 25 run locally and one via API, with 98,335 thoughts and 2,913 sleep-phase texts<!-- A§7.15, A§7.3 -->. An audit of the pilot found that from about 2026-04-10 each model's own past output was fed back into its prompts, that the cursor was invisible to the models, that the feel-word parser captures any word after "feel", and that 1,391 sessions record a coverage of 0<!-- A§1.4, A§1.1, A§1.6, A§7.15 -->. The observations are therefore descriptive only: for example, identical painting titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->. Several claims from an earlier version of this site are withdrawn, and a revised protocol addresses the pilot's problems for new sessions.</p>
-<p class="meta">Sources: every number on this page comes from an audit report of the pilot database, available on request together with the data. Section references for each number are in the page source.</p>
-</section>
-
-<nav aria-label="Contents">
-  <h2 style="border-top:0;margin-top:1.5rem">Contents</h2>
+<nav class="track" data-track aria-label="Sections">
   <ol>
-    <li><a href="#question">Research question</a></li>
-    <li><a href="#system">System</a></li>
-    <li><a href="#dataset">Pilot dataset</a></li>
-    <li><a href="#observations">Observations</a></li>
-    <li><a href="#limitations">Audit and limitations</a></li>
-    <li><a href="#protocol">Current protocol</a></li>
-    <li><a href="#availability">Data and code availability</a></li>
-    <li><a href="#researcher">Researcher</a></li>
+    <li><a href="#c1" data-ch="c1"><span class="tn">1. A pattern engine</span><span class="td">2025-05-31 to 2025-07</span></a></li>
+    <li><a href="#c2" data-ch="c2"><span class="tn">2. A language model takes the pen</span><span class="td">from 2025-07-24</span></a></li>
+    <li><a href="#c3" data-ch="c3"><span class="tn">3. Taking out the reward signal</span><span class="td">2025-12-02 and 2026-02-25</span></a></li>
+    <li><a href="#c4" data-ch="c4"><span class="tn">4. The pilot: many models, one database</span><span class="td">2026-03-07 to 2026-06-14</span></a></li>
+    <li><a href="#c5" data-ch="c5"><span class="tn">5. Audit and rebuild</span><span class="td">2026-09-20 to 2026-10-26</span></a></li>
+    <li><a href="#c6" data-ch="c6"><span class="tn">6. v3: learning what actions do, without language</span><span class="td">from 2026-10-21</span></a></li>
+    <li class="extra"><a href="#side" data-ch="side"><span class="tn">Side branches</span></a></li>
+    <li class="extra"><a href="#terms" data-ch="terms"><span class="tn">Terms</span></a></li>
+    <li class="extra"><a href="#method" data-ch="method"><span class="tn">How to read the evidence</span></a></li>
+    <li class="extra"><a href="#researcher" data-ch="researcher"><span class="tn">Researcher</span></a></li>
   </ol>
+  <div class="prog" aria-hidden="true"><i></i></div>
 </nav>
-
-<section id="question" aria-labelledby="h-question">
-<h2 id="h-question">1. Research question</h2>
-<p>What does a language model produce when it is given a canvas, a small command vocabulary and no reward signal? And how does that output change when the model can perceive the results of its own actions?</p>
-<p>Aurora is the system built to ask these questions. This report covers its pilot, which ran from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->. The pilot was exploratory. It produced a dataset and an audit, not tested hypotheses. The audit found that several features of the pilot system make many tempting conclusions unsupportable; those are listed in <a href="#limitations">section 5</a>. Two perception conditions are now being separated in the current protocol: a text grid, as in the pilot, and images of the canvas before and after each step (<a href="#protocol">section 6</a>).</p>
+<main id="main">
+<section class="keys" aria-labelledby="h-keys">
+<div class="wrap">
+  <h2 id="h-keys">Key results so far</h2>
+  <ul>
+    <li>With the text grid, reordering the command list shifted five models' <span class="term" tabindex="0" aria-describedby="tip-14">first-token probabilities<span class="tip" role="tooltip" id="tip-14">The probabilities a model assigns to each possible first token of its reply.</span></span> (<span class="term" tabindex="0" aria-describedby="tip-15">total variation distance<span class="tip" role="tooltip" id="tip-15">Half the summed absolute difference between two probability distributions: 0 when they are identical, 1 when they do not overlap.</span></span> 0.24 to 0.55) more than any of six real canvases did (0.04 to 0.21). For llama2, the probability of "up" was 0.256 with "up" listed first and 0.002 with "left" first. <a href="#c5">Chapter 5</a>, preliminary.</li>
+    <li>A vision model's horizontal moves went right 72% of the time on canvases with more marks on the right, and 70% on the same canvases mirrored. <a href="#c5">Chapter 5</a>, vision-branch probe.</li>
+    <li>Without language, a forward model trained on random actions got a mean of 9.52 cells wrong per step, against 31.2 that changed; fed its own predictions, it first misplaced the hand at step 19. <a href="#c6">Chapter 6</a>.</li>
+  </ul>
+</div>
 </section>
 
-<section id="system" aria-labelledby="h-system">
-<h2 id="h-system">2. System (as it ran during the pilot)</h2>
-<p>The system facts in this section come from the code, not the dataset. They describe the code as it ran in the pilot, from the project's version history. Terms in small capitals are defined here and used only in these senses.</p>
+<section class="tlsec" aria-labelledby="h-contents">
+<div class="wrap">
+  <h2 id="h-contents">Contents</h2>
+  <ol class="tl" style="--rows:7">
+    <li class="ch" style="--row:0;--x0:0.00%;--x1:11.78%;--w:11.78%;--accent:var(--a1)"><span class="bar"></span><span class="lab"><span class="d">2025-05-31 to 2025-07</span><a href="#c1">1. A pattern engine</a></span></li>
+    <li class="ch" style="--row:1;--x0:10.42%;--x1:54.05%;--w:43.63%;--accent:var(--a2)"><span class="bar"></span><span class="lab"><span class="d">from 2025-07-24</span><a href="#c2">2. A language model takes the pen</a></span></li>
+    <li class="ch" style="--row:2;--x0:35.71%;--x1:52.12%;--w:16.41%;--accent:var(--a3)"><span class="bar"></span><span class="lab"><span class="d">2025-12-02 and 2026-02-25</span><a href="#c3">3. Taking out the reward signal</a></span></li>
+    <li class="ch" style="--row:3;--x0:54.05%;--x1:73.17%;--w:19.11%;--accent:var(--a4)"><span class="bar"></span><span class="lab"><span class="d">2026-03-07 to 2026-06-14</span><a href="#c4">4. The pilot: many models, one database</a></span></li>
+    <li class="ch flip" style="--row:4;--x0:92.08%;--x1:99.03%;--w:6.95%;--accent:var(--a5)"><span class="bar"></span><span class="lab"><span class="d">2026-09-20 to 2026-10-26</span><a href="#c5">5. Audit and rebuild</a></span></li>
+    <li class="ch flip" style="--row:5;--x0:98.07%;--x1:99.23%;--w:1.16%;--accent:var(--a6)"><span class="bar"></span><span class="lab"><span class="d">from 2026-10-21</span><a href="#c6">6. v3: learning what actions do, without language</a></span></li>
+    <li class="side flip" style="--row:6;--x0:93.24%;--x1:98.26%;--w:5.02%;--accent:var(--muted)"><span class="bar"></span><span class="lab"><span class="d">2026-09 to 2026-10</span><a href="#side">Side branches</a></span></li>
+    <li class="axis" aria-hidden="true"><span style="--x:0%">2025-05-31</span><span style="--x:41.51%">2026</span><span style="--x:100%">2026-10</span></li>
+  </ol>
+  <ul class="tl-more">
+    <li><span class="d">notes</span><a href="#terms">Terms</a> · <a href="#method">How to read the evidence</a></li>
+    <li><span class="d">about</span><a href="#researcher">Researcher</a></li>
+  </ul>
+</div>
+</section>
 
-<dl class="glossary" aria-label="Defined terms">
-  <dt><span class="term">Rotation</span></dt>
-  <dd>The scheduler that gave each model in the pool one session in turn, for a fixed interval (5,400 s, then 1,800 s, then 3,900 s)<!-- A§7.18, A§1.8 -->.</dd>
-  <dt><span class="term">Session</span></dt>
-  <dd>One model's turn in the rotation, recorded as one row in the sessions table.</dd>
-  <dt><span class="term">Thought</span></dt>
-  <dd>A saved piece of a model's prose output from a drawing step. It is saved only when the output passes a length and phrase filter.</dd>
-  <dt><span class="term">Feel word</span> (called "emotion" in the code)</dt>
-  <dd>The word that follows "feel", "feeling" or "feel a sense of" in a drawing-step output, if that word is alphabetic, at least 2 letters, not on a blocklist of about 200 words<!-- A§1.6 --> and not negated. There is no list of emotion words. A <span class="term">feel entry</span> is written only when the captured word differs from the current one.</dd>
-  <dt><span class="term">Thought-step</span></dt>
-  <dd>A saved thought counted under the feel word that was current when it was saved, whether or not that thought contained "feel".</dd>
-  <dt><span class="term">Sleep-phase text</span> (called "dream" in the code)</dt>
-  <dd>One text generated during a rest period from a fixed prompt (see 2.5).</dd>
-  <dt><span class="term">Reflection</span></dt>
-  <dd>A model's continuation of one of five fixed sentence openings, each identified by a prompt key<!-- A§7.18 -->. After a titled painting, from the model's 5th painting on, one of three is asked in turn: "surprise" ("The thing that surprised me most was"), "keep_thinking" ("The part I want to keep thinking about is") and "reminds" ("This painting reminds me of"). At session start, from the 5th painting on, "difference" ("My painting is different now because") is asked at every 10th painting and "no_limit" ("If I had no canvas size limit I would paint") at every 20th<!-- A§7.18 -->.</dd>
-  <dt><span class="term">Coverage</span></dt>
-  <dd>The share of a 50 by 50 sample of the 100 by 100 canvas that is not black<!-- A§3 -->, recorded at session end.</dd>
-  <dt><span class="term">Sound string</span></dt>
-  <dd>A string of punctuation characters from a drawing step, played as notes.</dd>
-  <dt><span class="term">Painting</span></dt>
-  <dd>A session that ended with a model-written title. Placeholder titles written by the code are excluded.</dd>
-</dl>
+<section class="plain terms-sec" id="terms" aria-labelledby="h-terms">
+<div class="wrap">
+  <h2 id="h-terms">Terms</h2>
+  <p>Words such as "emotion" and "dream" appear only as names the code used, with their operational meaning.</p>
+  <dl class="terms">
+    <dt>feel word</dt><dd>The word after "feel" in a model's text.</dd>
+    <dt>sleep-phase text</dt><dd>Text generated from a fixed prompt during a rest period.</dd>
+    <dt>coverage</dt><dd>The share of the canvas recorded as painted at the end of a session.</dd>
+    <dt>timelapse</dt><dd>A session's recorded sequence of canvas frames.</dd>
+    <dt>cursor, hand</dt><dd>The cell where the next mark lands. Chapter 5 calls it the cursor (H in the text grid); chapter 6 calls it the hand.</dd>
+    <dt>shakedown</dt><dd>A short test run of the whole system, to check it works; not research data.</dd>
+    <dt>smoke test</dt><dd>A short check of each model with fixed prompts before the first shakedown.</dd>
+    <dt>constrained decoding</dt><dd>Generating under a grammar that allows only the legend's command strings.</dd>
+    <dt>first-token probabilities</dt><dd>The probabilities a model assigns to each possible first token of its reply.</dd>
+    <dt>total variation distance</dt><dd>Half the summed absolute difference between two probability distributions: 0 when they are identical, 1 when they do not overlap.</dd>
+    <dt>forward model</dt><dd>A model that, given the canvas and an action, predicts the next canvas.</dd>
+    <dt>imagination</dt><dd>Running the forward model on its own predictions instead of the real canvas.</dd>
+    <dt>U-Net</dt><dd>A convolutional network that maps an image to an image of the same size.</dd>
+    <dt>done criteria</dt><dd>The tests on held-out data that end v3 training.</dd>
+  </dl>
+</div>
+</section>
 
-<h3>2.1 Perception</h3>
-<p>The canvas is 100 by 100 cells<!-- C007, A§1.1 -->. Each step, the model receives the canvas as text: one character per cell: one of 15 palette letters; a dot for an empty cell; or, for a mixed color far from every palette entry, a brightness character (=, +, -, a dot or a space), so a dot can mean either empty or dim<!-- A§1.1 -->. A line of text gives the hand position, pen state and color. During the pilot, <strong>the hand (cursor) was not drawn in the grid</strong>, and the row containing it was one character short<!-- A§1.1 -->. Image description and alternative views were off.</p>
-<div class="canvas-grid">
-  <figure>
-    <img src="figures/session-1208-llama3.png" width="600" height="600" loading="lazy" alt="Black square canvas. A vertical white band runs down from the top edge, right of center, with overlapping blue round marks inside its lower half. Below it, after a gap, a column of solid blue circles continues toward the bottom edge. Most of the canvas is black.">
-    <figcaption>llama3, session 1208, 2026-03-31. Recorded coverage 0% (a saved painting; see 5.4)<!-- A§7.16 -->.</figcaption>
+<!-- 1 -->
+<section class="chapter" id="c1" aria-labelledby="h-c1" style="--accent:var(--a1)">
+<div class="wrap">
+<div class="head">
+  <p class="when"><b>Chapter 1</b> · 2025-05-31 to 2025-07</p>
+  <h2 id="h-c1">A pattern engine</h2>
+  <p class="lede"><strong>What it revealed:</strong> the images were striking, but every visual decision came from hand-written mappings. They showed what the engine could draw, not what any model would choose.</p>
+</div>
+<div class="split">
+<div class="pin">
+  <figure class="wide">
+    <img src="img/v1-pattern-2025-07-05.jpg" width="1360" height="768" loading="lazy" alt="The pattern engine's window: on black, green lattice bands, pink pyramids and gold looping curves surround a cyan grid face with round eyes.">
+    <figcaption><b>The pattern engine's window, 2025-07-05.</b> A screenshot. Selected example: chosen by hand from the screenshots of that month for its density.</figcaption>
   </figure>
-  <figure>
-    <img src="figures/session-1941-mistral.png" width="600" height="600" loading="lazy" alt="Black square canvas. A large mass of overlapping magenta and purple round marks covers much of the left half, from the left edge to the middle, with a few small white and red marks inside it. The right half is black.">
-    <figcaption>mistral, session 1941, 2026-04-12. Recorded coverage 0% (a saved painting; see 5.4)<!-- A§7.16 -->.</figcaption>
+</div>
+<div class="text">
+  <p>The first version, called Subconscious AI, was a generative pattern engine. Its earliest dated file says May 31, 2025; the first commits, from 2025-06-03, describe it as built in two weeks. A 12-dimensional state vector, fed by audio input, image files, typed chat and timers, set the parameters of the patterns (fractals, attractors, L-systems and others) drawn around a grid face.</p>
+  <p class="note"><b>Not language-free.</b> This version did load a language model (Llama 2, 7B chat). Its text was mapped by keyword into the state vector, so it shifted the pattern parameters; it never chose strokes.</p>
+  <p>The state vector was named after emotions, and the code had a "sleep cycle". Both were parameters and timers; nothing in the code measured an emotion.</p>
+  <p class="evidence"><b>Evidence.</b> First commits, both 2025-06-03: <code>79cdb65</code> (license) and <code>8c235f7</code> (the code, with the docstring "Date: May 31, 2025" and the language-model loader). Project README of the v1 repository (12-dimensional state vector). Screenshot dated 2025-07-05.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 2 -->
+<section class="chapter" id="c2" aria-labelledby="h-c2" style="--accent:var(--a2)">
+<div class="wrap">
+<div class="head">
+  <p class="when"><b>Chapter 2</b> · from 2025-07-24</p>
+  <h2 id="h-c2">A language model takes the pen</h2>
+  <p class="lede"><strong>What it revealed:</strong> a language model could drive a pen for months from a text view of the canvas. But the record was files, not a dataset: canvas images and a command history, with no session boundaries and no code version.</p>
+</div>
+<ul class="stats" aria-label="Counts from this chapter"><li><span class="num" data-count="189567">189,567</span><span class="what">entries in the command history</span></li></ul>
+<div class="split">
+<div class="pin">
+  <figure class="canvas">
+    <img src="img/canvas-2025-08-08.png" width="260" height="260" loading="lazy" style="width:min(100%,420px)" alt="Dense canvas of overlapping shapes: red and blue blocks, cyan and pink stars, yellow and green circles, a white glowing disc near the bottom.">
+    <figcaption><b>A canvas from 2025-08-08</b> (130 by 130 cells, 820 steps). Selected example: chosen by hand from the 754 for color variety.</figcaption>
   </figure>
-  <figure>
-    <img src="figures/session-3084-qwen.png" width="600" height="600" loading="lazy" alt="Black square canvas. A vertical white band runs from the top edge to just below the middle, right of center, with a blue area at its top. Most of the canvas is black.">
-    <figcaption>qwen, session 3084, 2026-06-04. Recorded coverage 13.3%<!-- A§7.16 -->.</figcaption>
+</div>
+<div class="text">
+  <p>On 2025-07-24 a new program put a language model in charge of the drawing. A local Llama model wrote short movement codes: digits for direction, 4 and 5 to lift and lower the pen, and color words. Each step it received a compressed ASCII (text) view of the canvas. The canvas size was not yet fixed: an August 2025 snapshot records a canvas 130 cells across, and a December snapshot one of 490.</p>
+  <p>From 2025-07-31 each saved canvas carries a state label in its metadata, stored under the name "emotion". It was a label set by the program, not a measurement.</p>
+  <p>What survives from this period is an archive: 754 canvas images saved before the pilot (750 dated from 2025-07-31 to 2026-03-06, and 4 undated), and a command history of 189,567 entries, each the drawing code of one step, from 2025-09-02 to 2026-03-07. Before 2025-08-04 the history kept only the last 1,000 entries.</p>
+  <p class="evidence"><b>Evidence.</b> Commit <code>c0b74c9</code> (2025-07-24, "Add AURORA drawing AI"); <code>f75549b</code> (2025-08-04, history cap removed). Canvas snapshot metadata (canvas size, step count, state word). Archive counts: the snapshot folder and the command-history file, counted 2026-10-27.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 3 -->
+<section class="chapter" id="c3" aria-labelledby="h-c3" style="--accent:var(--a3)">
+<div class="wrap">
+<div class="head">
+  <p class="when"><b>Chapter 3</b> · 2025-12-02 and 2026-02-25</p>
+  <h2 id="h-c3">Taking out the reward signal</h2>
+  <p class="lede"><strong>What it revealed:</strong> once the reward code was gone, there was no comparison condition. Canvases and commands survive from before the removal (80,351 command-history entries), but with no session boundaries or code version and with the canvas size changing, so the removal's effect cannot be measured.</p>
+</div>
+<div class="split">
+<div class="pin">
+  <figure class="canvas">
+    <img src="img/canvas-2025-12-14.png" width="980" height="980" loading="lazy" style="width:min(100%,520px)" alt="A dense lattice of thin red, blue, yellow and green lines crossing at right angles, filling most of a black canvas.">
+    <figcaption><b>A canvas from 2025-12-14</b> (490 by 490 cells), twelve days after the first removal. Selected example: chosen by hand for its structure.</figcaption>
   </figure>
 </div>
-<p class="meta">Each image is the snapshot a session saved when its painting was finished. They illustrate the canvas and are not a representative sample. Selection rule: sessions in the window (excluding claude-opus-4.6 and the three sessions inserted by hand, section 3) whose timelapse recording (a file named by model and title) belongs to exactly one session, which have exactly one snapshot saved at the end of the session, and whose timelapse's saved final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified<!-- A§7.16 -->. Session 3084 (qwen) was kept from an earlier version of this page; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017<!-- A§7.16 -->. Two of the three record a coverage of 0 although their snapshots show marks: the measurement failure described in 5.4.</p>
-
-<h3>2.2 Action vocabulary</h3>
-<p>Digits 0 to 3 move the hand 3 cells<!-- C023, A§1.2 -->; 5 and 4 put the pen down and up. The model can also name 14 colors, 13 tools, a set of sound characters, and three controls (save the painting, return to the center, view the gallery)<!-- A§1.2 -->. The prompt lists 14 color names, while the palette that renders the canvas has 15 entries<!-- A§1.2, A§1.1 -->. Output was filtered to allowed tokens and capped at 40 characters per step<!-- A§1.2 -->. Tool choice was a substring match on the model's prose, so ordinary words could select a tool. Output containing certain question-mark patterns had its actions replaced by fixed strings written in the code. Actions were not logged.</p>
-
-<h3>2.3 Prompt formats</h3>
-<p>Every model family received raw text continuation ending in "I am drawing ", except gemma, which used its chat template from about 2026-04-10<!-- A§1.3 -->. From 2026-05-30 all calls used temperature 1.0. For 2026-05-22 to 2026-05-30 the code shows temperatures that varied by call type, from 0.7 to 1.2; values before 2026-05-22 are not recorded<!-- C024, A§1.8 -->. The model pool ranged from 1.7 to 24 billion parameters and from 2-bit to 8-bit quantization, and included both base and instruction-tuned models<!-- A§1.3 -->.</p>
-
-<h3>2.4 Memory</h3>
-<p>Each model had its own memory folder, and its canvas was saved and restored between its sessions<!-- A§1.4 -->. From about 2026-04-10, a per-model preamble was added to every drawing prompt. It contained the model's 5 most frequent past feel words, its recent titles, 2 of its reflection answers and the start of its latest sleep-phase text<!-- A§1.4 -->. <strong>Each model's own past output was therefore part of its input.</strong></p>
-
-<h3>2.5 Sleep-phase generation</h3>
-<p>After a period of drawing, the model was asked to answer DREAM or CHAT. A DREAM answer started a rest period that generated text from a fixed prompt beginning "I am resting after painting. My mind drifts through colors, shapes, and feelings", up to 300 tokens, at temperature 1.0 from 2026-05-30 (1.05 for at least 2026-05-22 to 2026-05-30; earlier values are not recorded)<!-- A§1.5, A§1.8 -->. Early in the pilot a rest produced up to 5 such texts; by the end, one<!-- A§1.5, A§2.5 -->. The first 200 characters of the latest text were added to later drawing prompts<!-- A§1.5 -->.</p>
-
-<h3>2.6 Feel-word extraction</h3>
-<p>See the definition of <span class="term">feel word</span> above. Because the parser removes color names, a phrase such as "feel blue" cannot be captured. A routine in the code could also write a feel entry from its own word list, and these entries cannot be told apart from model output<!-- A§1.6 -->. A field intended to store how long a word lasted is always 0<!-- A§1.6, A§3 -->.</p>
-
-<h3>2.7 Logging</h3>
-<p>Records went to a MySQL database: sessions, thoughts, feel entries, sleep-phase texts, reflections, sound strings, goals and chats. Timestamps were the machine's local time without a zone. There was no per-step record of actions. The database kept canvas images only as the latest one per model; separate image files, saved each time a painting was finished, and timelapse recordings survive outside the database<!-- A§7.16 -->. No session recorded which version of the code it ran<!-- A§1.7, A§5.5, A§5.14 -->.</p>
-
-<h3>2.8 Changes during the pilot</h3>
-<div class="table-wrap">
-<table>
-<caption>Dated changes inside the pilot window</caption>
-<thead><tr><th>Date (2026)</th><th>Change</th></tr></thead>
-<tbody>
-<tr><td>by 03-20</td><td>Rotation of models with per-model memory folders in place; rotation interval 5,400 s<!-- A§1.8 --></td></tr>
-<tr><td>03-23</td><td>Rotation interval 1,800 s; rest 10 minutes<!-- A§1.8 --></td></tr>
-<tr><td>~04-06 to 04-19</td><td>Models added to the pool on 04-06/08, 04-13 and 04-19<!-- A§5.19 --></td></tr>
-<tr><td>~04-10</td><td>gemma moved to its chat template<!-- A§1.8 --></td></tr>
-<tr><td>~04-10 to 04-13</td><td>Per-model preamble added to every drawing prompt<!-- A§1.4, A§1.8 --></td></tr>
-<tr><td>between 03-23 and 05-22</td><td>Rotation 3,900 s (65 minutes); rest 20 minutes; one sleep-phase text per rest<!-- A§1.8 --></td></tr>
-<tr><td>05-30</td><td>All temperatures set to 1.0; canvas snapshots and heartbeats moved from step-based to time-based<!-- A§1.8 --></td></tr>
-</tbody>
-</table>
+<div class="text">
+  <p>The drawing loop had included reinforcement code. On 2025-12-02 the reinforcement calls were switched off, commented out and marked "REINFORCEMENT REMOVED" in the code, and on 2026-02-25 a commit that removed 2,384 lines deleted the remaining reward and skill code together with other code. From then on the system had no reward signal, the condition every later version keeps.</p>
+  <p class="note"><b>Withdrawn claims.</b> An earlier version of the site said about 600 lines of reward shaping were removed in September 2025 and reported a 15 to 25% improvement. The audit found two removals, in December and February, and no measure of any improvement.</p>
+  <p class="evidence"><b>Evidence.</b> Commits <code>47f4196</code> (2025-12-02, "cleaned up") and <code>9da3b13</code> (2026-02-25, "cleaned version"). Pilot audit, claim review (section 5.10 of the <a href="pilot/#limitations">appendix</a>).</p>
 </div>
-<p>Reward-based feedback had been removed from the code before the pilot began, in changes dated 2025-12-02 and 2026-02-25<!-- A§1.8, C035 -->. The pilot data therefore contains no period with a reward signal to compare against.</p>
-</section>
-
-<section id="dataset" aria-labelledby="h-dataset">
-<h2 id="h-dataset">3. Pilot dataset</h2>
-<p><strong>Window.</strong> Sessions with database IDs 14 to 3244, which started between 2026-03-07 19:20 and 2026-06-14 11:44 local time<!-- A§7.15, A§7.18 -->. Timestamps are local time without a zone, with a daylight-saving change on 2026-03-08; inclusion is by session ID, so the change cannot move a session in or out of the window.</p>
-<p><strong>Exclusions.</strong> One model label, claude-opus-4.6, is excluded from all statistics. Its 9 sessions show the signs of pre-composed pieces (all within about 2.5 hours on one day, 4 end before they start, 3 share a start time, no sounds or chats) and are treated as non-autonomous; that they were pre-composed is inferred, not recorded<!-- A§7.1 -->. Three sessions inserted by hand to steer the rotation (2026-04-19 and 2026-05-05; zero duration, no output) are also excluded<!-- A§7.15 -->.</p>
-
-<div class="table-wrap">
-<table>
-<caption>Pilot totals (claude-opus-4.6 excluded)</caption>
-<thead><tr><th>Measure</th><th class="n">Count</th></tr></thead>
-<tbody>
-<tr><td>Sessions</td><td class="n">3,060<!-- A§7.15 --></td></tr>
-<tr><td>Models (25 local, 1 via API)</td><td class="n">26<!-- A§7.3 --></td></tr>
-<tr><td>Sessions per model (min / median / max)</td><td class="n">44 / 101 / 345<!-- A§7.15 --></td></tr>
-<tr><td>Thoughts</td><td class="n">98,335<!-- A§7.3 --></td></tr>
-<tr><td>Feel entries</td><td class="n">7,468<!-- A§7.3 --></td></tr>
-<tr><td>Distinct feel words</td><td class="n">285<!-- A§7.3 --></td></tr>
-<tr><td>Sleep-phase texts</td><td class="n">2,913<!-- A§7.3 --></td></tr>
-<tr><td>Reflections (from 2026-04-06)</td><td class="n">1,247<!-- A§7.3, A§2.1 --></td></tr>
-<tr><td>Sound strings</td><td class="n">56,487<!-- A§7.3 --></td></tr>
-<tr><td>Paintings (titled sessions, placeholders excluded)</td><td class="n">2,108<!-- A§7.3 --></td></tr>
-<tr><td>Canvas snapshots (latest per model only)</td><td class="n">24<!-- A§7.3 --></td></tr>
-</tbody>
-</table>
 </div>
-<p>No model had fewer than 3 sessions<!-- A§7.3 -->. The database's step counter is not reported anywhere on this page, because it counted every pass of the main loop, including rest and retries, and carried over between sessions<!-- A§5.11 -->.</p>
-
-<h3>3.1 Session length</h3>
-<figure>
-  <img src="figures/session-length.svg" width="720" height="390" alt="Histogram of session length for 2,987 sessions with an end time and non-negative duration. 0 to 1 minutes: 227. 1 to 5: 371. 5 to 15: 345. 15 to 30: 362. 30 to 45: 779. 45 to 60: 70. 60 to 70: 793. 70 to 90: 15. 90 to 180: 11. Over 180: 14.">
-  <figcaption>Session length, n = 2,987 sessions with an end time and non-negative duration<!-- A§7.15 -->; 72 have no end time<!-- A§7.4 --> and 1 has a negative duration<!-- A§7.13 -->. Median 30.1 minutes<!-- A§7.15 -->. The two peaks match the 30-minute and 65-minute rotation intervals<!-- A§2.3, A§1.8 -->. 598 of the 2,987 (20.0%) lasted under 5 minutes<!-- A§7.15 -->.</figcaption>
-</figure>
-
-<h3>3.2 Sessions by month</h3>
-<div class="table-wrap">
-<table>
-<caption>Sessions by month (local dates)</caption>
-<thead><tr><th>Month</th><th class="n">Sessions</th><th class="n">Days with sessions</th><th class="n">Sessions per active day</th></tr></thead>
-<tbody>
-<tr><td>March 2026 (from the 7th)</td><td class="n">1,091<!-- A§7.5 --></td><td class="n">25<!-- A§7.5 --></td><td class="n">43.6<!-- A§7.5 --></td></tr>
-<tr><td>April 2026</td><td class="n">1,192<!-- A§7.15 --></td><td class="n">30<!-- A§7.5 --></td><td class="n">39.7<!-- A§7.15 --></td></tr>
-<tr><td>May 2026</td><td class="n">574<!-- A§7.15 --></td><td class="n">26<!-- A§7.5 --></td><td class="n">22.1<!-- A§7.15 --></td></tr>
-<tr><td>June 2026 (to the 14th)</td><td class="n">203<!-- A§7.5 --></td><td class="n">14<!-- A§7.5 --></td><td class="n">14.5<!-- A§7.5 --></td></tr>
-</tbody>
-</table>
-</div>
-
-<h3>3.3 Per model</h3>
-<p>Mean coverage is computed over sessions with non-zero recorded coverage only, because most recorded zeros are a measurement failure and the rest are undetermined (<a href="#limitations">section 5.4</a>). The last two columns give that n and the number of excluded zero sessions. The excluded sessions are not random: the excluded share ranges from 3 of 89 sessions to 76 of 81 depending on the model<!-- A§7.15 -->, so the model means differ in how representative they are of each model's sessions.</p>
-<div class="table-wrap">
-<table>
-<caption>Per-model counts</caption>
-<thead><tr><th>Model</th><th class="n">Sessions</th><th class="n">Thoughts</th><th class="n">Feel entries</th><th class="n">Sleep-phase texts</th><th class="n">Reflections</th><th class="n">Sound strings</th><th class="n">Mean coverage %</th><th class="n">n non-zero</th><th class="n">Zero sessions</th></tr></thead>
-<tbody>
-<!-- every value in this table: A§7.6 -->
-<tr><td>deepseek-r1-8b</td><!-- A§7.6 --><td class="n">345</td><td class="n">8,868</td><td class="n">96</td><td class="n">58</td><td class="n">43</td><td class="n">3,228</td><td class="n">15.7</td><td class="n">310</td><td class="n">35</td></tr>
-<tr><td>llama3</td><!-- A§7.6 --><td class="n">216</td><td class="n">4,548</td><td class="n">208</td><td class="n">101</td><td class="n">50</td><td class="n">4,117</td><td class="n">16.0</td><td class="n">145</td><td class="n">71</td></tr>
-<tr><td>qwen (2.5, 3B)</td><!-- A§7.6 --><td class="n">190</td><td class="n">5,980</td><td class="n">519</td><td class="n">41</td><td class="n">66</td><td class="n">4,039</td><td class="n">18.8</td><td class="n">109</td><td class="n">81</td></tr>
-<tr><td>llama3-abliterated</td><!-- A§7.6 --><td class="n">180</td><td class="n">2,870</td><td class="n">45</td><td class="n">109</td><td class="n">44</td><td class="n">3,822</td><td class="n">22.8</td><td class="n">125</td><td class="n">55</td></tr>
-<tr><td>qwen3</td><!-- A§7.6 --><td class="n">145</td><td class="n">5,376</td><td class="n">240</td><td class="n">110</td><td class="n">27</td><td class="n">3,146</td><td class="n">20.0</td><td class="n">101</td><td class="n">44</td></tr>
-<tr><td>phi4-mini</td><!-- A§7.6 --><td class="n">127</td><td class="n">6,052</td><td class="n">1,098</td><td class="n">51</td><td class="n">107</td><td class="n">1,726</td><td class="n">42.6</td><td class="n">71</td><td class="n">56</td></tr>
-<tr><td>internlm-7b</td><!-- A§7.6 --><td class="n">117</td><td class="n">6,233</td><td class="n">552</td><td class="n">96</td><td class="n">120</td><td class="n">1,350</td><td class="n">22.0</td><td class="n">38</td><td class="n">79</td></tr>
-<tr><td>mistral</td><!-- A§7.6 --><td class="n">113</td><td class="n">4,514</td><td class="n">251</td><td class="n">224</td><td class="n">38</td><td class="n">2,848</td><td class="n">18.2</td><td class="n">43</td><td class="n">70</td></tr>
-<tr><td>llama3.1</td><!-- A§7.6 --><td class="n">112</td><td class="n">3,789</td><td class="n">38</td><td class="n">37</td><td class="n">43</td><td class="n">3,400</td><td class="n">28.0</td><td class="n">53</td><td class="n">59</td></tr>
-<tr><td>glm4</td><!-- A§7.6 --><td class="n">104</td><td class="n">3,370</td><td class="n">48</td><td class="n">69</td><td class="n">11</td><td class="n">3,676</td><td class="n">22.8</td><td class="n">72</td><td class="n">32</td></tr>
-<tr><td>qwen3.5</td><!-- A§7.6 --><td class="n">104</td><td class="n">2,315</td><td class="n">221</td><td class="n">106</td><td class="n">77</td><td class="n">1,250</td><td class="n">29.5</td><td class="n">51</td><td class="n">53</td></tr>
-<tr><td>llama2</td><!-- A§7.6 --><td class="n">103</td><td class="n">4,318</td><td class="n">596</td><td class="n">257</td><td class="n">19</td><td class="n">2,201</td><td class="n">18.2</td><td class="n">65</td><td class="n">38</td></tr>
-<tr><td>mistral-base</td><!-- A§7.6 --><td class="n">102</td><td class="n">2,416</td><td class="n">64</td><td class="n">366</td><td class="n">7</td><td class="n">2,318</td><td class="n">42.8</td><td class="n">75</td><td class="n">27</td></tr>
-<tr><td>hermes3</td><!-- A§7.6 --><td class="n">100</td><td class="n">6,392</td><td class="n">531</td><td class="n">58</td><td class="n">39</td><td class="n">3,028</td><td class="n">22.4</td><td class="n">29</td><td class="n">71</td></tr>
-<tr><td>openhermes</td><!-- A§7.6 --><td class="n">93</td><td class="n">4,019</td><td class="n">298</td><td class="n">292</td><td class="n">12</td><td class="n">2,346</td><td class="n">41.8</td><td class="n">63</td><td class="n">30</td></tr>
-<tr><td>phi3</td><!-- A§7.6 --><td class="n">93</td><td class="n">945</td><td class="n">92</td><td class="n">166</td><td class="n">33</td><td class="n">2,412</td><td class="n">14.8</td><td class="n">22</td><td class="n">71</td></tr>
-<tr><td>gemma2-9b</td><!-- A§7.6 --><td class="n">91</td><td class="n">1,951</td><td class="n">116</td><td class="n">137</td><td class="n">29</td><td class="n">1,713</td><td class="n">5.6</td><td class="n">25</td><td class="n">66</td></tr>
-<tr><td>mistral-small-24b</td><!-- A§7.6 --><td class="n">90</td><td class="n">1,673</td><td class="n">254</td><td class="n">25</td><td class="n">80</td><td class="n">858</td><td class="n">15.3</td><td class="n">21</td><td class="n">69</td></tr>
-<tr><td>qwen2.5-coder-7b</td><!-- A§7.6 --><td class="n">90</td><td class="n">7,068</td><td class="n">1,143</td><td class="n">2</td><td class="n">81</td><td class="n">1,577</td><td class="n">44.7</td><td class="n">21</td><td class="n">69</td></tr>
-<tr><td>smollm2</td><!-- A§7.6 --><td class="n">89</td><td class="n">2,805</td><td class="n">393</td><td class="n">47</td><td class="n">25</td><td class="n">1,747</td><td class="n">65.2</td><td class="n">86</td><td class="n">3</td></tr>
-<tr><td>llama2-base</td><!-- A§7.6, A§7.15 --><td class="n">85</td><td class="n">413</td><td class="n">24</td><td class="n">252</td><td class="n">16</td><td class="n">2,131</td><td class="n">37.8</td><td class="n">55</td><td class="n">30</td></tr>
-<tr><td>command-r-7b</td><!-- A§7.6 --><td class="n">85</td><td class="n">1,518</td><td class="n">224</td><td class="n">89</td><td class="n">53</td><td class="n">1,346</td><td class="n">42.3</td><td class="n">35</td><td class="n">50</td></tr>
-<tr><td>deepseek-coder-v2</td><!-- A§7.6 --><td class="n">81</td><td class="n">3,070</td><td class="n">149</td><td class="n">71</td><td class="n">80</td><td class="n">964</td><td class="n">30.5</td><td class="n">5</td><td class="n">76</td></tr>
-<tr><td>yi-9b</td><!-- A§7.6 --><td class="n">81</td><td class="n">701</td><td class="n">94</td><td class="n">77</td><td class="n">68</td><td class="n">369</td><td class="n">12.9</td><td class="n">11</td><td class="n">70</td></tr>
-<tr><td>codestral-22b</td><!-- A§7.6 --><td class="n">80</td><td class="n">1,823</td><td class="n">143</td><td class="n">59</td><td class="n">77</td><td class="n">685</td><td class="n">15.4</td><td class="n">6</td><td class="n">74</td></tr>
-<tr><td>claude-sonnet-4-6 (API)</td><!-- A§7.6, A§7.15 --><td class="n">44</td><td class="n">5,308</td><td class="n">31</td><td class="n">13</td><td class="n">2</td><td class="n">190</td><td class="n">18.6</td><td class="n">32</td><td class="n">12</td></tr>
-</tbody>
-</table>
 </div>
 </section>
 
-<section id="observations" aria-labelledby="h-observations">
-<h2 id="h-observations">4. Observations</h2>
-<p>These are descriptive statements about the pilot dataset. Each gives its numbers, its n and the caveat that limits it. None is a tested hypothesis.</p>
-<ol class="obs">
-<li><strong>Scale.</strong> 26 models ran 3,060 sessions, between 44 and 345 per model (median 101)<!-- A§7.15 -->. The pilot recorded 98,335 thoughts, 2,913 sleep-phase texts, 1,247 reflections and 56,487 sound strings<!-- A§7.3 -->.
-  <span class="caveat">Some child records belong to sessions whose session row is missing (section 5).</span></li>
-<li><strong>Session length.</strong> Of 2,987 sessions with an end time and non-negative duration, the median length was 30.1 minutes<!-- A§7.15 -->; 793 lasted 60 to 70 minutes, matching the 65-minute rotation<!-- A§7.4 -->.
-  <span class="caveat">598 of the 2,987 (20.0%) ended within 5 minutes<!-- A§7.15 -->.</span></li>
-<li><strong>Feel-word vocabulary.</strong> Feel-word extraction produced 7,468 entries and 285 distinct words<!-- A§7.7 -->. 121 words occur once and 152 come from only one model<!-- A§7.7 -->. 7 words were produced by 15 or more models: accomplishment, alive, calm, free, happy, inspired, peace<!-- A§7.7 -->.
-  <span class="caveat">Feel words are whatever follows "feel"; they are not validated as emotion terms.</span></li>
-<li><strong>Feel words current for the most saved thoughts.</strong> Counted as thought-steps (n = 59,013): calm 11,474; inspired 5,749; stuck 5,242; free 3,271; happy 2,285<!-- A§7.7 -->.
-  <span class="caveat">A thought-step count measures how many saved thoughts were recorded while a word was current, not how often the word was written<!-- A§3 -->. 40.8% of the "calm" thought-steps come from one model, internlm-7b<!-- A§7.7 -->.</span></li>
-<li><strong>Per-model feel words differ.</strong> Examples, as feel entries (n = that model's entries): qwen2.5-coder-7b stuck 485, frustrated 270 (n = 1,143); qwen disconnected 154, confused 122, lost 116 (n = 519); mistral-small-24b alive 104 (n = 254); llama3 weightless 48, carefree 27 (n = 208); qwen3 thirsty 76 (n = 240); internlm-7b calm 309 (n = 552)<!-- A§7.7 table -->. The most frequent word is the same under both counting methods for 22 of 26 models<!-- A§7.7 -->.
-  <span class="caveat">From about 2026-04-10 each model was shown its own 5 most frequent feel words<!-- A§1.4 --> in every prompt, so these differences may partly reflect the feedback loop (section 5.1). Models also differ in size, format and family.</span></li>
-<li><strong>"stuck" is concentrated in one model.</strong> 485 of the 542 "stuck" entries come from qwen2.5-coder-7b<!-- A§7.7 --> (90 sessions<!-- A§7.6 -->). The other two code-trained models (models trained mainly on program code: deepseek-coder-v2 and codestral-22b, added with qwen2.5-coder-7b on 2026-04-19<!-- A§7.18 -->) have "inspired" and "tranquil" as their most frequent words<!-- A§4.3 C080 -->.
-  <span class="caveat">One model; no claim about code training in general follows.</span></li>
-<li><strong>Some captured words are not affect terms.</strong> At least 131 entries (1.8%) are words such as "during", "order", "various" and "low"; a further 1,931 (25.9%) are ambiguous state or situation words<!-- A§7.7 -->, classified by a single rater without a validated coding scheme. 464 of the 531 thoughts containing "feel free" or "feeling free" are the phrase "feel free"<!-- A§7.7 -->. claude-sonnet-4-6's most frequent thought-step words are "unfinished" (2,037), "state" (421) and "bright" (329)<!-- A§7.7 -->.
-  <span class="caveat">The two counts depend entirely on one rater's word lists, which are published in queries.sql; another rater could classify differently<!-- A§7.7 -->.</span></li>
-<li><strong>Sleep-phase texts use art vocabulary.</strong> 2,186 of 2,913 sleep-phase texts (75.0%) contain at least one word from the art lexicon below; 68.7% do when the words color and hue are left out of the lexicon<!-- A§7.5 -->. The lexicon is a prefix match on canvas, paint, brush, color (either spelling), draw, stroke, palette, artist, artwork, pixel, hue and sketch, so it also matches words such as painter, drawback or artistic; "art" matches only as a whole word<!-- A§7.5 -->. By month: 59.5% in March (n = 1,470), 91.7% in April (n = 1,086), 86.6% in May (n = 268), 94.4% in June (n = 89)<!-- A§7.5 -->.
-  <span class="caveat">The prompt that produces these texts itself mentions colors, shapes and feelings, the texts were fed back into later prompts, and the generation code changed during the pilot.</span>
-  <figure>
-    <img src="figures/sleep-phase-lexicon.svg" width="720" height="350" alt="Bar chart of the share of sleep-phase texts matching the art lexicon by month: March 2026, 874 of 1,470 (59.5%); April, 996 of 1,086 (91.7%); May, 232 of 268 (86.6%); June, 84 of 89 (94.4%).">
-    <figcaption>Share of sleep-phase texts containing at least one art-lexicon word, by month, with n per month<!-- A§7.5 -->.</figcaption>
-  </figure></li>
-<li><strong>Sleep-phase counts follow the check-in answer.</strong> qwen2.5-coder-7b produced 2 sleep-phase texts and 148 chat messages over 90 sessions<!-- A§7.12 -->, consistent with it answering CHAT rather than DREAM at the check-in. mistral-base produced 366 over 102 sessions, 110 of them (65, 25 and 20) in three March sessions<!-- A§7.12 -->.
-  <span class="caveat">Each figure is one model. 148 counts chat messages, not check-in answers. In March a rest could produce up to 5 sleep-phase texts, so March counts are not comparable with later ones<!-- A§1.5, A§2.5 -->.</span></li>
-<li><strong>Painting titles reuse common words.</strong> Of 2,108 titles from 26 models<!-- A§7.9 -->: "sunset" or "sunrise" appears in 243 (11.5%) from 20 models; "harmony" in 172 (8.2%, 19 models); "abstract" in 145 (6.9%, 17 models); "serenity" or "serene" in 134 (6.4%, 19 models)<!-- A§7.9 -->. Identical titles are shared across models less often than chance: 78 titles are shared by 2 or more models, against 195.8 when the model labels are shuffled at random; 7 are shared by 4 or more, against 45.0<!-- A§7.9 -->.
-  <span class="caveat">These are generic title words. Models mostly reuse their own titles.</span></li>
-<li><strong>Color words in thoughts.</strong> Thoughts contain 93,095 color-name mentions: white 18.6%, blue 16.3%, green 11.3%<!-- A§7.10 -->. 5,652 of the 6,087 mentions of "navy" (92.9%) come from claude-sonnet-4-6<!-- A§7.10 -->.
-  <span class="caveat">Color names are also commands, so a mention may be an instruction rather than a description.</span></li>
-<li><strong>Sound strings.</strong> The 56,487 sound strings include 26,150 distinct strings; the 12 most frequent account for 24.2%<!-- A§7.10 -->. The three most frequent are <code>()</code> (2,725), <code>:</code> (1,788) and <code>():</code> (1,742)<!-- A§7.10 -->.
-  <span class="caveat">12,220 sound strings belong to sessions whose session row is missing<!-- A§7.10 -->.</span></li>
-<li><strong>Reflections.</strong> 1,247 reflections were recorded from 2026-04-06. By prompt key: surprise 380, reminds 376, keep_thinking 371, difference 73, no_limit 47<!-- A§7.12, A§2.1 -->. These are the prompts' identifiers, not words in the answers (see the glossary). The most came from internlm-7b (120) and phi4-mini (107)<!-- A§7.12 -->.
-  <span class="caveat">Reflections were asked only from a model's 5th painting on, so models with fewer paintings contribute none<!-- A§7.18 -->. Two reflection answers were fed back into each later prompt. Their content has not been coded.</span></li>
-<li><strong>Activity.</strong> 1,091 sessions ran in March (from the 7th, 25 active days), 1,192 in April (30), 574 in May (26) and 203 in June (to the 14th, 14)<!-- A§7.5, A§7.15 -->. Sessions per active day fell from 43.6 in March to 39.7 in April<!-- A§7.5, A§7.15 -->.
-  <span class="caveat">Months are local dates.</span></li>
-</ol>
-</section>
-
-<section id="limitations" aria-labelledby="h-limitations">
-<h2 id="h-limitations">5. Audit and limitations</h2>
-<p>An audit of the pilot dataset, its code and the claims made about it on an earlier version of this site was completed in October 2026. Its main findings follow.</p>
-
-<h3>5.1 Each model's past output was part of its input</h3>
-<p>From about 2026-04-10, every drawing prompt included the model's most frequent feel words, its titles, reflection answers and sleep-phase text<!-- A§1.4 -->. Any apparent stability in a model's output over time, or any "identity", is confounded by this loop.</p>
-
-<h3>5.2 The cursor was invisible</h3>
-<p>The hand was not drawn in the text grid, and its row was shifted by one character<!-- A§1.1 -->. Models could locate the hand only from a line of text.</p>
-
-<h3>5.3 Parser behavior</h3>
-<ul>
-<li>Any word after "feel" counts unless blocklisted; there is no emotion lexicon. The stock phrase "feel free" produces "free"<!-- A§1.6, A§7.7 -->.</li>
-<li>Color names cannot be captured as feel words.</li>
-<li>Feel entries written by the code's own routine cannot be distinguished from model output.</li>
-<li>A comment in the code reports that gemma stopped after 1 to 2 tokens under raw continuation, before its switch to a chat template on about 2026-04-10<!-- A§7.18, A§1.3 -->. Measured: its 63 sessions before that date produced 777 thoughts, against 1,174 from 28 sessions after<!-- A§7.12 -->.</li>
-<li>A structured parser for a "feeling:" field could never run.</li>
-</ul>
-
-<h3>5.4 Recorded coverage of 0</h3>
-<p>1,391 of 3,060 sessions record coverage of exactly 0<!-- A§7.15 -->. For 1,246 of them the cause is known: the session ended by saving a painting, and the code measured coverage after the save had already cleared the canvas<!-- A§7.2, A§7.13 -->. Consistent with this, 16 of the 24 snapshots in the database belong to zero-coverage sessions while showing coverage of 17.0% to 69.8%<!-- A§7.2 -->. For the other 145 the cause is undetermined<!-- A§7.15 -->. All 1,391 are excluded, and coverage on this page is reported over the 1,669 sessions with non-zero values<!-- A§7.2 -->.</p>
-
-<h3>5.5 No code version per session</h3>
-<p>No pilot session recorded which version of the code it ran<!-- A§5.14 -->. Changes listed in section 2.8 can be dated only approximately, and several have no recorded version at all.</p>
-
-<h3>5.6 Step counts</h3>
-<p>The step counter counted every loop pass, including rest, chat and retries, and carried over between sessions<!-- A§5.11 -->. The field meant to record how long a feel word lasted is always 0<!-- A§5.12 -->. Neither is reported.</p>
-
-<h3>5.7 Base rates for word coincidences</h3>
-<p>The earlier site reported that different models "independently" produced the same words or titles. Checked against how often each word appears across all models, those claims do not hold.</p>
-<div class="table-wrap">
-<table>
-<caption>How widely selected words occur across the 26 models<!-- A§7.8 --></caption>
-<thead><tr><th>Word</th><th class="n">Feel entries</th><th class="n">Models (as feel word)</th><th class="n">Models (in thoughts)</th><th class="n">Models (in sleep-phase texts)</th></tr></thead>
-<tbody>
-<!-- every value in this table: A§7.8 -->
-<tr><td>weightless</td><!-- A§7.8 --><td class="n">81</td><td class="n">4</td><td class="n">5</td><td class="n">8</td></tr>
-<tr><td>free</td><!-- A§7.8 --><td class="n">309</td><td class="n">19</td><td class="n">25</td><td class="n">22</td></tr>
-<tr><td>calm</td><!-- A§7.8 --><td class="n">1,317</td><td class="n">25</td><td class="n">25</td><td class="n">25</td></tr>
-<tr><td>peace</td><!-- A§7.8 --><td class="n">276</td><td class="n">15</td><td class="n">23</td><td class="n">25</td></tr>
-<tr><td>serene</td><!-- A§7.8 --><td class="n">19</td><td class="n">3</td><td class="n">21</td><td class="n">19</td></tr>
-<tr><td>lake</td><!-- A§7.8 --><td class="n">0</td><td class="n">0</td><td class="n">22</td><td class="n">16</td></tr>
-<tr><td>alive</td><!-- A§7.8 --><td class="n">175</td><td class="n">15</td><td class="n">26</td><td class="n">24</td></tr>
-</tbody>
-</table>
+<!-- 4 -->
+<section class="chapter" id="c4" aria-labelledby="h-c4" style="--accent:var(--a4)">
+<div class="wrap">
+<div class="head">
+  <p class="when"><b>Chapter 4</b> · 2026-03-07 to 2026-06-14</p>
+  <h2 id="h-c4">The pilot: many models, one database</h2>
+  <p class="lede"><strong>What it revealed:</strong> a large dataset, and an audit showing that the pilot's design makes most tempting conclusions unsupportable. From about 2026-04-10 models saw their own past output in their prompts, the cursor was not drawn in the grid, and 1,391 of the 3,060 sessions record a <span class="term" tabindex="0" aria-describedby="tip-3">coverage<span class="tip" role="tooltip" id="tip-3">The share of the canvas recorded as painted at the end of a session.</span></span> of 0, 1,246 of them from a known measurement failure.</p>
 </div>
-<ul>
-<li>"weightless" was used as a feel word by 4 models<!-- A§7.8 -->, so the earlier claim that it was unique to llama3 does not hold<!-- C149 -->.</li>
-<li>"lake" appears in sleep-phase texts from 16 of 26 models<!-- A§7.8 -->.</li>
-<li>Identical titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->.</li>
-</ul>
-
-<h3>5.8 Data quality</h3>
-<div class="table-wrap">
-<table>
-<caption>Data-quality issues and what they affect</caption>
-<thead><tr><th>Issue</th><th class="n">Count</th><th>Affects</th></tr></thead>
-<tbody>
-<tr><td>Session IDs missing inside the window, with child records still present</td><td class="n">159<!-- A§7.12 --></td><td>359 sleep-phase texts, 12,220 sound strings and 72 chat messages cannot be tied to a session<!-- A§7.12, A§7.15 -->. Probable cause (inferred): the pilot code deleted earlier "rotation swap" sessions, with their thoughts and feel entries but not their other records, at each rotation<!-- A§7.17 --></td></tr>
-<tr><td>Records with no session at all</td><td class="n">1,227 thoughts; 71 feel entries (plus 342 "base" rows)<!-- A§7.15 -->; 7 sleep-phase texts<!-- A§ time zones --></td><td>Excluded from all counts</td></tr>
-<tr><td>Thoughts carrying the placeholder state "base" (no feel word yet)</td><td class="n">39,322<!-- A§7.3 --></td><td>Excluded from feel-word counts</td></tr>
-<tr><td>Placeholder titles written by the code</td><td class="n">596<!-- A§7.3 --></td><td>Excluded from paintings</td></tr>
-<tr><td>Recorded coverage of 0</td><td class="n">1,391<!-- A§7.15 --></td><td>Excluded from coverage</td></tr>
-<tr><td>Sessions without an end time</td><td class="n">72<!-- A§7.4 --></td><td>Excluded from session length</td></tr>
-<tr><td>Sessions with negative duration</td><td class="n">1<!-- A§7.13 --></td><td>Excluded from session length</td></tr>
-<tr><td>Sessions longer than 3 hours</td><td class="n">14<!-- A§7.4 --></td><td>Session length</td></tr>
-<tr><td>Sessions with no thoughts</td><td class="n">256<!-- A§7.15 --></td><td>Per-model thought rates</td></tr>
-<tr><td>Sessions inserted by hand to steer the rotation, inside the window</td><td class="n">3<!-- A§7.15 --></td><td>Excluded from all counts</td></tr>
-<tr><td>Records labeled with a different model from their session</td><td class="n">53 thoughts; 13 feel entries; 11 sleep-phase texts; 195 sound strings<!-- A§7.18 --></td><td>Per-model counts (which label is right is unknown)</td></tr>
-<tr><td>Sessions that start more than 1 minute before the previous session ended</td><td class="n">7<!-- A§7.18 --></td><td>Session length; per-session attribution of records</td></tr>
-<tr><td>Sessions spanning the daylight-saving change (2026-03-08 02:00 local)</td><td class="n">1<!-- A§7.18 --></td><td>Its length on the local clock is overstated by 1 hour</td></tr>
-<tr><td>Repeated identical thoughts within a session (extra rows)</td><td class="n">1,478<!-- A§7.12 --></td><td>Thought counts</td></tr>
-<tr><td>Thoughts containing chat control tokens</td><td class="n">8<!-- A§7.12 --></td><td>Thought text</td></tr>
-<tr><td>Actions replaced by code-written strings, not logged</td><td>unknown</td><td>Any measure based on marks or coverage</td></tr>
-</tbody>
-</table>
+<ul class="stats" aria-label="Counts from this chapter"><li><span class="num" data-count="3060">3,060</span><span class="what">sessions in the pilot</span></li><li><span class="num" data-count="98335">98,335</span><span class="what">saved thoughts</span></li></ul>
+<div class="split wide-pin">
+<div class="pin">
+  <figure class="wide canvas switcher" data-switch>
+    <div class="sw-panels">
+      <div class="sw-panel on" id="sw-1208"><img src="pilot/figures/session-1208-llama3.png" width="600" height="600" loading="lazy" alt="Black canvas with a vertical white band right of center, overlapping blue round marks and scattered colored marks."><p class="sub">llama3, session 1208, 2026-03-31. Recorded coverage 0%.</p></div>
+      <div class="sw-panel" id="sw-1941"><img src="pilot/figures/session-1941-mistral.png" width="600" height="600" loading="lazy" alt="Black canvas with a large mass of overlapping magenta and purple round marks over much of the left half."><p class="sub">mistral, session 1941, 2026-04-12. Recorded coverage 0%.</p></div>
+      <div class="sw-panel" id="sw-3084"><img src="pilot/figures/session-3084-qwen.png" width="600" height="600" loading="lazy" alt="Black canvas with a vertical white band from the top edge to below the middle, right of center, and a blue area."><p class="sub">qwen, session 3084, 2026-06-04. Recorded coverage 13.3%.</p></div>
+    </div>
+    <div class="sw-thumbs" role="group" aria-label="Pilot canvases" hidden>
+      <button type="button" class="sw-thumb" aria-controls="sw-1208" aria-pressed="true" aria-label="Show llama3, session 1208"><img src="pilot/figures/session-1208-llama3.png" width="600" height="600" alt=""></button>
+      <button type="button" class="sw-thumb" aria-controls="sw-1941" aria-pressed="false" aria-label="Show mistral, session 1941"><img src="pilot/figures/session-1941-mistral.png" width="600" height="600" alt=""></button>
+      <button type="button" class="sw-thumb" aria-controls="sw-3084" aria-pressed="false" aria-label="Show qwen, session 3084"><img src="pilot/figures/session-3084-qwen.png" width="600" height="600" alt=""></button>
+    </div>
+    <figcaption><b>Three pilot canvases, selected by a stated rule.</b> Each is the snapshot a session saved when its painting was finished; they are not a representative sample. Rule: sessions in the window (excluding claude-opus-4.6 and three sessions inserted by hand) whose timelapse belongs to exactly one session, which have exactly one end-of-session snapshot, and whose timelapse's final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified. Session 3084 was kept from an earlier version of the page; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017. Two of the three record a coverage of 0 although their snapshots show marks: the measurement failure described in the <a href="pilot/#limitations">appendix, section 5.4</a>.</figcaption>
+  </figure>
 </div>
-
-<h3>5.9 Changes during the pilot</h3>
-<p>Rotation length, rest length, the number of sleep-phase texts per rest, gemma's prompt format, the per-model preamble, the model pool, temperatures and snapshot timing all changed during the pilot (section 2.8)<!-- A§5.19 -->. Comparisons across those dates are confounded.</p>
-
-<h3>5.10 Claims from the earlier site that this audit does not support</h3>
-<ul>
-<li>A "15 to 25%" improvement after removing reward shaping: no measure of it exists, and no pre-removal data is in the dataset<!-- C030 -->.</li>
-<li>"About 600 lines of reward shaping" removed in September 2025: the removal was two changes, in December 2025 and February 2026<!-- C035 -->.</li>
-<li>"217 unique emotional states" and an "11-color" palette: neither matches the data or the code<!-- C034, C033 -->.</li>
-<li>A 35% rise in the daily session rate from March to April: sessions per active day fell<!-- C130 -->.</li>
-<li>"78%" assistant-style and "91%" genuine reflection responses: no responses were coded<!-- C121 -->.</li>
-<li>Reflections "never fed back": two were included in every later prompt<!-- C122 -->.</li>
-<li>"weightless" and "carefree" unique to one model: both were used by another model<!-- C149 -->.</li>
-<li>Convergent titling and "emergent aesthetic consensus": below chance (section 5.7)<!-- C100 to C106 -->.</li>
-<li>Sleep-phase texts as "consolidation" of experience: the prompt itself supplies the art content<!-- C093 -->.</li>
-<li>Two models "share identical weights": they share a base model; fine-tuning changes the weights<!-- C145 -->.</li>
-<li>Earlier headline figures (pixels drawn, total steps, accumulated memories, session totals before March 2026): these predate the database and cannot be checked<!-- C012 to C020 -->.</li>
-</ul>
-</section>
-
-<section id="protocol" aria-labelledby="h-protocol">
-<h2 id="h-protocol">6. Current protocol</h2>
-<p>The changes below were made on the project's current development branch between 2026-09-20 and 2026-10-17<!-- A§7.17 -->. They apply to new sessions only; they do not change the pilot data. Commit identifiers and statuses come from the private repository's history as of 2026-10-17. No results from the current protocol are reported here: none has been through an audit yet.</p>
-<div class="table-wrap">
-<table>
-<caption>Pilot problems and current changes</caption>
-<thead><tr><th>Pilot problem</th><th>Change</th><th>Commits</th><th>Status</th></tr></thead>
-<tbody>
-<tr><td>Past output in the prompt (5.1)</td><td>The per-model preamble (a self-description line with the model's name, painting and session counts and top feel words, plus its titles, reflections and sleep-phase text; 2.4) removed from every prompt<!-- A§7.18, A§1.4 -->; prompt audit tool; nothing from before the restart reaches any prompt; memory loaded by explicit model ID</td><td><code>00945eb</code>, <code>9ef32f6</code>, <code>20b2ff7</code>, <code>6242b45</code></td><td class="status">Implemented</td></tr>
-<tr><td>Invisible cursor (5.2)</td><td>Hand marked in the grid with rows kept aligned; a visible marker in the image condition</td><td><code>caf7222</code>, <code>f496790</code></td><td class="status">Implemented</td></tr>
-<tr><td>Substring parsing and code-substituted actions (2.2, 5.3)</td><td>Only whole command lines and whole words act, in written order; prose is logged and never run; actions over the cap are logged</td><td><code>d66f560</code>, <code>12a1730</code>, <code>120e0e2</code>, <code>b11a2f4</code></td><td class="status">Implemented</td></tr>
-<tr><td>Silent edge stops: in the pilot, a move that the canvas edge blocked or cut short (less than 3 cells) was not reported to the model<!-- A§7.18 --></td><td>Moves stopped by an edge are counted and reported in the next prompt</td><td><code>f715089</code></td><td class="status">Implemented</td></tr>
-<tr><td>Step counts and no code version (5.5, 5.6)</td><td>Correct step counts; titles kept; each session records its code version, uncommitted files, prompt hash and full settings</td><td><code>b70e142</code>, <code>a026ce1</code>, <code>bb6df3b</code></td><td class="status">Implemented</td></tr>
-<tr><td>Sessions deleted or overwritten at rotation (5.8)<!-- A§7.17 --></td><td>The deletion of earlier "rotation swap" sessions is removed; a failed start no longer reuses the previous session ID</td><td><code>b6a45a2</code>, <code>7a0e99c</code></td><td class="status">Implemented</td></tr>
-<tr><td>Chat and rest branches mixed into drawing (observation 9)</td><td>Chat and rest breaks off by default</td><td><code>0a872b2</code></td><td class="status">Implemented</td></tr>
-<tr><td>Many confounded models</td><td>Rotation limited to a small configurable set; the vision protocol (the frozen protocol for the image condition, with paired sessions that see either the text grid or images of the canvas) uses one fixed vision-language model<!-- A§7.18 --></td><td><code>8854507</code>, <code>d91992c</code></td><td class="status">Implemented</td></tr>
-<tr><td>Local timestamps</td><td>UTC timestamps</td><td><code>35a57b5</code></td><td class="status">Implemented</td></tr>
-<tr><td>Text-only perception</td><td>An image condition: pictures of the canvas before and after the last step replace the text grid; a perception validation tool; paired sessions that differ only in this element</td><td><code>20f71d4</code>, <code>a65d0c2</code>, <code>92706fb</code></td><td class="status">Implemented</td></tr>
-<tr><td>Protocol drift</td><td>Protocol frozen and tagged; each session records its protocol tag and whether it ran exactly</td><td><code>d91992c</code>, <code>a0c7b5b</code></td><td class="status">Implemented</td></tr>
-<tr><td>Too few sessions per condition</td><td>Repeated sessions per condition at the frozen protocol</td><td>-</td><td class="status">Planned</td></tr>
-<tr><td>Parser cases still open, such as repeated pen and color codes; a decision on whether commands stay digit codes (2.2) or become words only</td><td>A second protocol version</td><td>-</td><td class="status">Planned</td></tr>
-<tr><td>No exact record of each prompt and reply</td><td>A per-step file of the exact prompt and reply</td><td>-</td><td class="status">Planned</td></tr>
-<tr><td>One vision model</td><td>Validation of further vision models</td><td>-</td><td class="status">Planned</td></tr>
-</tbody>
-</table>
+<div class="text">
+  <p>In March 2026 the system began rotating through many models on a timer, each with its own memory folder, and logging to a MySQL database. Several models were not new: the code already listed eight on 2026-02-25. The database starts on 2026-03-07 and shows models rotating from its first sessions; a rotation list with an interval of 5,400 s and per-model memory folders first appear in committed code on 2026-03-20 (1,800 s from 2026-03-23). These changes did not come before the pilot; they arrived as it began.</p>
+  <p>The pilot ran from 2026-03-07 to 2026-06-14: 3,060 sessions from 26 models (25 run locally, 1 through an API), with 98,335 saved thoughts (pieces of a model's prose that passed a length and phrase filter) and 2,913 <span class="term" tabindex="0" aria-describedby="tip-2">sleep-phase texts<span class="tip" role="tooltip" id="tip-2">Text generated from a fixed prompt during a rest period.</span></span>. The audit, completed in October 2026, found that from about 2026-04-10 each model's top <span class="term" tabindex="0" aria-describedby="tip-1">feel words<span class="tip" role="tooltip" id="tip-1">The word after "feel" in a model's text.</span></span>, titles, reflections and latest sleep-phase text were fed back into its own prompts, so any apparent stable "identity" is confounded. Observations are descriptive only: for example, identical painting titles were shared across models less often than under random reassignment of model labels (78 against 195.8).</p>
+  <p>The full report, with its tables, observations, data-quality list and the SQL behind every number, is now the <a href="pilot/">appendix</a>.</p>
+  <p class="evidence"><b>Evidence.</b> Counts recomputed for this page from a copy of the database (SELECT only): sessions with IDs 14 to 3244, excluding one model label and three hand-inserted sessions (queries in the appendix, A§7.3 and A§7.15). Commits <code>9811757</code> (2026-03-20) and <code>8ed2f58</code> (2026-03-23). Audit findings: appendix sections 5.1 to 5.4 and 5.7.</p>
+</div>
+</div>
 </div>
 </section>
 
-<section id="availability" aria-labelledby="h-availability">
-<h2 id="h-availability">7. Data and code availability</h2>
-<p>The code and the dataset are private. Both are available on request for review.</p>
-<p>The SQL queries behind the numbers on this page are published as <a href="queries.sql">queries.sql</a>, each labeled with the audit section it produced.</p>
-<p>Contact: <a href="https://www.linkedin.com/in/elijah-camp-106708282" rel="noopener">linkedin.com/in/elijah-camp-106708282</a></p>
-<p>The dataset is a MySQL database containing sessions, thoughts, feel entries, sleep-phase texts, reflections, sound strings, goals and chat messages. For the pilot it contains canvas images only as the latest per model and no per-step record of actions. The full audit report is kept with the dataset.</p>
-<p>An instrumented pre-database run (21 Feb to 7 Mar 2026) is archived and may be published as an appendix.</p>
+<!-- 5 -->
+<section class="chapter" id="c5" aria-labelledby="h-c5" style="--accent:var(--a5)">
+<div class="wrap">
+<div class="head">
+  <p class="when"><b>Chapter 5</b> · 2026-09-20 to 2026-10-26</p>
+  <h2 id="h-c5">Audit and rebuild</h2>
+  <p class="lede"><strong>What it revealed:</strong> with every step recorded and replayable, the order of the command list shifted five models' <span class="term" tabindex="0" aria-describedby="tip-6">first-token probabilities<span class="tip" role="tooltip" id="tip-6">The probabilities a model assigns to each possible first token of its reply.</span></span> more than any of six real canvases did. <span class="prelim">Preliminary</span></p>
+</div>
+<ul class="stats" aria-label="Counts from this chapter"><li><span class="num" data-count="1547">1,547</span><span class="what">of 1,547 steps ended in a complete command</span></li></ul>
+<div class="split">
+<div class="pin">
+  <figure class="wide" aria-labelledby="cap-replay">
+    <div class="player" id="replay">
+      <div class="views">
+        <div><p class="lab">The canvas before this step (the model is not shown this image)</p><canvas width="400" height="400" role="img" aria-label="Canvas before this step"></canvas></div>
+        <div class="asciiwrap"><p class="lab">What the model read: the text grid in its prompt (H is the cursor)</p><pre class="ascii" aria-hidden="true"></pre><p class="sr" data-out="desc">Text grid, step 86: cursor and painted cells as in the prompt.</p></div>
+      </div>
+      <div class="readout" aria-live="polite">
+        <span>Step <b data-out="step">86 of 86</b></span>
+        <span>Command chosen: <b data-out="cmd">save</b></span>
+        <span>Pen before step: <b data-out="pen">down</b></span>
+      </div>
+      <div class="bar">
+        <button type="button" data-act="prev" aria-label="Previous step">&#8249;</button>
+        <button type="button" data-act="play">Play</button>
+        <button type="button" data-act="next" aria-label="Next step">&#8250;</button>
+        <input type="range" min="0" max="85" value="85" step="1" aria-label="Step" aria-valuetext="Step 86 of 86">
+        <button type="button" data-act="zoom" aria-pressed="false">Zoom on cursor</button>
+      </div>
+      <p data-out="err" hidden>The replay data could not be loaded. View the page through a local web server.</p>
+    </div>
+    <figcaption id="cap-replay"><b>Replay of one rebuild session, step by step.</b> Shakedown 1e, session 900015, phi4-mini, 86 steps, constrained decoding. Chosen as the session of that run with the most visible activity: the most painted cells at any step (155) among its 85 sessions. The frames come from the replay tool (no model); each frame's canvas matched the recorded checksum. The grid is taken from each step's recorded prompt. The model titled the finished canvas <em>"24-Hour Day in the Life of a Screen: Marks on a Blank Canvas"</em>.</figcaption>
+  </figure>
+</div>
+<div class="text">
+  <p>Protocol changes began on a development branch on 2026-09-20. The audit, completed 2026-10-17, then led to a rebuild on a separate research branch from 2026-10-21. The rebuild kept the pilot's world (a 100 by 100 canvas, moves of 3 cells, the same tools and colors, a text grid as the model's view) and made three main changes.</p>
+  <h3>Fingerprints removed</h3>
+  <p>The pilot prompt carried the project's own framing: a preamble, code memories, sleep-phase "insights", goals, and an "I am drawing " anchor that every reply had to continue. The decision log calls these "our fingerprints". The rebuilt prompt describes only the program, the screen and the commands.</p>
+  <h3>Every step recorded and replayable</h3>
+  <p>Each drawing step records the exact prompt, the raw reply and what it did. A replay tool feeds the recorded replies back through the drawing code with no model and checks the canvas after every step. All five test runs ("<span class="term" tabindex="0" aria-describedby="tip-4">shakedowns<span class="tip" role="tooltip" id="tip-4">A short test run of the whole system, to check it works; not research data.</span></span>", 2026-10-23 to 2026-10-25) replayed pixel-identical at the code each was recorded with.</p>
+  <h3>Grammar-constrained decoding over 64 commands</h3>
+  <p>In the pilot, actions were parsed out of free text, so ordinary words could trigger tools. In the rebuild the model generates under a grammar that allows exactly the 64 command strings of the legend (4 directions, pen down and pen up, 15 colors, 13 tools, 28 notes, center and save) and nothing else. In the first run in this mode, all 1,547 of 1,547 steps ended in a complete command.</p>
+  <h3>Preliminary findings</h3>
+  <p>These come from probes and short test runs, not from research sessions. Each gives its n.</p>
+  <ol class="findings">
+    <li>
+      <h4>Vision probe: the order of the command list shifts the first move</h4>
+      <p><span class="prelim">Vision-branch probe</span> Qwen2.5-VL-7B, shown images of a blank canvas rather than the text grid: with the directions listed "up down left right", its first move was up in 47 of 100 replies; listed "right left down up", it was right in 80 of 100. <span class="n">n = 100 per condition, 2026-10-20</span></p>
+    </li>
+    <li>
+      <h4>Text grid: list order shifts first-token probabilities more than real screens do</h4>
+      <p><span class="prelim">Rebuild screen test</span> With the text grid and <span class="term" tabindex="0" aria-describedby="tip-5">constrained decoding<span class="tip" role="tooltip" id="tip-5">Generating under a grammar that allows only the legend's command strings.</span></span>, one alternative order of the command list, on a blank screen, shifted five models' first-token probabilities by a <span class="term" tabindex="0" aria-describedby="tip-7">total variation distance<span class="tip" role="tooltip" id="tip-7">Half the summed absolute difference between two probability distributions: 0 when they are identical, 1 when they do not overlap.</span></span> of 0.24 to 0.55. Six real screens from Shakedown 1e shifted them by 0.04 to 0.21. In 50 sampled commands per condition, the reordering was detectable beyond sampling noise for 4 of 5 models; shifts as small as the real screens' are too small for that test. For llama2, the probability of "up" was 0.256 with "up" listed first and 0.002 with "left" first. <span class="n">13 conditions × 50 generations per model, run twice</span></p>
+    </li>
+    <li>
+      <h4>Mirroring the canvas does not mirror the moves</h4>
+      <p><span class="prelim">Vision-branch probe</span> Qwen2.5-VL-7B, shown images rather than the text grid. On canvases with more marks on the right, 72% of its horizontal moves went right. On the same canvases mirrored, 70% still went right. <span class="n">n = 100 per side (10 screens × 10 seeds), 2026-10-20</span></p>
+    </li>
+    <li>
+      <h4>2 of 4 models titled the canvas as a game</h4>
+      <p>Asked once each to title a busy synthetic canvas, four models answered:</p>
+      <blockquote class="title-q">4x4 Minesweeper Grid</blockquote>
+      <p class="sub">qwen (Qwen2.5, 3B)</p>
+      <blockquote class="title-q">2D Grid Game - "Mark Master" by Unknown Author</blockquote>
+      <p class="sub">phi4-mini</p>
+      <blockquote class="title-q">The Mysterious Marks</blockquote>
+      <p class="sub">qwen2.5-coder-7b</p>
+      <blockquote class="title-q">OPPPPAO</blockquote>
+      <p class="sub">llama2 (letters from the grid). <span class="n">One title request per model, smoke test, 2026-10-22</span></p>
+    </li>
+    <li>
+      <h4>llama2 before and after three changes</h4>
+      <p>In the first shakedown, llama2 copied the grid in 187 of 187 replies (100%) and none of them acted. Before the next shakedown three things changed at once: the grid and its key moved before the command list, the legend gained a last line, and the rule for what counts as acting changed. In that run 52 of 278 replies (18.7%) copied the grid and 116 of 278 (41.7%) acted. Both runs used free-text replies, before constrained decoding. <span class="n">One model, one 10-minute slot per run; Shakedowns 1 and 1b, 2026-10-23 and 2026-10-24</span></p>
+    </li>
+    <li>
+      <h4>No model avoided the walls</h4>
+      <p><span class="prelim">Rebuild screen test</span> With the <span class="term" tabindex="0" aria-describedby="tip-8">cursor<span class="tip" role="tooltip" id="tip-8">The cell where the next mark lands. Chapter 5 calls it the cursor (H in the text grid); chapter 6 calls it the hand.</span></span> against an edge, no model moved into that edge less often than at the center, beyond sampling noise. <span class="n">5 models, 4 edges, 50 generations each</span></p>
+    </li>
+  </ol>
+  <p class="note"><b>Not reported.</b> An earlier method that scored every command's probability ("choose mode") failed its validation check: its cached scores differed from a fresh evaluation by up to 0.099 to 1.06 in log-probability (the largest gap for each model). No per-model action proportions from it appear here.</p>
+  <p class="evidence"><b>Evidence.</b> Rebuild decision log: <span class="tag">D1</span> (fingerprints), <span class="tag">D44</span> (per-step record), <span class="tag">D107</span> to <span class="tag">D110</span> (constrained decoding; choose mode not used). Commits <code>de08335</code> (2026-10-21, first rebuild commit), <code>70c6540</code> (first code change), <code>3d17f2a</code> and <code>3e0a496</code> (2026-10-25, constrain mode and default), <code>573a0c4</code> (code of Shakedown 1e). Reports: shakedown1, 1b, 1c, 1d and 1e (replay results; 1,547 steps: phi4-mini 825, llama2 722), smoke_report 2026-10-22 (titles), screen_test_report 2026-10-26, <span class="tag">AUR-135</span> stage 2 probe report (command order, mirroring). Tickets <span class="tag">AUR-152</span> (choose mode) and <span class="tag">AUR-154</span>.</p>
+</div>
+</div>
+</div>
 </section>
 
-<section id="researcher" aria-labelledby="h-researcher">
-<h2 id="h-researcher">8. Researcher</h2>
-<p>Elijah Sylar Camp. B.A. Computer Science, University of Colorado Denver (2026). Seven years as a Registered Behavior Technician. Software engineer.</p>
-<p>Behavior-analytic observation methods shaped the design: the system relies on the model perceiving the consequences of its own actions rather than on a reward signal. This is a design rationale, not a finding.</p>
+<!-- 6 -->
+<section class="chapter" id="c6" aria-labelledby="h-c6" style="--accent:var(--a6)">
+<div class="wrap">
+<div class="head">
+  <p class="when"><b>Chapter 6</b> · from 2026-10-21</p>
+  <h2 id="h-c6">v3: learning what actions do, without language</h2>
+  <p class="lede"><strong>What it revealed so far:</strong> one step ahead, a model trained only on the consequences of random actions got a mean of 9.52 cells wrong per step, against a mean of 31.2 cells that actually changed. Fed its own predictions, it drifts, and in two of four test sequences it first loses track of the <span class="term" tabindex="0" aria-describedby="tip-13">hand<span class="tip" role="tooltip" id="tip-13">The cell where the next mark lands. Chapter 5 calls it the cursor (H in the text grid); chapter 6 calls it the hand.</span></span> around step 20.</p>
+</div>
+<div class="split">
+<div class="pin">
+  <figure class="cmpfig" data-compare>
+    <div class="cmp">
+      <div class="cmp-base" role="img" aria-label="Real canvas at the chosen step"></div>
+      <div class="cmp-top" role="img" aria-label="Predicted canvas at the chosen step"></div>
+      <div class="cmp-handle"></div>
+      <span class="cmp-tag l">Real</span><span class="cmp-tag r" data-cmp-toplabel>Imagined</span>
+      <input class="cmp-range" type="range" min="0" max="100" value="50" aria-label="Compare: drag or use arrow keys to move the divider between real and predicted">
+    </div>
+    <div class="cmp-ctl">
+      <label>View <select data-cmp-mode><option value="imag" selected>Imagination, 79 fixed actions</option><option value="onestep">One step ahead, fresh world</option></select></label>
+      <label>Step <select data-cmp-step></select></label>
+    </div>
+    <figcaption><b>Real and predicted at the same step.</b> Drag the divider, or focus it and use the arrow keys. Panels from the run's saved inspection output, the same as in this chapter's figures.</figcaption>
+  </figure>
+</div>
+<div class="text">
+  <p>v3 removes language entirely. The plan is an agent that acts in the same canvas world (100 by 100 cells, moves of 3 cells) through 35 numbered actions with no names, a set separate from the rebuild's 64 commands. The part built so far is its <span class="term" tabindex="0" aria-describedby="tip-9">forward model<span class="tip" role="tooltip" id="tip-9">A model that, given the canvas and an action, predicts the next canvas.</span></span>: given the canvas and an action, predict the next canvas. The agent that will use it is not built yet. The model is a small <span class="term" tabindex="0" aria-describedby="tip-10">U-Net<span class="tip" role="tooltip" id="tip-10">A convolutional network that maps an image to an image of the same size.</span></span> (1.35M parameters) trained on 1,000,000 transitions from "babbling", sticky random moves that cover the canvas, with 50,000 held out.</p>
+  <p>Training stopped itself at iteration 40,000, after 2 h 11 min, when the <span class="term" tabindex="0" aria-describedby="tip-11">done criteria<span class="tip" role="tooltip" id="tip-11">The tests on held-out data that end v3 training.</span></span> held at two evaluations in a row. Before that the criteria were met and then missed again twice; every miss was on the hand's position.</p>
+  <p>One step ahead, on a fresh world it had not seen, it placed the hand and the pen, color and tool state correctly at all 300 of 300 steps, and got a mean of 9.52 of 10,000 cells wrong per step (worst step: 124), while a mean of 31.2 cells changed per step.</p>
+  <figure class="wide">
+    <img class="anim" src="img/v3-predicted-vs-real-still.png" data-anim="img/v3-predicted-vs-real.gif" data-still="img/v3-predicted-vs-real-still.png" width="610" height="222" loading="lazy" style="width:min(100%,732px);image-rendering:pixelated" alt="Three panels: the real canvas, the model's one-step prediction, and their difference magnified four times. The real and predicted panels look the same; the difference panel is almost all black.">
+    <button type="button" class="animbtn" hidden>Pause animation</button>
+    <figcaption><b>One step ahead: real, predicted, difference (×4).</b> The odd steps 1 to 299 of a 300-step run on a fresh world, at iteration 40,000; when paused or with reduced motion, step 299. From the run's saved inspection output; not rerun for this page.</figcaption>
+  </figure>
+  <p><span class="term" tabindex="0" aria-describedby="tip-12">Imagination<span class="tip" role="tooltip" id="tip-12">Running the forward model on its own predictions instead of the real canvas.</span></span> is harder. Given 79 fixed actions from a blank canvas and fed only its own predictions, the model got 19 cells wrong after step 1, 220 after step 20 and 678 after step 40, and 1,135 by the end. It first misplaced the hand at step 19. The pen, color and tool state were never wrong. Over three random 200-step sequences, it ended with 1,259, 582 and 1,372 cells wrong; it lost the hand at step 20 in one and kept it throughout in the other two.</p>
+  <figure class="wide">
+    <img src="img/v3-imagination-vs-real.png" width="1856" height="672" loading="lazy" alt="Grid of panels at steps 0 to 79: the real canvas builds a red, white and cyan figure; the imagined canvas keeps the early white stroke and the cyan stroke but omits the red ones; the difference panels show the missing red strokes.">
+    <figcaption><b>Imagination against reality, 79 fixed actions.</b> Each group: real, imagined, difference (×4). The imagined canvas keeps the early strokes and the latest one but loses the strokes made while it had lost the hand.</figcaption>
+  </figure>
+  <p class="note"><b>Since then.</b> A run that gives the model the hand's position directly is complete. Its results are not reported here.</p>
+  <p class="evidence"><b>Evidence.</b> v3 repository: <code>bfeee3d</code> (2026-10-21, the world), <code>96e0f59</code> (2026-10-21, babbling and dataset), <code>6259bb5</code> (2026-10-26, criteria met at 40,000). Design document (setup, model size, data). Step 2b report, section 7 (training stop). Saved inspection output (one-step and imagination numbers, criteria history). The figures are the run's own.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- side -->
+<section class="plain" id="side" aria-labelledby="h-side">
+<div class="wrap">
+  <h2 id="h-side">Side branches</h2>
+  <p><b>Vision experiments (2026-10-16 to 2026-10-20).</b> A development branch replaced the text grid with pictures of the canvas before and after the last step, froze a protocol for paired sessions with one vision-language model (2026-10-17) and added a second model (2026-10-18). Its probes produced the command-order and mirroring results in chapter 5. Evidence: commits <code>20f71d4</code>, <code>d91992c</code>, <code>ed4128e</code>; <span class="tag">AUR-135</span>.</p>
+  <p><b>A light wall (2026-09-26 to 2026-10-22, archived).</b> An earlier project also called v3 drove a simulated wall of 48 by 24 lights. A model drove it in an earlier program mode (first live session 2026-10-09); from 2026-10-16 it moved to the pilot's movement codes, and it was archived without running a model in that mode. Evidence: its repository, <code>eacee51</code> to <code>2623e62</code>.</p>
+</div>
+</section>
+
+<section class="plain" id="method" aria-labelledby="h-method">
+<div class="wrap">
+  <h2 id="h-method">How to read the evidence</h2>
+  <p>Commit identifiers refer to the project's private repositories. "D" numbers are entries in the rebuild's decision log. AUR numbers are tickets. Reports are named by run and date. Database counts were recomputed for this page with read-only queries on a copy of the database. The code and the data are private and available on request for review; the pilot's SQL is published with the <a href="pilot/">appendix</a> (<a href="pilot/queries.sql">queries.sql</a>).</p>
+  <p>Hand-picked images are labeled "selected example". The pilot canvases follow a stated selection rule. The replay session was chosen by a stated criterion.</p>
+</div>
+</section>
+
+<section class="plain" id="researcher" aria-labelledby="h-res">
+<div class="wrap">
+  <h2 id="h-res">Researcher</h2>
+  <p>Elijah Sylar Camp. B.A. Computer Science, University of Colorado Denver (2026). Seven years as a Registered Behavior Technician. Software engineer.</p>
+  <p>Behavior-analytic observation methods shaped the current design, which relies on the model perceiving the consequences of its own actions rather than on a reward signal. This is a design rationale, not a finding.</p>
+  <p>Contact: <a href="https://www.linkedin.com/in/elijah-camp-106708282" rel="noopener">LinkedIn</a></p>
+</div>
 </section>
 </main>
 
-<footer>
-  <p>Last updated: 2026-10-17. Rebuilt from audited data, Oct 2026.</p>
-</footer>
+<footer><div class="wrap"><p>Draft, 2026-10-27. Not published. Earlier report: <a href="pilot/">pilot report and audit</a>.</p></div></footer>
+<script src="motion.js"></script>
 </body>
 </html>

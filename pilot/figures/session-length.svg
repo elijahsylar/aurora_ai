@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 390" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Session length distribution</title>
+<desc id="d">Histogram of session length for 2,987 pilot sessions with an end time and non-negative duration. 0–1 minutes: 227; 1–5 minutes: 371; 5–15 minutes: 345; 15–30 minutes: 362; 30–45 minutes: 779; 45–60 minutes: 70; 60–70 minutes: 793; 70–90 minutes: 15; 90–180 minutes: 11; &gt;180 minutes: 14. The two tallest bins, 30 to 45 minutes (779) and 60 to 70 minutes (793), match the 30-minute and 65-minute rotation intervals used during the pilot.</desc>
+<rect width="720" height="390" fill="#ffffff"/>
+<line x1="60" x2="700" y1="320.0" y2="320.0" stroke="#d9d9d9"/>
+<text x="52.0" y="324.0" font-size="12" text-anchor="end" fill="#555555" font-weight="normal" >0</text>
+<line x1="60" x2="700" y1="250.0" y2="250.0" stroke="#d9d9d9"/>
+<text x="52.0" y="254.0" font-size="12" text-anchor="end" fill="#555555" font-weight="normal" >200</text>
+<line x1="60" x2="700" y1="180.0" y2="180.0" stroke="#d9d9d9"/>
+<text x="52.0" y="184.0" font-size="12" text-anchor="end" fill="#555555" font-weight="normal" >400</text>
+<line x1="60" x2="700" y1="110.0" y2="110.0" stroke="#d9d9d9"/>
+<text x="52.0" y="114.0" font-size="12" text-anchor="end" fill="#555555" font-weight="normal" >600</text>
+<line x1="60" x2="700" y1="40.0" y2="40.0" stroke="#d9d9d9"/>
+<text x="52.0" y="44.0" font-size="12" text-anchor="end" fill="#555555" font-weight="normal" >800</text>
+<rect x="64.0" y="240.6" width="56.0" height="79.5" fill="#2b5f8a"/>
+<text x="92.0" y="235.6" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >227</text>
+<text x="92.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >0–1</text>
+<rect x="128.0" y="190.2" width="56.0" height="129.8" fill="#2b5f8a"/>
+<text x="156.0" y="185.2" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >371</text>
+<text x="156.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >1–5</text>
+<rect x="192.0" y="199.2" width="56.0" height="120.8" fill="#2b5f8a"/>
+<text x="220.0" y="194.2" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >345</text>
+<text x="220.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >5–15</text>
+<rect x="256.0" y="193.3" width="56.0" height="126.7" fill="#2b5f8a"/>
+<text x="284.0" y="188.3" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >362</text>
+<text x="284.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >15–30</text>
+<rect x="320.0" y="47.4" width="56.0" height="272.6" fill="#2b5f8a"/>
+<text x="348.0" y="42.4" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >779</text>
+<text x="348.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >30–45</text>
+<rect x="384.0" y="295.5" width="56.0" height="24.5" fill="#2b5f8a"/>
+<text x="412.0" y="290.5" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >70</text>
+<text x="412.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >45–60</text>
+<rect x="448.0" y="42.4" width="56.0" height="277.6" fill="#2b5f8a"/>
+<text x="476.0" y="37.4" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >793</text>
+<text x="476.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >60–70</text>
+<rect x="512.0" y="314.8" width="56.0" height="5.2" fill="#2b5f8a"/>
+<text x="540.0" y="309.8" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >15</text>
+<text x="540.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >70–90</text>
+<rect x="576.0" y="316.1" width="56.0" height="3.9" fill="#2b5f8a"/>
+<text x="604.0" y="311.1" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >11</text>
+<text x="604.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >90–180</text>
+<rect x="640.0" y="315.1" width="56.0" height="4.9" fill="#2b5f8a"/>
+<text x="668.0" y="310.1" font-size="11" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >14</text>
+<text x="668.0" y="338.0" font-size="11" text-anchor="middle" fill="#555555" font-weight="normal" >&gt;180</text>
+<text x="380.0" y="368.0" font-size="13" text-anchor="middle" fill="#1a1a1a" font-weight="normal" >Session length (minutes)</text>
+<text x="52.0" y="28.0" font-size="13" text-anchor="start" fill="#1a1a1a" font-weight="normal" >Sessions</text>
+</svg>
