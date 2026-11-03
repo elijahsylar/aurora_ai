@@ -369,7 +369,7 @@ FROM dreams
 WHERE session_id BETWEEN 14 AND 3244 AND model &lt;&gt; 'claude-opus-4.6' AND session_id NOT IN (2190, 2588, 2590);</code></pre></details>
 
 <h3><span class="secnum">3.3</span> Per model</h3>
-<p>Mean coverage is computed over sessions with non-zero recorded coverage only, because most recorded zeros are a measurement failure and the rest are undetermined (<a href="#limitations">section 5.4</a>). The last two columns give that n and the number of excluded zero sessions. The excluded sessions are not random: the excluded share ranges from 3 of 89 sessions to 76 of 81 depending on the model<!-- A§7.15 -->, so the model means differ in how representative they are of each model's sessions.</p>
+<p>Mean coverage is computed over sessions with non-zero recorded coverage only, because most recorded zeros are sessions where coverage was not captured and the rest are undetermined (<a href="#limitations">section 5.4</a>). The last two columns give that n and the number of excluded zero sessions. The excluded sessions are not random: the excluded share ranges from 3 of 89 sessions to 76 of 81 depending on the model<!-- A§7.15 -->, so the model means differ in how representative they are of each model's sessions.</p>
 <div class="table-wrap">
 <table>
 <caption>Per-model counts</caption>
