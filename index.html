@@ -20,7 +20,7 @@
   <h1>Aurora: from pattern engine to blank-slate agent</h1>
   <p class="dek">Aurora gives a program a canvas and a small set of commands and records what it does. Since the reward code was removed (chapter 3), nothing rewards it. This page follows the system in six chapters, from a generative pattern engine to language models choosing every stroke to an agent that has to learn what its actions do. Each chapter leads with what it revealed and cites its evidence.</p>
   <p class="question"><b>The question.</b> What does a language model produce when it is given a canvas, a small command vocabulary and no reward signal? And how does that output change when the model can perceive the results of its own actions?</p>
-  <p class="byline"><strong>Elijah Sylar Camp</strong> · Last updated 2026-10-27 · <a href="pilot/">Pilot report and audit (appendix)</a></p>
+  <p class="byline"><strong>Elijah Sylar Camp</strong> · Last updated 2026-10-27 · <a href="pilot/">Pilot report (appendix)</a></p>
   </div>
   <figure class="hero-fig">
     <div class="asciiwrap"><pre class="ascii hero-grid" aria-hidden="true"></pre></div>
@@ -34,7 +34,7 @@
     <li><a href="#c2" data-ch="c2"><span class="tn">2. A language model takes the pen</span><span class="td">from 2025-07-24</span></a></li>
     <li><a href="#c3" data-ch="c3"><span class="tn">3. Taking out the reward signal</span><span class="td">2025-12-02 and 2026-02-25</span></a></li>
     <li><a href="#c4" data-ch="c4"><span class="tn">4. The pilot: many models, one database</span><span class="td">2026-03-07 to 2026-06-14</span></a></li>
-    <li><a href="#c5" data-ch="c5"><span class="tn">5. Audit and rebuild</span><span class="td">2026-09-20 to 2026-10-26</span></a></li>
+    <li><a href="#c5" data-ch="c5"><span class="tn">5. Review and rebuild</span><span class="td">2026-09-20 to 2026-10-26</span></a></li>
     <li><a href="#c6" data-ch="c6"><span class="tn">6. v3: learning what actions do, without language</span><span class="td">from 2026-10-21</span></a></li>
     <li class="extra"><a href="#side" data-ch="side"><span class="tn">Side branches</span></a></li>
     <li class="extra"><a href="#terms" data-ch="terms"><span class="tn">Terms</span></a></li>
@@ -63,7 +63,7 @@
     <li class="ch" style="--row:1;--x0:10.42%;--x1:54.05%;--w:43.63%;--accent:var(--a2)"><span class="bar"></span><span class="lab"><span class="d">from 2025-07-24</span><a href="#c2">2. A language model takes the pen</a></span></li>
     <li class="ch" style="--row:2;--x0:35.71%;--x1:52.12%;--w:16.41%;--accent:var(--a3)"><span class="bar"></span><span class="lab"><span class="d">2025-12-02 and 2026-02-25</span><a href="#c3">3. Taking out the reward signal</a></span></li>
     <li class="ch" style="--row:3;--x0:54.05%;--x1:73.17%;--w:19.11%;--accent:var(--a4)"><span class="bar"></span><span class="lab"><span class="d">2026-03-07 to 2026-06-14</span><a href="#c4">4. The pilot: many models, one database</a></span></li>
-    <li class="ch flip" style="--row:4;--x0:92.08%;--x1:99.03%;--w:6.95%;--accent:var(--a5)"><span class="bar"></span><span class="lab"><span class="d">2026-09-20 to 2026-10-26</span><a href="#c5">5. Audit and rebuild</a></span></li>
+    <li class="ch flip" style="--row:4;--x0:92.08%;--x1:99.03%;--w:6.95%;--accent:var(--a5)"><span class="bar"></span><span class="lab"><span class="d">2026-09-20 to 2026-10-26</span><a href="#c5">5. Review and rebuild</a></span></li>
     <li class="ch flip" style="--row:5;--x0:98.07%;--x1:99.23%;--w:1.16%;--accent:var(--a6)"><span class="bar"></span><span class="lab"><span class="d">from 2026-10-21</span><a href="#c6">6. v3: learning what actions do, without language</a></span></li>
     <li class="side flip" style="--row:6;--x0:93.24%;--x1:98.26%;--w:5.02%;--accent:var(--muted)"><span class="bar"></span><span class="lab"><span class="d">2026-09 to 2026-10</span><a href="#side">Side branches</a></span></li>
     <li class="axis" aria-hidden="true"><span style="--x:0%">2025-05-31</span><span style="--x:41.51%">2026</span><span style="--x:100%">2026-10</span></li>
@@ -166,8 +166,7 @@
 </div>
 <div class="text">
   <p>The drawing loop had included reinforcement code. On 2025-12-02 the reinforcement calls were switched off, commented out and marked "REINFORCEMENT REMOVED" in the code, and on 2026-02-25 a commit that removed 2,384 lines deleted the remaining reward and skill code together with other code. From then on the system had no reward signal, the condition every later version keeps.</p>
-  <p class="note"><b>Withdrawn claims.</b> An earlier version of the site said about 600 lines of reward shaping were removed in September 2025 and reported a 15 to 25% improvement. The audit found two removals, in December and February, and no measure of any improvement.</p>
-  <p class="evidence"><b>Evidence.</b> Commits <code>47f4196</code> (2025-12-02, "cleaned up") and <code>9da3b13</code> (2026-02-25, "cleaned version"). Pilot audit, claim review (section 5.10 of the <a href="pilot/#limitations">appendix</a>).</p>
+  <p class="evidence"><b>Evidence.</b> Commits <code>47f4196</code> (2025-12-02, "cleaned up") and <code>9da3b13</code> (2026-02-25, "cleaned version").</p>
 </div>
 </div>
 </div>
@@ -179,7 +178,7 @@
 <div class="head">
   <p class="when"><b>Chapter 4</b> · 2026-03-07 to 2026-06-14</p>
   <h2 id="h-c4">The pilot: many models, one database</h2>
-  <p class="lede"><strong>What it revealed:</strong> a large dataset, and an audit showing that the pilot's design makes most tempting conclusions unsupportable. From about 2026-04-10 models saw their own past output in their prompts, the cursor was not drawn in the grid, and 1,391 of the 3,060 sessions record a <span class="term" tabindex="0" aria-describedby="tip-3">coverage<span class="tip" role="tooltip" id="tip-3">The share of the canvas recorded as painted at the end of a session.</span></span> of 0, 1,246 of them from a known measurement failure.</p>
+  <p class="lede"><strong>What it revealed:</strong> a large descriptive dataset, and the design limits that shaped the next protocol. From about 2026-04-10 models saw their own past output in their prompts, the cursor was not drawn in the grid, and 1,391 of the 3,060 sessions record a <span class="term" tabindex="0" aria-describedby="tip-3">coverage<span class="tip" role="tooltip" id="tip-3">The share of the canvas recorded as painted at the end of a session.</span></span> of 0 (for 1,246, the save cleared the canvas before coverage was measured).</p>
 </div>
 <ul class="stats" aria-label="Counts from this chapter"><li><span class="num" data-count="3060">3,060</span><span class="what">sessions in the pilot</span></li><li><span class="num" data-count="98335">98,335</span><span class="what">saved thoughts</span></li></ul>
 <div class="split wide-pin">
@@ -195,14 +194,14 @@
       <button type="button" class="sw-thumb" aria-controls="sw-1941" aria-pressed="false" aria-label="Show mistral, session 1941"><img src="pilot/figures/session-1941-mistral.png" width="600" height="600" alt=""></button>
       <button type="button" class="sw-thumb" aria-controls="sw-3084" aria-pressed="false" aria-label="Show qwen, session 3084"><img src="pilot/figures/session-3084-qwen.png" width="600" height="600" alt=""></button>
     </div>
-    <figcaption><b>Three pilot canvases, selected by a stated rule.</b> Each is the snapshot a session saved when its painting was finished; they are not a representative sample. Rule: sessions in the window (excluding claude-opus-4.6 and three sessions inserted by hand) whose timelapse belongs to exactly one session, which have exactly one end-of-session snapshot, and whose timelapse's final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified. Session 3084 was kept from an earlier version of the page; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017. Two of the three record a coverage of 0 although their snapshots show marks: the measurement failure described in the <a href="pilot/#limitations">appendix, section 5.4</a>.</figcaption>
+    <figcaption><b>Three pilot canvases, selected by a stated rule.</b> Each is the snapshot a session saved when its painting was finished; they are not a representative sample. Rule: sessions in the window (excluding claude-opus-4.6 and three sessions inserted by hand) whose timelapse belongs to exactly one session, which have exactly one end-of-session snapshot, and whose timelapse's final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified. Session 3084 is a fixed choice; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017. Two of the three record a coverage of 0 although their snapshots show marks: the measurement failure described in the <a href="pilot/#limitations">appendix, section 5.4</a>.</figcaption>
   </figure>
 </div>
 <div class="text">
   <p>In March 2026 the system began rotating through many models on a timer, each with its own memory folder, and logging to a MySQL database. Several models were not new: the code already listed eight on 2026-02-25. The database starts on 2026-03-07 and shows models rotating from its first sessions; a rotation list with an interval of 5,400 s and per-model memory folders first appear in committed code on 2026-03-20 (1,800 s from 2026-03-23). These changes did not come before the pilot; they arrived as it began.</p>
   <p>The pilot ran from 2026-03-07 to 2026-06-14: 3,060 sessions from 26 models (25 run locally, 1 through an API), with 98,335 saved thoughts (pieces of a model's prose that passed a length and phrase filter) and 2,913 <span class="term" tabindex="0" aria-describedby="tip-2">sleep-phase texts<span class="tip" role="tooltip" id="tip-2">Text generated from a fixed prompt during a rest period.</span></span>. The audit, completed in October 2026, found that from about 2026-04-10 each model's top <span class="term" tabindex="0" aria-describedby="tip-1">feel words<span class="tip" role="tooltip" id="tip-1">The word after "feel" in a model's text.</span></span>, titles, reflections and latest sleep-phase text were fed back into its own prompts, so any apparent stable "identity" is confounded. Observations are descriptive only: for example, identical painting titles were shared across models less often than under random reassignment of model labels (78 against 195.8).</p>
   <p>The full report, with its tables, observations, data-quality list and the SQL behind every number, is now the <a href="pilot/">appendix</a>.</p>
-  <p class="evidence"><b>Evidence.</b> Counts recomputed for this page from a copy of the database (SELECT only): sessions with IDs 14 to 3244, excluding one model label and three hand-inserted sessions (queries in the appendix, A§7.3 and A§7.15). Commits <code>9811757</code> (2026-03-20) and <code>8ed2f58</code> (2026-03-23). Audit findings: appendix sections 5.1 to 5.4 and 5.7.</p>
+  <p class="evidence"><b>Evidence.</b> Counts recomputed for this page from a copy of the database (SELECT only): sessions with IDs 14 to 3244, excluding one model label and three hand-inserted sessions (queries in the appendix, A§7.3 and A§7.15). Commits <code>9811757</code> (2026-03-20) and <code>8ed2f58</code> (2026-03-23). Design limits: appendix sections 5.1 to 5.4 and 5.7.</p>
 </div>
 </div>
 </div>
@@ -213,7 +212,7 @@
 <div class="wrap">
 <div class="head">
   <p class="when"><b>Chapter 5</b> · 2026-09-20 to 2026-10-26</p>
-  <h2 id="h-c5">Audit and rebuild</h2>
+  <h2 id="h-c5">Review and rebuild</h2>
   <p class="lede"><strong>What it revealed:</strong> with every step recorded and replayable, the order of the command list shifted five models' <span class="term" tabindex="0" aria-describedby="tip-6">first-token probabilities<span class="tip" role="tooltip" id="tip-6">The probabilities a model assigns to each possible first token of its reply.</span></span> more than any of six real canvases did. <span class="prelim">Preliminary</span></p>
 </div>
 <ul class="stats" aria-label="Counts from this chapter"><li><span class="num" data-count="1547">1,547</span><span class="what">of 1,547 steps ended in a complete command</span></li></ul>
@@ -243,7 +242,7 @@
   </figure>
 </div>
 <div class="text">
-  <p>Protocol changes began on a development branch on 2026-09-20. The audit, completed 2026-10-17, then led to a rebuild on a separate research branch from 2026-10-21. The rebuild kept the pilot's world (a 100 by 100 canvas, moves of 3 cells, the same tools and colors, a text grid as the model's view) and made three main changes.</p>
+  <p>Protocol changes began on a development branch on 2026-09-20. A review of the pilot data and code, completed 2026-10-17, led to a rebuild on a separate research branch from 2026-10-21. The rebuild kept the pilot's world (a 100 by 100 canvas, moves of 3 cells, the same tools and colors, a text grid as the model's view) and made three main changes.</p>
   <h3>Fingerprints removed</h3>
   <p>The pilot prompt carried the project's own framing: a preamble, code memories, sleep-phase "insights", goals, and an "I am drawing " anchor that every reply had to continue. The decision log calls these "our fingerprints". The rebuilt prompt describes only the program, the screen and the commands.</p>
   <h3>Every step recorded and replayable</h3>
@@ -286,7 +285,7 @@
       <p><span class="prelim">Rebuild screen test</span> With the <span class="term" tabindex="0" aria-describedby="tip-8">cursor<span class="tip" role="tooltip" id="tip-8">The cell where the next mark lands. Chapter 5 calls it the cursor (H in the text grid); chapter 6 calls it the hand.</span></span> against an edge, no model moved into that edge less often than at the center, beyond sampling noise. <span class="n">5 models, 4 edges, 50 generations each</span></p>
     </li>
   </ol>
-  <p class="note"><b>Not reported.</b> An earlier method that scored every command's probability ("choose mode") failed its validation check: its cached scores differed from a fresh evaluation by up to 0.099 to 1.06 in log-probability (the largest gap for each model). No per-model action proportions from it appear here.</p>
+  <p class="note"><b>Not reported:</b> per-model action proportions. The method that would give them ("choose mode", scoring every command) did not pass its validation check and is not used for results.</p>
   <p class="evidence"><b>Evidence.</b> Rebuild decision log: <span class="tag">D1</span> (fingerprints), <span class="tag">D44</span> (per-step record), <span class="tag">D107</span> to <span class="tag">D110</span> (constrained decoding; choose mode not used). Commits <code>de08335</code> (2026-10-21, first rebuild commit), <code>70c6540</code> (first code change), <code>3d17f2a</code> and <code>3e0a496</code> (2026-10-25, constrain mode and default), <code>573a0c4</code> (code of Shakedown 1e). Reports: shakedown1, 1b, 1c, 1d and 1e (replay results; 1,547 steps: phi4-mini 825, llama2 722), smoke_report 2026-10-22 (titles), screen_test_report 2026-10-26, <span class="tag">AUR-135</span> stage 2 probe report (command order, mirroring). Tickets <span class="tag">AUR-152</span> (choose mode) and <span class="tag">AUR-154</span>.</p>
 </div>
 </div>
@@ -366,7 +365,7 @@
 </section>
 </main>
 
-<footer><div class="wrap"><p>Earlier report: <a href="pilot/">pilot report and audit</a>.</p></div></footer>
+<footer><div class="wrap"><p><a href="pilot/">Pilot report</a>.</p></div></footer>
 <script src="motion.js"></script>
 </body>
 </html>

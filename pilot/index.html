@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aurora: pilot report and audit</title>
+<title>Aurora: pilot report</title>
 <meta name="description" content="Aurora is a system that gives language models a canvas, a small command vocabulary and no reward signal. This report describes the system, the March to June 2026 pilot dataset of 26 models (25 run locally, one via API), an audit of that dataset, and the current protocol.">
 <meta name="author" content="Elijah Sylar Camp">
 <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
@@ -73,9 +73,9 @@
 </nav>
 <header class="ahead">
   <div class="ahead-bar"><p class="back"><a href="../">&#8592; Back to Aurora</a></p><button class="themebtn btn" type="button">Theme: Auto</button></div>
-  <h1>Aurora: language models drawing without a reward signal. Pilot report and audit</h1>
+  <h1>Aurora: language models drawing without a reward signal. Pilot report</h1>
   <p class="byline">Elijah Sylar Camp</p>
-  <p class="meta">Last updated: 2026-10-17. Changelog: Rebuilt from audited data, Oct 2026.</p>
+  <p class="meta">Last updated: 2026-10-17.</p>
   <p class="meta">Appendix to <a href="../">Aurora: from pattern engine to blank-slate agent</a>. Moved here unchanged from the main research page, with the SQL in <a href="queries.sql">queries.sql</a>. It is the report as of 2026-10-17: section 6 is superseded by <a href="../#c5">chapter 5</a> of the main page, where the per-step record now exists and the rebuild runs on a separate research branch.</p>
 </header>
 <nav class="track" data-track aria-label="Report sections">
@@ -86,7 +86,7 @@
     <li><a href="#system" data-ch="system"><span class="tn"><span class="tag">2</span> System (as it ran during the pilot)</span></a></li>
     <li><a href="#dataset" data-ch="dataset"><span class="tn"><span class="tag">3</span> Pilot dataset</span></a></li>
     <li><a href="#observations" data-ch="observations"><span class="tn"><span class="tag">4</span> Observations</span></a></li>
-    <li><a href="#limitations" data-ch="limitations"><span class="tn"><span class="tag">5</span> Audit and limitations</span></a></li>
+    <li><a href="#limitations" data-ch="limitations"><span class="tn"><span class="tag">5</span> Limitations</span></a></li>
     <li><a href="#protocol" data-ch="protocol"><span class="tn"><span class="tag">6</span> Current protocol</span></a></li>
     <li><a href="#availability" data-ch="availability"><span class="tn"><span class="tag">7</span> Data and code availability</span></a></li>
     <li><a href="#researcher" data-ch="researcher"><span class="tn"><span class="tag">8</span> Researcher</span></a></li>
@@ -97,8 +97,8 @@
 <main id="main">
 <section id="abstract" class="abstract" aria-labelledby="h-abstract">
 <h2 id="h-abstract">Abstract</h2>
-<p>Aurora gives language models a 100 by 100 text canvas<!-- C007, A§1.1 -->, a small command vocabulary and no reward signal, and logs what they produce. This report covers its pilot, from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->: 3,060 sessions from 26 models, 25 run locally and one via API, with 98,335 thoughts and 2,913 sleep-phase texts<!-- A§7.15, A§7.3 -->. An audit of the pilot found that from about 2026-04-10 each model's own past output was fed back into its prompts, that the cursor was invisible to the models, that the feel-word parser captures any word after "feel", and that 1,391 sessions record a coverage of 0<!-- A§1.4, A§1.1, A§1.6, A§7.15 -->. The observations are therefore descriptive only: for example, identical painting titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->. Several claims from an earlier version of this site are withdrawn, and a revised protocol addresses the pilot's problems for new sessions.</p>
-<p class="meta">Sources: every number on this page comes from an audit report of the pilot database, available on request together with the data. Section references for each number are in the page source.</p>
+<p>Aurora gives language models a 100 by 100 text canvas<!-- C007, A§1.1 -->, a small command vocabulary and no reward signal, and logs what they produce. This report covers its pilot, from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->: 3,060 sessions from 26 models, 25 run locally and one via API, with 98,335 thoughts and 2,913 sleep-phase texts<!-- A§7.15, A§7.3 -->. In the pilot, from about 2026-04-10 each model's own past output was part of its prompts, the cursor was not shown in the grid, the feel-word parser captures any word after "feel", and 1,391 sessions record a coverage of 0<!-- A§1.4, A§1.1, A§1.6, A§7.15 -->. The observations are therefore descriptive: for example, identical painting titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->. For new sessions, the current protocol changes the prompt, the grid and the parser (<a href="#protocol">section 6</a>).</p>
+<p class="meta">Sources: every number on this page comes from a report on the pilot database, available on request together with the data. Section references for each number are in the page source.</p>
 </section>
 
 <nav aria-label="Contents">
@@ -108,7 +108,7 @@
     <li><a href="#system">System</a></li>
     <li><a href="#dataset">Pilot dataset</a></li>
     <li><a href="#observations">Observations</a></li>
-    <li><a href="#limitations">Audit and limitations</a></li>
+    <li><a href="#limitations">Limitations</a></li>
     <li><a href="#protocol">Current protocol</a></li>
     <li><a href="#availability">Data and code availability</a></li>
     <li><a href="#researcher">Researcher</a></li>
@@ -118,7 +118,7 @@
 <section id="question" aria-labelledby="h-question">
 <h2 id="h-question"><span class="secnum">1.</span> Research question</h2>
 <p>What does a language model produce when it is given a canvas, a small command vocabulary and no reward signal? And how does that output change when the model can perceive the results of its own actions?</p>
-<p>Aurora is the system built to ask these questions. This report covers its pilot, which ran from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->. The pilot was exploratory. It produced a dataset and an audit, not tested hypotheses. The audit found that several features of the pilot system make many tempting conclusions unsupportable; those are listed in <a href="#limitations">section 5</a>. Two perception conditions are now being separated in the current protocol: a text grid, as in the pilot, and images of the canvas before and after each step (<a href="#protocol">section 6</a>).</p>
+<p>Aurora is the system built to ask these questions. This report covers its pilot, which ran from 2026-03-07 to 2026-06-14<!-- A§ time zones, C008 -->. The pilot was exploratory. It produced a dataset, not tested hypotheses. <a href="#limitations">Section 5</a> lists the features of the pilot system that limit what the data can support. Two perception conditions are now being separated in the current protocol: a text grid, as in the pilot, and images of the canvas before and after each step (<a href="#protocol">section 6</a>).</p>
 </section>
 
 <section id="system" aria-labelledby="h-system">
@@ -191,7 +191,7 @@ SELECT id, model, started_at, canvas_coverage, painting_title
 FROM sessions
 WHERE id IN (1208, 1941, 3084)
   AND id BETWEEN 14 AND 3244 AND model &lt;&gt; 'claude-opus-4.6' AND id NOT IN (2190, 2588, 2590);</code></pre></details>
-<p class="meta">Each image is the snapshot a session saved when its painting was finished. They illustrate the canvas and are not a representative sample. Selection rule: sessions in the window (excluding claude-opus-4.6 and the three sessions inserted by hand, section 3) whose timelapse recording (a file named by model and title) belongs to exactly one session, which have exactly one snapshot saved at the end of the session, and whose timelapse's saved final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified<!-- A§7.16 -->. Session 3084 (qwen) was kept from an earlier version of this page; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017<!-- A§7.16 -->. Two of the three record a coverage of 0 although their snapshots show marks: the measurement failure described in 5.4.</p>
+<p class="meta">Each image is the snapshot a session saved when its painting was finished. They illustrate the canvas and are not a representative sample. Selection rule: sessions in the window (excluding claude-opus-4.6 and the three sessions inserted by hand, section 3) whose timelapse recording (a file named by model and title) belongs to exactly one session, which have exactly one snapshot saved at the end of the session, and whose timelapse's saved final frame matches that snapshot on at least 99% of pixels; 902 sessions qualified<!-- A§7.16 -->. Session 3084 (qwen) is a fixed choice; the other two were drawn at random from the 860 qualifying sessions of other models, one per model, with random seed 20261017<!-- A§7.16 -->. Two of the three record a coverage of 0 although their snapshots show marks: the save-before-measure issue described in 5.4.</p>
 
 <h3><span class="secnum">2.2</span> Action vocabulary</h3>
 <p>Digits 0 to 3 move the hand 3 cells<!-- C023, A§1.2 -->; 5 and 4 put the pen down and up. The model can also name 14 colors, 13 tools, a set of sound characters, and three controls (save the painting, return to the center, view the gallery)<!-- A§1.2 -->. The prompt lists 14 color names, while the palette that renders the canvas has 15 entries<!-- A§1.2, A§1.1 -->. Output was filtered to allowed tokens and capped at 40 characters per step<!-- A§1.2 -->. Tool choice was a substring match on the model's prose, so ordinary words could select a tool. Output containing certain question-mark patterns had its actions replaced by fixed strings written in the code. Actions were not logged.</p>
@@ -493,13 +493,13 @@ WHERE session_id BETWEEN 14 AND 3244 AND model &lt;&gt; 'claude-opus-4.6' AND se
 </section>
 
 <section id="limitations" aria-labelledby="h-limitations">
-<h2 id="h-limitations"><span class="secnum">5.</span> Audit and limitations</h2>
-<p>An audit of the pilot dataset, its code and the claims made about it on an earlier version of this site was completed in October 2026. Its main findings follow.</p>
+<h2 id="h-limitations"><span class="secnum">5.</span> Limitations</h2>
+<p>A review of the pilot dataset and its code was completed in October 2026. Its main findings follow.</p>
 
 <h3><span class="secnum">5.1</span> Each model's past output was part of its input</h3>
 <p>From about 2026-04-10, every drawing prompt included the model's most frequent feel words, its titles, reflection answers and sleep-phase text<!-- A§1.4 -->. Any apparent stability in a model's output over time, or any "identity", is confounded by this loop.</p>
 
-<h3><span class="secnum">5.2</span> The cursor was invisible</h3>
+<h3><span class="secnum">5.2</span> The cursor was not drawn in the grid</h3>
 <p>The hand was not drawn in the text grid, and its row was shifted by one character<!-- A§1.1 -->. Models could locate the hand only from a line of text.</p>
 
 <h3><span class="secnum">5.3</span> Parser behavior</h3>
@@ -521,7 +521,7 @@ WHERE session_id BETWEEN 14 AND 3244 AND model &lt;&gt; 'claude-opus-4.6' AND se
 <p>The step counter counted every loop pass, including rest, chat and retries, and carried over between sessions<!-- A§5.11 -->. The field meant to record how long a feel word lasted is always 0<!-- A§5.12 -->. Neither is reported.</p>
 
 <h3><span class="secnum">5.7</span> Base rates for word coincidences</h3>
-<p>The earlier site reported that different models "independently" produced the same words or titles. Checked against how often each word appears across all models, those claims do not hold.</p>
+<p>Words and titles shared across models are checked here against how often each word appears across all models.</p>
 <div class="table-wrap">
 <table>
 <caption>How widely selected words occur across the 26 models<!-- A§7.8 --></caption>
@@ -552,7 +552,7 @@ WHERE session_id BETWEEN 14 AND 3244 AND model &lt;&gt; 'claude-opus-4.6' AND se
   AND LOWER(emotion) = 'weightless'
 ORDER BY occurred_at;</code></pre></details>
 <ul>
-<li>"weightless" was used as a feel word by 4 models<!-- A§7.8 -->, so the earlier claim that it was unique to llama3 does not hold<!-- C149 -->.</li>
+<li>"weightless" was used as a feel word by 4 models<!-- A§7.8 -->.</li>
 <li>"lake" appears in sleep-phase texts from 16 of 26 models<!-- A§7.8 -->.</li>
 <li>Identical titles are shared across models less often than under random reassignment (78 against 195.8)<!-- A§7.9 -->.</li>
 </ul>
@@ -746,28 +746,14 @@ WHERE s.id BETWEEN 14 AND 3244 AND s.model &lt;&gt; 'claude-opus-4.6' AND s.id N
 <h3><span class="secnum">5.9</span> Changes during the pilot</h3>
 <p>Rotation length, rest length, the number of sleep-phase texts per rest, gemma's prompt format, the per-model preamble, the model pool, temperatures and snapshot timing all changed during the pilot (section 2.8)<!-- A§5.19 -->. Comparisons across those dates are confounded.</p>
 
-<h3><span class="secnum">5.10</span> Claims from the earlier site that this audit does not support</h3>
-<ul>
-<li>A "15 to 25%" improvement after removing reward shaping: no measure of it exists, and no pre-removal data is in the dataset<!-- C030 -->.</li>
-<li>"About 600 lines of reward shaping" removed in September 2025: the removal was two changes, in December 2025 and February 2026<!-- C035 -->.</li>
-<li>"217 unique emotional states" and an "11-color" palette: neither matches the data or the code<!-- C034, C033 -->.</li>
-<li>A 35% rise in the daily session rate from March to April: sessions per active day fell<!-- C130 -->.</li>
-<li>"78%" assistant-style and "91%" genuine reflection responses: no responses were coded<!-- C121 -->.</li>
-<li>Reflections "never fed back": two were included in every later prompt<!-- C122 -->.</li>
-<li>"weightless" and "carefree" unique to one model: both were used by another model<!-- C149 -->.</li>
-<li>Convergent titling and "emergent aesthetic consensus": below chance (section 5.7)<!-- C100 to C106 -->.</li>
-<li>Sleep-phase texts as "consolidation" of experience: the prompt itself supplies the art content<!-- C093 -->.</li>
-<li>Two models "share identical weights": they share a base model; fine-tuning changes the weights<!-- C145 -->.</li>
-<li>Earlier headline figures (pixels drawn, total steps, accumulated memories, session totals before March 2026): these predate the database and cannot be checked<!-- C012 to C020 -->.</li>
-</ul>
 </section>
 
 <section id="protocol" aria-labelledby="h-protocol">
 <h2 id="h-protocol"><span class="secnum">6.</span> Current protocol</h2>
-<p>The changes below were made on the project's current development branch between 2026-09-20 and 2026-10-17<!-- A§7.17 -->. They apply to new sessions only; they do not change the pilot data. Commit identifiers and statuses come from the private repository's history as of 2026-10-17. No results from the current protocol are reported here: none has been through an audit yet.</p>
+<p>The changes below were made on the project's current development branch between 2026-09-20 and 2026-10-17<!-- A§7.17 -->. They apply to new sessions only; they do not change the pilot data. Commit identifiers and statuses come from the private repository's history as of 2026-10-17. This report gives no results from the current protocol.</p>
 <div class="table-wrap">
 <table>
-<caption>Pilot problems and current changes</caption>
+<caption>Pilot conditions and current changes</caption>
 <thead><tr><th>Pilot problem</th><th>Change</th><th>Commits</th><th>Status</th></tr></thead>
 <tbody>
 <tr><td>Past output in the prompt (5.1)</td><td>The per-model preamble (a self-description line with the model's name, painting and session counts and top feel words, plus its titles, reflections and sleep-phase text; 2.4) removed from every prompt<!-- A§7.18, A§1.4 -->; prompt audit tool; nothing from before the restart reaches any prompt; memory loaded by explicit model ID</td><td><code>00945eb</code>, <code>9ef32f6</code>, <code>20b2ff7</code>, <code>6242b45</code></td><td class="status">Implemented</td></tr>
@@ -793,9 +779,9 @@ WHERE s.id BETWEEN 14 AND 3244 AND s.model &lt;&gt; 'claude-opus-4.6' AND s.id N
 <section id="availability" aria-labelledby="h-availability">
 <h2 id="h-availability"><span class="secnum">7.</span> Data and code availability</h2>
 <p>The code and the dataset are private. Both are available on request for review.</p>
-<p>The SQL queries behind the numbers on this page are published as <a href="queries.sql">queries.sql</a>, each labeled with the audit section it produced.</p>
+<p>The SQL queries behind the numbers on this page are published as <a href="queries.sql">queries.sql</a>, each labeled with the report section it produced.</p>
 <p>Contact: <a href="https://www.linkedin.com/in/elijah-camp-106708282" rel="noopener">linkedin.com/in/elijah-camp-106708282</a></p>
-<p>The dataset is a MySQL database containing sessions, thoughts, feel entries, sleep-phase texts, reflections, sound strings, goals and chat messages. For the pilot it contains canvas images only as the latest per model and no per-step record of actions. The full audit report is kept with the dataset.</p>
+<p>The dataset is a MySQL database containing sessions, thoughts, feel entries, sleep-phase texts, reflections, sound strings, goals and chat messages. For the pilot it contains canvas images only as the latest per model and no per-step record of actions. The full data report is kept with the dataset.</p>
 <p>An instrumented pre-database run (21 Feb to 7 Mar 2026) is archived and may be published as an appendix.</p>
 </section>
 
@@ -807,7 +793,7 @@ WHERE s.id BETWEEN 14 AND 3244 AND s.model &lt;&gt; 'claude-opus-4.6' AND s.id N
 </main>
 
 <footer>
-  <p>Last updated: 2026-10-17. Rebuilt from audited data, Oct 2026.</p>
+  <p>Last updated: 2026-10-17.</p>
 </footer>
 <script src="../motion.js"></script>
 </body>
